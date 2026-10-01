@@ -29,6 +29,7 @@
     "schemas",
     "catalog.json",
     "docs",
+    ".env.example",
     "BOOTSTRAP.md",
     "AGENTS.md",
     "CONTRIBUTING.md",

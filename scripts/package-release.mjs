@@ -30,6 +30,7 @@ const packed = JSON.parse(
 const packageAsset = packed[0].filename;
 for (const file of packed[0].files) {
   if (
+    file.path !== ".env.example" &&
     /(^|\/)(?:\.env(?:\..*)?|node_modules|coverage|test|\.git)(?:\/|$)/.test(
       file.path,
     )

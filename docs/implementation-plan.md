@@ -28,8 +28,10 @@ Acceptance:
 - [x] Seed Jev/UI skills and a UI reviewer role without pretending native wrappers exist.
 - [x] Validate catalog structure, contained resource paths, skill frontmatter, and dependencies.
 - [x] Resolve explicit capability selections, includes/excludes, and transitive dependencies without modifying a harness.
-- [ ] Verify tests, coverage, package installation, and artifact contents.
-- [ ] Create the public GitHub repository, verify CI/security settings, and publish the foundation prerelease.
+- [x] Verify tests, coverage, package installation, and artifact contents.
+- [x] Create the public GitHub repository and enable private security reporting, secret scanning, and push protection.
+
+The external publication gate is a successful [CI run](https://github.com/benjamin-small/agentic-harness-development/actions/workflows/ci.yml), protected main, and a verified [foundation prerelease](https://github.com/benjamin-small/agentic-harness-development/releases/tag/v0.1.0-alpha.1). Those live records identify publication status; a local commit alone does not.
 
 ## M1: Jev library and command-line tool
 
