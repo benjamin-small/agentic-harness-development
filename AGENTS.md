@@ -18,6 +18,7 @@ Never upgrade, rewrite a pin, or discard local work at startup. For an explicit 
 
 ## Constraints
 
+- Every project's primary README must show a linked maturity badge directly below its title, using the shared [Tinker → Alpha → Beta → Stable scale](docs/repository-maturity.md). Select the stage from evidence, explain it in the status section, and log changes to the assessment. Apply this when bootstrapping or maintaining a project within the user's requested scope.
 - Use TypeScript for Jev and shared runtime code. Keep CLI and adapters thin over the library.
 - `skills/<id>/SKILL.md` and `agents/<id>/AGENT.md` are canonical entrypoints. Each component must own `knowledge/INDEX.md` and `memory/INDEX.md`, with local expertise maintained under its own directories. Follow `docs/local-expertise.md`.
 - Keep entrypoints and indexes small. Search the selected component with `rg`, then read only relevant topics/lessons and supporting evidence. Build useful local explanations instead of relying on remote links or previous chat context alone.

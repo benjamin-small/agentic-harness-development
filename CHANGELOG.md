@@ -6,6 +6,10 @@ Entries follow the [changelog policy](docs/changelog.md). `Unreleased` describes
 
 ## Unreleased
 
+### Added
+
+- **Repository maturity:** Add reusable Tinker → Alpha → Beta → Stable badges and a linked guide defining each stage, selection criteria, and README examples. Require a badge and evidence-based status explanation when bootstrapping or maintaining a project's primary README. Mark this toolkit Alpha because its core packages are tested while live provider and interactive harness verification remain pending; maturity stays independent of timestamp versions.
+
 ## 2026.1001.174037 — 2026-10-01 17:40:37 UTC
 
 ### Added
