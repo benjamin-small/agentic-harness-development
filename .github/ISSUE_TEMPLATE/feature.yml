@@ -1,0 +1,10 @@
+name: Capability proposal
+description: Propose a skill, harness specialist, or tool improvement.
+body:
+  - type: textarea
+    id: use-case
+    attributes:
+      label: Use case and intended outcome
+      description: Describe the task, consumer harness, installation scope, and what success looks like.
+    validations:
+      required: true

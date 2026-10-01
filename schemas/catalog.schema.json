@@ -1,0 +1,79 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/benjamin-small/agentic-harness-development/schemas/catalog.schema.json",
+  "title": "Toolkit component catalog, version 1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "components"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": 1 },
+    "components": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/definitions/component" }
+    }
+  },
+  "definitions": {
+    "id": {
+      "type": "string",
+      "maxLength": 64,
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "ids": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "#/definitions/id" }
+    },
+    "component": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "path",
+        "description",
+        "capabilities",
+        "requires",
+        "software",
+        "status"
+      ],
+      "properties": {
+        "id": { "$ref": "#/definitions/id" },
+        "kind": { "enum": ["skill", "agent"] },
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_./-]*$"
+        },
+        "description": { "type": "string", "minLength": 1 },
+        "capabilities": { "$ref": "#/definitions/ids" },
+        "requires": { "$ref": "#/definitions/ids" },
+        "software": {
+          "type": "array",
+          "maxItems": 0,
+          "description": "Executable dependency entries will be introduced with the runtime milestone."
+        },
+        "status": { "const": "instructions-only" },
+        "execution": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["host", "context", "identityScope", "concurrency"],
+          "properties": {
+            "host": { "const": "harness" },
+            "context": { "const": "fresh" },
+            "identityScope": { "const": "invocation" },
+            "concurrency": { "const": "multiple" }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "kind": { "const": "agent" } } },
+          "then": { "required": ["execution"] },
+          "else": { "not": { "required": ["execution"] } }
+        }
+      ]
+    }
+  }
+}

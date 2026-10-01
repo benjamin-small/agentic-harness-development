@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Private vulnerability report
+    url: https://github.com/benjamin-small/agentic-harness-development/security/advisories/new
+    about: Report vulnerabilities privately.

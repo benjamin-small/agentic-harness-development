@@ -1,0 +1,42 @@
+{
+  "$schema": "./schemas/catalog.schema.json",
+  "schemaVersion": 1,
+  "components": [
+    {
+      "id": "jev",
+      "kind": "skill",
+      "path": "skills/jev",
+      "description": "Design typed Jev decisions through OpenRouter; API execution is a planned milestone.",
+      "capabilities": ["structured-decisions"],
+      "requires": [],
+      "software": [],
+      "status": "instructions-only"
+    },
+    {
+      "id": "ui-standards",
+      "kind": "skill",
+      "path": "skills/ui-standards",
+      "description": "Evaluate user interfaces against the project's design system and interaction requirements.",
+      "capabilities": ["ui"],
+      "requires": [],
+      "software": [],
+      "status": "instructions-only"
+    },
+    {
+      "id": "ui-reviewer",
+      "kind": "agent",
+      "path": "agents/ui-reviewer.md",
+      "description": "Review a bounded UI task in fresh context and return actionable findings with evidence.",
+      "capabilities": ["ui"],
+      "requires": ["ui-standards"],
+      "software": [],
+      "status": "instructions-only",
+      "execution": {
+        "host": "harness",
+        "context": "fresh",
+        "identityScope": "invocation",
+        "concurrency": "multiple"
+      }
+    }
+  ]
+}

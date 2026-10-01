@@ -1,0 +1,17 @@
+name: Bug report
+description: Report a reproducible issue with a skill, agent definition, or tool.
+body:
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Release version, operating system, Node version, and harness/version if relevant. Do not include credentials.
+    validations:
+      required: true
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Reproduction and expected behavior
+      description: Include a minimal example and sanitized output.
+    validations:
+      required: true
