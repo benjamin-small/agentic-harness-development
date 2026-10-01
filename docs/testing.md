@@ -25,6 +25,15 @@ Measured on 2026-10-01 with Node.js 26.10.0: **99.76% lines/statements, 100% fun
 
 ## Outside this baseline
 
+The [isolated Codex dogfood runner](codex-dogfood.md) provides a separate opt-in
+installation test with an empty container home and example UI project. Its
+credential-free preflight and authenticated bootstrap/fresh-session run have
+passed with Codex 0.156.1 and release v2026.1001.174037. Native discovery found
+Jev, UI standards, and update; the fresh session executed the pinned startup
+check and validated Jev locally through the CLI and library. See the
+[dated evidence review](verification/codex-2026-10-01.md) for scope and limitations.
+This opt-in test is not part of ordinary CI and does not establish live inference.
+
 Claude Code 2.1.281's `plugin validate --strict --json` accepts the generated plugin
 manifest without warnings. Unit and external-consumer tests execute the generated
 hook command and validate its context output. These checks do not establish

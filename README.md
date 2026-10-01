@@ -8,7 +8,7 @@ Portable skills, harness specialists, and reusable development tools. This repos
 
 ## Current status
 
-**Maturity: Alpha.** The core tools are packaged and tested; live Jev inference and interactive harness verification remain pending. See the [maturity scale](docs/repository-maturity.md) for the criteria.
+**Maturity: Alpha.** The core tools are packaged and tested, and [isolated Codex bootstrap and fresh-session use](docs/verification/codex-2026-10-01.md) are verified. Live Jev inference and other harness integrations remain pending. See the [maturity scale](docs/repository-maturity.md) for the criteria.
 
 Releases use [UTC date-and-time versions](docs/releases.md), such as `2026.1001.171432` for 2026-10-01 at 17:14:32 UTC. Pin an exact timestamp; changes and compatibility details belong in the changelog.
 

@@ -61,6 +61,12 @@ Claude Code maintenance plugin. Startup is read-only; pinned checks are offline
 by default. The skill guides scoped updates and preserves local expertise; an
 automatic installer, capability manifest, and atomic updater remain future work.
 
+An [isolated Codex evaluation](verification/codex-2026-10-01.md) verified manual
+bootstrap from public guidance using release v2026.1001.174037, native discovery
+of all three selected skills, and fresh-session startup and local Jev validation.
+This verifies one project-scoped path; it does not complete the automatic
+installer, upgrade matrix, or native specialist acceptance criteria below.
+
 Acceptance:
 
 - Detect actual UI evidence across web/mobile/desktop projects and scoped monorepo roots. A framework dependency alone is insufficient.
