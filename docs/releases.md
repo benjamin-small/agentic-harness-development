@@ -21,7 +21,7 @@ Current source ships each component's entrypoint and reviewed `knowledge/` and `
 
 ## Release procedure
 
-1. Run `npm run release:stamp`, then update the changelog, bootstrap example, and `docs/release-notes/v<VERSION>.md` for its emitted version. Use a pull request.
+1. Run `npm run release:stamp`, then move ready `Unreleased` entries into its exact timestamp section following [the changelog policy](changelog.md). Confirm significant additions, fixes, removals, migration actions, and limitations match the shipped changes. Update the bootstrap example and `docs/release-notes/v<VERSION>.md`; release notes summarize and link to the canonical changelog section. Use a pull request.
 2. Run `npm run check`; document measured coverage and actual scope of native/live validation.
 3. Commit changes. Packaging requires a clean checkout so `sourceCommit` identifies all tracked content.
 4. Run `npm run release:pack` and `npm run release:verify`. The latter installs the exact tarball in a fresh temporary consumer, resolves declared runtime dependencies, imports the library, validates bundled references, and invokes the installed CLI binary.

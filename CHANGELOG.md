@@ -2,6 +2,14 @@
 
 Versions identify the UTC release-preparation date and time (`YYYY.MMDD.HHMMSS`, numeric groups without leading zeros). Pin an exact release and read its changes; version numbers do not promise compatibility.
 
+Entries follow the [changelog policy](docs/changelog.md). `Unreleased` describes changes not yet included in a published release.
+
+## Unreleased
+
+### Added
+
+- **Contribution guidance:** Require significant additions, fixes, removals, and behavior changes to be logged in the same pull request. Stable Markdown categories, searchable component names, impact explanations, and migration instructions make the changelog useful to humans and harnesses; see the [policy](docs/changelog.md).
+
 ## 2026.1001.171432 — 2026-10-01 17:14:32 UTC
 
 ### Changed
