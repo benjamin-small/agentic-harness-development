@@ -1,6 +1,6 @@
 # Using the Jev tool
 
-Repository behavior verified with contract fixtures on 2026-10-01. Applies to toolkit 0.1.0-alpha.2; a live provider check is still pending.
+Repository behavior verified with contract fixtures on 2026-10-01. Applies to toolkit releases carrying the Jev runtime; a live provider check is still pending.
 
 1. Locate the **pinned toolkit installation**, then run its `node_modules/.bin/jev --version`. In a built source checkout, use `node dist/src/jev/cli.js`. A skill directory alone does not install the executable.
 2. Read the selected local question-design topic. Prepare `{id, state, questions}` as JSON. Use meaningful instructions; IDs are correlation labels. Multiple questions share state and do not consume each other's answers.

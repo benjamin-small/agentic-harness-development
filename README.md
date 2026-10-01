@@ -6,7 +6,9 @@ Portable skills, harness specialists, and reusable development tools. This repos
 
 ## Current status
 
-**0.1.0-alpha.2** adds the Jev TypeScript library and CLI, plus a [shared local expertise layout](docs/local-expertise.md): every skill and agent owns indexed `knowledge/` and `memory/` directories. Search locally, load relevant material progressively, and maintain scoped lessons with evidence. Catalog schema 2 requires a matching reader; alpha.1 retains schema 1 and its original paths.
+Releases use [UTC date-and-time versions](docs/releases.md), such as `2026.1001.171432` for 2026-10-01 at 17:14:32 UTC. Pin an exact timestamp; changes and compatibility details belong in the changelog.
+
+The toolkit includes the Jev TypeScript library and CLI and a [shared local expertise layout](docs/local-expertise.md): every skill and agent owns indexed `knowledge/` and `memory/` directories. Search locally, load relevant material progressively, and maintain scoped lessons with evidence. Catalog schema 2 requires a matching reader; historical alpha.1 retains schema 1 and its original paths.
 
 The toolkit includes:
 

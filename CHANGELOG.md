@@ -1,6 +1,17 @@
 # Changelog
 
-Versions use semantic versioning. Prereleases may change interfaces; pin an exact release.
+Versions identify the UTC release-preparation date and time (`YYYY.MMDD.HHMMSS`, numeric groups without leading zeros). Pin an exact release and read its changes; version numbers do not promise compatibility.
+
+## 2026.1001.171432 — 2026-10-01 17:14:32 UTC
+
+### Changed
+
+- Replace semantic release numbering with UTC timestamp versions and exact timestamp tags.
+- Add `release:stamp` to synchronize package/lockfile versions; validate real calendar dates, time ranges, and monotonic preparation times.
+- Include the full ISO timestamp in manifests and verify package/lockfile/tag agreement before packaging.
+- Publish timestamp releases without alpha/beta suffixes; retain the two historical prereleases unchanged.
+
+Jev behavior, catalog schema 2, and the pending live API check are unchanged.
 
 ## 0.1.0-alpha.2 — 2026-10-01
 

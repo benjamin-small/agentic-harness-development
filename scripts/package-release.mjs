@@ -3,6 +3,7 @@ import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { resolve } from "node:path";
+import { verifyVersionMetadata } from "./release-version.mjs";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const run = (command, args) =>
@@ -13,8 +14,10 @@ const catalog = JSON.parse(
 );
 const isLocalExpertise = (path) =>
   /(?:^|\/)(?:knowledge|memory)\/local(?:\/|$)/.test(path);
-if (!/^\d+\.\d+\.\d+(?:-[a-zA-Z0-9.-]+)?$/.test(pkg.version))
-  throw new Error("Invalid package version");
+const lock = JSON.parse(
+  await readFile(resolve(root, "package-lock.json"), "utf8"),
+);
+const versionTimestamp = verifyVersionMetadata(pkg, lock);
 const tag = `v${pkg.version}`;
 if (
   process.env.GITHUB_REF_TYPE === "tag" &&
@@ -68,6 +71,8 @@ for (const name of [packageAsset, sourceAsset]) {
 const manifest = {
   schemaVersion: 1,
   version: pkg.version,
+  versioning: "utc-timestamp",
+  versionTimestamp,
   tag,
   sourceCommit,
   packageName: pkg.name,

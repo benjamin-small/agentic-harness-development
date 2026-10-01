@@ -2,11 +2,17 @@
 
 ## Artifacts and versioning
 
-Use semantic versions and exact Git tags (`v0.1.0-alpha.1` initially). Prerelease interfaces may change. Each release contains:
+Versions encode the UTC time when a release is prepared: **`YYYY.MMDD.HHMMSS`**, with leading zeros removed from each numeric group. For example, `2026.1001.171432` means **2026-10-01 17:14:32 UTC**; `2026.102.304` means **2026-01-02 00:03:04 UTC**. Tags add `v`, such as `v2026.1001.171432`.
+
+The three numeric groups satisfy [npm's version format](https://docs.npmjs.com/cli/v11/configuring-npm/package-json#version); their meaning is entirely date and time. There are no major/minor/patch compatibility promises, revision counters, or alpha/beta suffixes. Read the changelog and pin exact releases instead of using caret/tilde ranges. Schema versions remain explicit wire-format identifiers, independent of package timestamps.
+
+Run `npm run release:stamp` once while preparing a release. It generates the current UTC timestamp to whole seconds and updates `package.json` plus both root version fields in `package-lock.json`, leaving dependency versions unchanged. For a reproducible timestamp use `npm run release:stamp -- --at 2026-10-01T17:14:32.000Z`. Duplicate or older times are rejected; wait for a new second or correct the clock. Stamping does not commit, tag, or publish. Packing/rebuilding an already stamped release preserves its version. Its GitHub publication time may be later than its preparation time.
+
+Each release contains:
 
 - An npm-compatible `.tgz` with compiled library/CLI, catalog, schemas, skills, roles, and documentation.
 - A source `.tar.gz` made from the exact Git commit.
-- `manifest.json` containing version, tag, source commit, runtime requirements, capabilities, limitations, sizes, and SHA-256 hashes.
+- `manifest.json` containing version, `versioning: "utc-timestamp"`, the full ISO `versionTimestamp`, tag, source commit, runtime requirements, capabilities, limitations, sizes, and SHA-256 hashes.
 - `SHA256SUMS` covering both archives and the manifest.
 
 The package is not published to the npm registry. Its `private` flag prevents accidental registry publication while allowing `npm pack` and tarball installation. No postinstall script runs. Native standalone binaries are planned as a later distribution choice.
@@ -15,14 +21,16 @@ Current source ships each component's entrypoint and reviewed `knowledge/` and `
 
 ## Release procedure
 
-1. Update package version and lockfile, changelog, relevant bootstrap examples, and `docs/release-notes/v<VERSION>.md`. Use a pull request after initial repository creation.
+1. Run `npm run release:stamp`, then update the changelog, bootstrap example, and `docs/release-notes/v<VERSION>.md` for its emitted version. Use a pull request.
 2. Run `npm run check`; document measured coverage and actual scope of native/live validation.
 3. Commit changes. Packaging requires a clean checkout so `sourceCommit` identifies all tracked content.
 4. Run `npm run release:pack` and `npm run release:verify`. The latter installs the exact tarball in a fresh temporary consumer, resolves declared runtime dependencies, imports the library, validates bundled references, and invokes the installed CLI binary.
-5. Once CI passes for the intended commit, create and push the matching annotated tag. The release workflow checks tag/version alignment, rebuilds, verifies the consumer, and publishes the assets with the committed release notes.
-6. Download the GitHub assets to a fresh directory and run `node scripts/verify-release.mjs /absolute/path/to/downloaded-assets`. Confirm the GitHub release's tag, prerelease flag, source commit, and asset list.
+5. Once CI passes for the intended commit, create and push the matching annotated tag. The release workflow validates the date/time, package/lockfile/tag agreement, rebuilds, verifies the consumer, and publishes the assets with the committed release notes. Timestamp releases are regular GitHub releases; this classification does not imply compatibility or completed live validation.
+6. Download the GitHub assets to a fresh directory and run `node scripts/verify-release.mjs /absolute/path/to/downloaded-assets`. Confirm the tag, timestamp, source commit, and asset list.
 
 If a workflow fails before publication, fix the failure and follow the documented tag/release state. Do not silently move a published tag or overwrite released assets. Publish a new version for a changed artifact. Rollback means restoring a previous pinned release and its recorded configuration.
+
+The historical `v0.1.0-alpha.1` and `v0.1.0-alpha.2` releases retain their original tags, versions, and assets. The verifier accepts those legacy manifests; new releases must use timestamp metadata.
 
 Checksums depend on trusting their source. They are not signatures. Artifact signing/attestation can be added when a consumer requires that stronger provenance contract.
 

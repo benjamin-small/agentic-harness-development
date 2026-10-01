@@ -17,6 +17,7 @@ Publish a reusable collection of skills, harness specialists, and TypeScript too
 - Personal, project, and deployment installations are distinct. Catalog metadata separates instruction assets from executable dependencies.
 - Native packaging is preferred over a new general-purpose package manager. Our bootstrap coordinates versions, capability selection, and verification.
 - Use MIT licensing and public GitHub releases. Keep the initial package private to npm until registry publication is deliberately selected.
+- Package versions encode UTC release-preparation date/time. Use `release:stamp`, exact timestamp tags, and explicit changelog/schema compatibility information; preserve historical releases.
 
 ## M0: Repository foundation — shipped in alpha.1
 
@@ -46,7 +47,7 @@ Acceptance:
 - [x] Injected transport and cancellation in the library; environment credentials and JSON stdout in the CLI.
 - [x] Tests for response variants, malformed data, missing credentials, 401/429/5xx, cancellation, and partial batches.
 - [x] Include library and CLI in consumable package assets and isolated release-consumer verification.
-- [ ] Run one explicitly configured, bounded live request and report model/usage. The opt-in smoke script is ready; the implementation process has no OpenRouter key. This prerelease does not claim live verification.
+- [ ] Run one explicitly configured, bounded live request and report model/usage. The opt-in smoke script is ready; the implementation process has no OpenRouter key. Current releases do not claim live verification.
 
 ## M2: Bootstrap and capability selection
 

@@ -5,6 +5,7 @@ import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import assert from "node:assert/strict";
+import { versionTimestamp } from "./release-version.mjs";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const out = resolve(root, process.argv[2] ?? "release");
@@ -17,6 +18,16 @@ assert.equal(
   "@benjamin-small/agentic-harness-development",
 );
 assert.match(manifest.sourceCommit, /^[a-f0-9]{40}$/);
+assert.equal(manifest.tag, `v${manifest.version}`);
+if (manifest.versioning === "utc-timestamp") {
+  assert.equal(manifest.versionTimestamp, versionTimestamp(manifest.version));
+} else {
+  assert.equal(manifest.versioning, undefined);
+  assert.ok(
+    ["0.1.0-alpha.1", "0.1.0-alpha.2"].includes(manifest.version),
+    "Missing timestamp version metadata",
+  );
+}
 const sums = (await readFile(join(out, "SHA256SUMS"), "utf8"))
   .trim()
   .split("\n");

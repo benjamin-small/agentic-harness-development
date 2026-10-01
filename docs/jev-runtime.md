@@ -1,6 +1,6 @@
 # Jev library and CLI
 
-Implemented in source for **0.1.0-alpha.2**. The package exports `@benjamin-small/agentic-harness-development/jev` and a `jev` executable. Node.js 24 or 26 is required. Installing or selecting instructions never calls the API. Invoking `decide` or `batch` sends supplied state to OpenRouter and can incur charges.
+Introduced in **0.1.0-alpha.2** and included in subsequent timestamp releases. The package exports `@benjamin-small/agentic-harness-development/jev` and a `jev` executable. Node.js 24 or 26 is required. Installing or selecting instructions never calls the API. Invoking `decide` or `batch` sends supplied state to OpenRouter and can incur charges.
 
 The initial transport is pinned to `POST https://openrouter.ai/api/alpha/decisions` and `typesafe/jev-1.13`. It does not use chat completions or the separate TypeSafe SDK endpoint. The alpha [upstream schema](https://openrouter.ai/docs/api/api-reference/alphadecisions/submit-a-decisions-request) was checked on 2026-10-01. Fixtures test that contract; they do not establish live provider availability or model quality.
 
