@@ -106,12 +106,13 @@ export async function validateResources(
   root = toolkitRoot,
 ): Promise<void> {
   validateCatalog(catalog);
+  const canonicalRoot = await realpath(root);
   const checked = new Set<string>();
   async function checkMarkdown(resource: string): Promise<string> {
-    const path = await containedPath(root, resource);
+    const path = await containedPath(canonicalRoot, resource);
     if (
       /(?:^|\/)(?:knowledge|memory)\/local(?:\/|$)/.test(
-        path.replaceAll("\\", "/"),
+        relative(canonicalRoot, path).replaceAll("\\", "/"),
       )
     ) {
       throw new Error(
