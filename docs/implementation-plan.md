@@ -54,6 +54,12 @@ Acceptance:
 
 Add deterministic project inspection and installation planning. Inputs include the explicit project manifest, detected evidence, selected harness, scope, and pinned release.
 
+Implemented maintenance subset: [session-start version checks](maintenance.md),
+an exact version-pin schema, the `poietic-harness:update` skill, and a generated
+Claude Code maintenance plugin. Startup is read-only; pinned checks are offline
+by default. The skill guides scoped updates and preserves local expertise; an
+automatic installer, capability manifest, and atomic updater remain future work.
+
 Acceptance:
 
 - Detect actual UI evidence across web/mobile/desktop projects and scoped monorepo roots. A framework dependency alone is insufficient.

@@ -21,7 +21,7 @@ const clone = () => structuredClone(catalog);
 
 test("shipped catalog and progressively linked resources validate", async () => {
   await validateResources(catalog);
-  assert.equal(catalog.components.length, 3);
+  assert.equal(catalog.components.length, 4);
 });
 
 test("UI capability includes its skill dependency before the reviewer", () => {

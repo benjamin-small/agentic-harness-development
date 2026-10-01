@@ -2,6 +2,12 @@
 
 This repository distributes portable skills, reusable agent roles, and TypeScript tools. Read `docs/implementation-plan.md` for the current milestone and `docs/architecture.md` before changing component boundaries.
 
+## Session start
+
+Once at session start, run `node dist/src/maintenance/cli.js check --project .` from this repository root, unless the Poietic Harness plugin already supplied a check for this installation. Compare with `.poietic-harness.json` if present; otherwise check the latest public release. Report a mismatch or unavailable check briefly, then continue the user's work. If the compiled runtime is absent, report that the check needs the documented build; do not silently install dependencies just to start a session. A development checkout can be ahead of the last release. Version equality does not verify source contents or copied skills.
+
+Never upgrade, rewrite a pin, or discard local work at startup. For an explicit update request, read `skills/update/SKILL.md` (`poietic-harness:update`; `/poietic-harness:update` in the Claude plugin). Use [the maintenance guide](docs/maintenance.md) for other consumer scopes and offline checks.
+
 ## Commands
 
 - `npm ci` installs the locked toolchain; use Node.js 24 LTS or 26.

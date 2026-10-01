@@ -30,4 +30,10 @@ Current [Claude instruction loading](https://code.claude.com/docs/en/memory#agen
 
 ## Packaging
 
+This release includes a generated [Claude Code maintenance plugin](maintenance.md)
+with the `poietic-harness` namespace, `/poietic-harness:update` skill, and SessionStart
+version check. Its canonical portable skill remains `skills/update/SKILL.md`.
+This adapter does not register native subagents or establish equivalent startup
+hooks in the other harnesses. See [testing](testing.md) for what was verified.
+
 [Vercel's skills CLI](https://github.com/vercel-labs/skills) provides cross-harness skill installation. [Pi packages](https://github.com/earendil-works/pi/blob/main/packages/coding-agent/docs/packages.md) bundle skills and TypeScript extensions. Native plugins can provide convenient distribution, but shared content remains canonical here. Future bootstrap code must verify pinning and installation behavior before relying on an external installer.

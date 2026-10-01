@@ -16,6 +16,7 @@ The toolkit includes:
 - A portable UI reviewer role intended for fresh, isolated task contexts.
 - A validated capability catalog, TypeScript library, and read-only selection CLI.
 - An importable Jev client and `jev` CLI for typed decisions and bounded JSONL batches through OpenRouter.
+- A read-only `poietic-harness` version checker, an update skill, and a Claude Code plugin providing `/poietic-harness:update` and a SessionStart check.
 - CI, contributor guidance, and GitHub release archives with checksums and a source manifest.
 
 Automatic project detection, installation writes, and native subagent adapters remain planned. The catalog CLI produces a selection plan without changing harness configuration. A persistent project-manager service is a separate future project. Jev contract and consumer tests use synthetic fixtures; live provider verification is pending.
@@ -29,9 +30,10 @@ npm ci
 npm run check
 node dist/src/cli.js catalog
 node dist/src/cli.js plan --capability ui --harness claude-code --scope project
+node dist/src/maintenance/cli.js check --project .
 ```
 
-The plan lists selected components, their dependencies, and skill destinations. Capabilities are explicit in this release. It will not infer that a project has a UI.
+The plan lists selected components, their dependencies, and skill destinations. Capabilities are explicit in this release. It will not infer that a project has a UI. The version check uses a project pin when present, otherwise a bounded public release lookup; see [session checks and explicit updates](docs/maintenance.md) for offline use and harness setup.
 
 The library exports the same catalog validation and selection logic:
 
@@ -62,6 +64,7 @@ The same client is available through `@benjamin-small/agentic-harness-developmen
 | Location                   | Purpose                                                                                 |
 | -------------------------- | --------------------------------------------------------------------------------------- |
 | `skills/jev/`              | When to use Jev, typed question design, OpenRouter details, and interpretation limits   |
+| `skills/update/`           | Poietic Harness version checks and explicit scoped updates preserving local expertise   |
 | `skills/ui-standards/`     | UI review criteria, scoped to the project's actual design system                        |
 | `agents/ui-reviewer/`      | Portable role, local knowledge, and memory indexes; native harness wrappers are planned |
 | `catalog.json`, `schemas/` | Repository-owned component metadata and its JSON Schema                                 |
@@ -72,7 +75,7 @@ Skills follow the [Agent Skills format](https://agentskills.io/specification). R
 
 ## Configuration and validation
 
-The bootstrap CLI reads only the bundled catalog and command arguments. The Jev CLI reads `OPENROUTER_API_KEY` from its environment; see [.env.example](.env.example). Never put credentials in a skill, project manifest, release, or command-line argument. Selecting a capability or installing a skill does not invoke inference.
+The catalog CLI reads only the bundled catalog and command arguments. The maintenance CLI reads installation metadata and an exact consumer pin, with optional public release lookup. The Jev CLI reads `OPENROUTER_API_KEY` from its environment; see [.env.example](.env.example). Never put credentials in a skill, project manifest, release, or command-line argument. Selecting a capability or installing a skill does not invoke inference.
 
 See [testing](docs/testing.md) for measured coverage, tested boundaries, and checks that still require a real harness. Contributions follow [CONTRIBUTING.md](CONTRIBUTING.md); vulnerabilities can be reported privately through [SECURITY.md](SECURITY.md).
 

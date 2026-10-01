@@ -11,7 +11,7 @@ export interface Component {
   description: string;
   capabilities: string[];
   requires: string[];
-  software: "jev-runtime"[];
+  software: ("jev-runtime" | "maintenance-runtime")[];
   status: "instructions-only" | "tool-backed";
   execution?: {
     host: "harness";
@@ -279,7 +279,7 @@ export function planSelection(catalog: Catalog, options: SelectionOptions) {
     })),
     limitations: [
       "This command does not inspect a project or install files.",
-      "Native agent adapters are not included. The bundled jev-runtime is installed with the package, separately from skill discovery.",
+      "Native agent adapters are not included. Bundled jev-runtime and maintenance-runtime are installed with the package, separately from skill discovery. The optional Claude maintenance plugin has its own setup guide.",
       ...(options.scope === "deployment"
         ? [
             "Deployment provisioning must supply explicit destinations and a pinned release.",

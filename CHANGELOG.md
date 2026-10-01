@@ -6,8 +6,12 @@ Entries follow the [changelog policy](docs/changelog.md). `Unreleased` describes
 
 ## Unreleased
 
+## 2026.1001.174037 — 2026-10-01 17:40:37 UTC
+
 ### Added
 
+- **Session version alignment:** Add the read-only `poietic-harness check` CLI and `/maintenance` library export. Compare the active runtime with an exact project/user/deployment pin, or a bounded latest-release lookup when unpinned; report mismatch, availability, and unknown states separately. Pinned startup checks stay offline by default and never update automatically.
+- **Poietic Harness update skill:** Add component-owned indexed knowledge and memory for explicit scoped upgrades, verified acquisition, local expertise preservation, and rollback. The generated Claude Code plugin provides `/poietic-harness:update` and a SessionStart hook. Activate it with the documented `--plugin-dir` launch argument; other harnesses use the portable skill and startup guidance. Plugin manifest validation and direct hook execution are checked; interactive discovery and a real user upgrade are not yet verified.
 - **Contribution guidance:** Require significant additions, fixes, removals, and behavior changes to be logged in the same pull request. Stable Markdown categories, searchable component names, impact explanations, and migration instructions make the changelog useful to humans and harnesses; see the [policy](docs/changelog.md).
 
 ## 2026.1001.171432 — 2026-10-01 17:14:32 UTC

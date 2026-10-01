@@ -6,7 +6,12 @@ import { join } from "node:path";
 import { spawnSync } from "node:child_process";
 import { toolkitRoot } from "../src/index.js";
 
-const components = ["skills/jev", "skills/ui-standards", "agents/ui-reviewer"];
+const components = [
+  "skills/jev",
+  "skills/ui-standards",
+  "agents/ui-reviewer",
+  "skills/update",
+];
 
 test("npm packages include local indexes and topics but exclude private working notes", async () => {
   const fixture = await mkdtemp(join(tmpdir(), "expertise-package-"));

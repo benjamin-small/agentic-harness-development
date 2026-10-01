@@ -37,6 +37,16 @@
         "identityScope": "invocation",
         "concurrency": "multiple"
       }
+    },
+    {
+      "id": "update",
+      "kind": "skill",
+      "path": "skills/update",
+      "description": "Check Poietic Harness version alignment and explicitly update a scoped installation without losing local expertise.",
+      "capabilities": ["toolkit-maintenance"],
+      "requires": [],
+      "software": ["maintenance-runtime"],
+      "status": "tool-backed"
     }
   ]
 }
