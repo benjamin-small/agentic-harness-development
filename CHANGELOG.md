@@ -8,7 +8,12 @@ Entries follow the [changelog policy](docs/changelog.md). `Unreleased` describes
 
 ### Added
 
+- **Codex bootstrap evaluation:** Add an opt-in disposable-container runner with a blank configuration, example UI project, native before/after skill discovery, and a fresh-session probe. Verified public-release acquisition, project-scoped Jev/UI/update discovery, startup version alignment, and local Jev CLI/library validation with Codex 0.156.1. Jev must be explicitly selected for this fixture; a UI-only plan does not install it. See the [evidence review](docs/verification/codex-2026-10-01.md). No live inference, automatic installer, or native specialist registration is claimed.
 - **Repository maturity:** Add reusable Tinker → Alpha → Beta → Stable badges and a linked guide defining each stage, selection criteria, and README examples. Require a badge and evidence-based status explanation when bootstrapping or maintaining a project's primary README. Mark this toolkit Alpha because its core packages are tested while live provider and interactive harness verification remain pending; maturity stays independent of timestamp versions.
+
+### Fixed
+
+- **Jev memory guidance:** Correct the outdated statement that the runtime was unimplemented. The library/CLI are implemented and locally validated; live provider verification remains pending. Update this note when adopting the next release; v2026.1001.174037 still contains the old text.
 
 ## 2026.1001.174037 — 2026-10-01 17:40:37 UTC
 
