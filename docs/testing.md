@@ -4,9 +4,9 @@ Run `npm run check` for formatting, TypeScript, coverage tests, and resource val
 
 ## Test scope
 
-The tests cover catalog structure, cross-component dependencies, cycles, unknown selections, explicit exclusions, skill destination planning, metadata validation, missing resources, symlink/path escape rejection, linked reference cycles, and CLI stdout/stderr behavior. No API key or network is needed for the test suite.
+The tests cover catalog structure, cross-component dependencies, cycles, unknown selections, explicit exclusions, skill destination planning, metadata validation, missing resources, symlink/path escape rejection, linked reference cycles, required knowledge/memory indexes, and CLI stdout/stderr behavior. Packaging tests use synthetic private notes in an isolated fixture to verify that local working material is omitted while indexes and topics remain available. Git ignore rules are checked without writing private notes into the repository. No API key or network is needed for the test suite.
 
-Measured on 2026-10-01 with Node.js 26.10.0: **100% lines, 100% statements, 100% functions, and 97.84% branches**, across 13 tests. Reproduce with `npm run test:coverage`; CI uploads its own per-runtime measurements. Coverage covers `src/` runtime code, not the release scripts or skill decision quality. There is no arbitrary global coverage threshold in this initial baseline.
+Measured on 2026-10-01 with Node.js 26.10.0: **100% lines, 100% statements, 100% functions, and 97.94% branches**, across 17 tests. Reproduce with `npm run test:coverage`; CI uploads its own per-runtime measurements. Coverage covers `src/` runtime code, not the release scripts or skill decision quality. There is no arbitrary global coverage threshold in this initial baseline.
 
 ## Artifact verification
 

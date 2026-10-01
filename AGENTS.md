@@ -12,8 +12,10 @@ This repository distributes portable skills, reusable agent roles, and TypeScrip
 ## Constraints
 
 - Use TypeScript for Jev and shared runtime code. Keep CLI and adapters thin over the library.
-- `skills/*/SKILL.md` is canonical skill content. Load detailed references progressively. Preserve standard frontmatter and relative links.
-- `agents/*.md` contains portable role instructions. Native models, permissions, and discovery settings belong in harness adapters.
+- `skills/<id>/SKILL.md` and `agents/<id>/AGENT.md` are canonical entrypoints. Each component must own `knowledge/INDEX.md` and `memory/INDEX.md`, with local expertise maintained under its own directories. Follow `docs/local-expertise.md`.
+- Keep entrypoints and indexes small. Search the selected component with `rg`, then read only relevant topics/lessons and supporting evidence. Build useful local explanations instead of relying on remote links or previous chat context alone.
+- Maintain provenance, verification dates, applicability, and index links when knowledge changes. Capture actual lessons in scoped local memory; keep `knowledge/local/` and `memory/local/` out of commits and releases. Do not modify unrelated host memory stores.
+- Native models, permissions, and discovery settings belong in harness adapters. Learned state uses a writable component working directory separate from immutable release caches.
 - This repository owns definitions and tools. Durable project state, event queues, leases, and deployed identities belong in a separate runtime service.
 - The bootstrap CLI is read-only. Do not silently turn a selection plan into installation, a paid API call, or a background service.
 - Explicit project selections override detection when detection is implemented. Installing a capability does not grant new external-action permissions.

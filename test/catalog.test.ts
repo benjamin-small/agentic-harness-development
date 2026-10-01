@@ -109,6 +109,10 @@ test("invalid selection names fail instead of silently producing a partial plan"
 
 test("catalog rejects malformed structures, duplicates, and invalid lifecycle metadata", () => {
   assert.throws(() => validateCatalog({}), /Invalid catalog/);
+  assert.throws(
+    () => validateCatalog({ ...catalog, schemaVersion: 1 }),
+    /Invalid catalog/,
+  );
   const duplicate = clone();
   duplicate.components.push(duplicate.components[0]!);
   assert.throws(() => validateCatalog(duplicate), /Duplicate component/);
@@ -141,8 +145,15 @@ async function fixture(
   const root = await mkdtemp(join(tmpdir(), "harness-catalog-test-"));
   const entry = join(root, "skills/jev/SKILL.md");
   await mkdir(join(root, "skills/jev"), { recursive: true });
+  for (const area of ["knowledge", "memory"]) {
+    await mkdir(join(root, "skills/jev", area), { recursive: true });
+    await writeFile(
+      join(root, "skills/jev", area, "INDEX.md"),
+      "# Local index\n",
+    );
+  }
   const fixtureCatalog: Catalog = {
-    schemaVersion: 1,
+    schemaVersion: 2,
     components: [structuredClone(catalog.components[0]!)],
   };
   try {
@@ -234,6 +245,40 @@ test("linked Markdown cycles terminate and optional metadata is validated", asyn
   });
 });
 
+test("both local expertise indexes are required and their topic links are checked", async () => {
+  await fixture(async (root, entry, fixtureCatalog) => {
+    await writeFile(entry, "---\nname: jev\ndescription: text\n---\n");
+    for (const area of ["knowledge", "memory"]) {
+      const index = join(root, "skills/jev", area, "INDEX.md");
+      await rm(index);
+      await assert.rejects(validateResources(fixtureCatalog, root), /ENOENT/);
+      await writeFile(index, "[missing](missing.md)");
+      await assert.rejects(validateResources(fixtureCatalog, root), /ENOENT/);
+      await writeFile(index, "# Index\n");
+    }
+    await validateResources(fixtureCatalog, root);
+  });
+});
+
+test("public entrypoints and indexes cannot pull private local notes into validation", async () => {
+  await fixture(async (root, entry, fixtureCatalog) => {
+    await writeFile(entry, "---\nname: jev\ndescription: text\n---\n");
+    await mkdir(join(root, "skills/jev/memory/local"));
+    await writeFile(
+      join(root, "skills/jev/memory/local/note.md"),
+      "private fixture",
+    );
+    await writeFile(
+      join(root, "skills/jev/memory/INDEX.md"),
+      "[private](local/note.md)",
+    );
+    await assert.rejects(
+      validateResources(fixtureCatalog, root),
+      /must not link private/,
+    );
+  });
+});
+
 function cli(...args: string[]) {
   return spawnSync(
     process.execPath,
@@ -270,7 +315,7 @@ test("CLI emits JSON results on stdout and errors exclusively on stderr", () => 
 });
 
 test("CLI catalog, validation, and help work without credentials", () => {
-  assert.equal(JSON.parse(cli("catalog").stdout).schemaVersion, 1);
+  assert.equal(JSON.parse(cli("catalog").stdout).schemaVersion, 2);
   assert.equal(JSON.parse(cli("validate").stdout).valid, true);
   assert.match(cli("--help").stdout, /Read-only/);
   assert.match(cli().stdout, /harness-kit/);

@@ -23,7 +23,11 @@ flowchart LR
 
 ## Harness specialists
 
-A UI reviewer starts with its role, task brief, relevant files, and selected standards. Its context is isolated from unrelated parent discussion. References are loaded only when relevant. It returns findings, evidence, and verification limitations to the parent harness. The harness enforces permissions and creates the context; Markdown cannot guarantee isolation.
+A UI reviewer starts with its role, task brief, relevant files, and selected standards. Its context is isolated from unrelated parent discussion. It recovers expertise from its local indexes and targeted searches, then loads relevant topics, lessons, and evidence progressively. It returns findings, evidence, and verification limitations to the parent harness. The harness enforces permissions and creates the context; Markdown cannot guarantee isolation.
+
+## Local expertise
+
+Both agents and skills must own and maintain local `knowledge/` and `memory/` directories under a component root, with small `INDEX.md` files. [The shared convention](local-expertise.md) defines directory layout, search, progressive loading, provenance, and maintenance. Reviewed reusable content is versioned; private working material remains under ignored `local/` directories. A writable scoped component root is separate from the immutable release cache. Operational service state remains in the runtime.
 
 ## Persistent identity
 

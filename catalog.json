@@ -1,6 +1,6 @@
 {
   "$schema": "./schemas/catalog.schema.json",
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "components": [
     {
       "id": "jev",
@@ -25,7 +25,7 @@
     {
       "id": "ui-reviewer",
       "kind": "agent",
-      "path": "agents/ui-reviewer.md",
+      "path": "agents/ui-reviewer",
       "description": "Review a bounded UI task in fresh context and return actionable findings with evidence.",
       "capabilities": ["ui"],
       "requires": ["ui-standards"],

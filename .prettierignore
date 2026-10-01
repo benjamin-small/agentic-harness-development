@@ -3,3 +3,9 @@ dist
 coverage
 release
 package-lock.json
+
+# Private component expertise; keep it local to its owner and scope.
+skills/*/knowledge/local/
+skills/*/memory/local/
+agents/*/knowledge/local/
+agents/*/memory/local/

@@ -1,13 +1,13 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://github.com/benjamin-small/agentic-harness-development/schemas/catalog.schema.json",
-  "title": "Toolkit component catalog, version 1",
+  "title": "Toolkit component catalog, version 2",
   "type": "object",
   "additionalProperties": false,
   "required": ["schemaVersion", "components"],
   "properties": {
     "$schema": { "type": "string" },
-    "schemaVersion": { "const": 1 },
+    "schemaVersion": { "const": 2 },
     "components": {
       "type": "array",
       "minItems": 1,

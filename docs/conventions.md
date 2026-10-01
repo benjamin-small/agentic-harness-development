@@ -12,6 +12,8 @@ Documentation checked on 2026-10-01. The following are upstream documented capab
 
 ## Harness discovery
 
+Our [shared component layout](local-expertise.md) adds local indexed `knowledge/` and `memory/` directories to both skills and agent roles. These are repository conventions; native adapters preserve `SKILL.md` and translate `AGENT.md` into the host's format. Local expertise is maintained and searched within the selected component and scope.
+
 | Harness                                                                                  | Project skill destination used by our planner | Agent integration status             |
 | ---------------------------------------------------------------------------------------- | --------------------------------------------- | ------------------------------------ |
 | [Claude Code](https://code.claude.com/docs/en/skills)                                    | `.claude/skills/`                             | Planned Markdown adapter             |

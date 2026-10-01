@@ -8,6 +8,11 @@ const root = fileURLToPath(new URL("../", import.meta.url));
 const run = (command, args) =>
   execFileSync(command, args, { cwd: root, encoding: "utf8" }).trim();
 const pkg = JSON.parse(await readFile(resolve(root, "package.json"), "utf8"));
+const catalog = JSON.parse(
+  await readFile(resolve(root, "catalog.json"), "utf8"),
+);
+const isLocalExpertise = (path) =>
+  /(?:^|\/)(?:knowledge|memory)\/local(?:\/|$)/.test(path);
 if (!/^\d+\.\d+\.\d+(?:-[a-zA-Z0-9.-]+)?$/.test(pkg.version))
   throw new Error("Invalid package version");
 const tag = `v${pkg.version}`;
@@ -21,6 +26,11 @@ if (run("git", ["status", "--porcelain"]))
     "Commit tracked and untracked changes before packaging a release",
   );
 const sourceCommit = run("git", ["rev-parse", "HEAD"]);
+const trackedPaths = run("git", ["ls-files", "-z"]).split("\0");
+if (trackedPaths.some(isLocalExpertise))
+  throw new Error(
+    "Private local expertise must not be tracked or included in source releases",
+  );
 const out = resolve(root, "release");
 await rm(out, { recursive: true, force: true });
 await mkdir(out);
@@ -30,10 +40,11 @@ const packed = JSON.parse(
 const packageAsset = packed[0].filename;
 for (const file of packed[0].files) {
   if (
-    file.path !== ".env.example" &&
-    /(^|\/)(?:\.env(?:\..*)?|node_modules|coverage|test|\.git)(?:\/|$)/.test(
-      file.path,
-    )
+    isLocalExpertise(file.path) ||
+    (file.path !== ".env.example" &&
+      /(^|\/)(?:\.env(?:\..*)?|node_modules|coverage|test|\.git)(?:\/|$)/.test(
+        file.path,
+      ))
   )
     throw new Error(`Unexpected package member: ${file.path}`);
 }
@@ -61,7 +72,7 @@ const manifest = {
   sourceCommit,
   packageName: pkg.name,
   node: pkg.engines.node,
-  catalogSchemaVersion: 1,
+  catalogSchemaVersion: catalog.schemaVersion,
   artifacts,
   capabilities: [
     "portable-instructions",
