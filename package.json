@@ -1,6 +1,6 @@
 {
   "name": "@benjamin-small/agentic-harness-development",
-  "version": "2026.1001.171432",
+  "version": "2026.1001.174037",
   "description": "Portable agent skills, harness specialists, and versioned development tooling.",
   "private": true,
   "type": "module",
@@ -15,7 +15,8 @@
   },
   "bin": {
     "harness-kit": "dist/src/cli.js",
-    "jev": "dist/src/jev/cli.js"
+    "jev": "dist/src/jev/cli.js",
+    "poietic-harness": "dist/src/maintenance/cli.js"
   },
   "exports": {
     ".": {
@@ -25,10 +26,15 @@
     "./jev": {
       "types": "./dist/src/jev/index.d.ts",
       "import": "./dist/src/jev/index.js"
+    },
+    "./maintenance": {
+      "types": "./dist/src/maintenance/index.d.ts",
+      "import": "./dist/src/maintenance/index.js"
     }
   },
   "files": [
     "dist/src",
+    "dist/claude-plugin",
     "skills",
     "agents",
     "schemas",
@@ -42,7 +48,7 @@
     "SECURITY.md"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && node scripts/build-claude-plugin.mjs",
     "typecheck": "tsc --noEmit",
     "format": "prettier --write .",
     "format:check": "prettier --check .",

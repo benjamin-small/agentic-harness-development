@@ -52,8 +52,8 @@
         "software": {
           "type": "array",
           "uniqueItems": true,
-          "items": { "const": "jev-runtime" },
-          "description": "jev-runtime is the bundled Node.js CLI and library; selecting it does not install software or invoke inference."
+          "items": { "enum": ["jev-runtime", "maintenance-runtime"] },
+          "description": "Bundled Node.js tools; selecting software does not install or execute it."
         },
         "status": { "enum": ["instructions-only", "tool-backed"] },
         "execution": {

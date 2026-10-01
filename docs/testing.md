@@ -10,12 +10,32 @@ Jev tests exercise choice/score/noul contracts, structured guidance, missing/opt
 
 Release-version tests cover UTC conversion, whole-second precision, midnight, leap days, invalid dates/times, numeric padding, package/lockfile agreement, legacy migration, and duplicate/backward timestamp rejection. Stamping tests use temporary package fixtures and preserve dependency versions.
 
-Measured on 2026-10-01 with Node.js 26.10.0: **99.71% lines/statements, 100% functions, and 98.36% branches**, across 44 passing tests. Reproduce with `npm run test:coverage`; CI uploads its own per-runtime measurements. Coverage covers `src/` runtime code, not the release scripts or skill decision quality. There is no arbitrary global coverage threshold.
+Maintenance tests cover pin precedence, chronological comparisons, ahead/behind
+states, pinned alignment with a newer available release, local metadata conflicts,
+invalid pins, offline/HTTP/network failures, bounded response bodies and deadlines,
+structured CLI exits, and fail-soft startup context. The generated Claude plugin's
+actual exec command is run against a temporary project pin; it includes only
+maintenance, with no UI registration or inference.
+
+Measured on 2026-10-01 with Node.js 26.10.0: **99.76% lines/statements, 100% functions, and 98.11% branches**, across 52 passing tests. Reproduce with `npm run test:coverage`; CI uploads its own per-runtime measurements. Coverage covers `src/` runtime code, not the release scripts or skill decision quality. There is no arbitrary global coverage threshold.
 
 ## Artifact verification
 
-`npm run release:pack` followed by `npm run release:verify` validates checksums and installs the exact tarball into a fresh temporary npm consumer. It verifies catalog/library exports, shipped resource paths, selection, installed CLI execution, and version consistency. Jev verification imports the `/jev` entry, uses injected transport for a decision and partial batch, and invokes the installed `jev` binary for local validation/version. Package installation needs access to npm for the locked direct runtime dependencies.
+`npm run release:pack` followed by `npm run release:verify` validates checksums and installs the exact tarball into a fresh temporary npm consumer. It verifies catalog/library exports, shipped resource paths, selection, installed CLI execution, and version consistency. Jev verification imports the `/jev` entry, uses injected transport for a decision and partial batch, and invokes the installed `jev` binary for local validation/version. Maintenance verification imports `/maintenance`, invokes the installed version checker against a project pin, checks plugin/runtime version agreement and canonical skill copies, and runs the packaged hook command. Package installation needs access to npm for the locked direct runtime dependencies.
 
 ## Outside this baseline
 
-Tests do not establish skill quality, native harness discovery, or live Jev usefulness. Native adapter smoke tests and skill behavior evaluations remain later milestones. A live provider check is still pending: no key was available during implementation. From a source checkout, `JEV_LIVE_SMOKE=1 npm run jev:smoke` makes at most one synthetic request with no retries and a 20-second deadline when credentials are explicitly injected. It reports model/usage without secrets or input. That bounded integration check would still not prove decision quality across tasks.
+Claude Code 2.1.281's `plugin validate --strict --json` accepts the generated plugin
+manifest without warnings. Unit and external-consumer tests execute the generated
+hook command and validate its context output. These checks do not establish
+interactive skill discovery, hook invocation by a running Claude session, or a
+successful real user upgrade. Those remain separate verification steps; no host
+global configuration is modified for these tests.
+
+Tests do not establish skill quality or live Jev usefulness. Native specialist
+adapters and skill behavior evaluations remain later milestones. A live provider
+check is still pending: no key was available during implementation. From a source
+checkout, `JEV_LIVE_SMOKE=1 npm run jev:smoke` makes at most one synthetic request
+with no retries and a 20-second deadline when credentials are explicitly injected.
+It reports model/usage without secrets or input. That bounded integration check
+would still not prove decision quality across tasks.

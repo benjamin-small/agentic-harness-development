@@ -111,6 +111,62 @@ assert.equal(plan.components[0].destination, '~/.agents/skills/ui-standards');`;
     ),
   );
   assert.equal(installed.version, manifest.version);
+  const hasMaintenance = manifest.capabilities.includes(
+    "session-version-check",
+  );
+  if (hasMaintenance) {
+    const packageRoot = join(
+      consumer,
+      "node_modules/@benjamin-small/agentic-harness-development",
+    );
+    const maintenanceProbe = `import assert from 'node:assert/strict';
+import {checkVersion} from '@benjamin-small/agentic-harness-development/maintenance';
+const result = await checkVersion({root:${JSON.stringify(packageRoot)},expected:${JSON.stringify(manifest.version)},offline:true});
+assert.equal(result.alignment,'aligned');
+assert.equal(result.integrity,'not-checked');`;
+    run(process.execPath, ["--input-type=module", "-e", maintenanceProbe]);
+    const maintenanceBin = join(consumer, "node_modules/.bin/poietic-harness");
+    await writeFile(
+      join(consumer, ".poietic-harness.json"),
+      JSON.stringify({ schemaVersion: 1, version: manifest.version }),
+    );
+    const report = JSON.parse(
+      run(maintenanceBin, ["check", "--project", consumer, "--offline"]),
+    );
+    assert.equal(report.alignment, "aligned");
+    assert.equal(report.latest.status, "not-checked");
+    const pluginRoot = join(packageRoot, "dist/claude-plugin/poietic-harness");
+    const plugin = JSON.parse(
+      await readFile(join(pluginRoot, ".claude-plugin/plugin.json"), "utf8"),
+    );
+    assert.equal(plugin.name, "poietic-harness");
+    assert.equal(plugin.version, manifest.version);
+    const hooks = JSON.parse(
+      await readFile(join(pluginRoot, "hooks/hooks.json"), "utf8"),
+    );
+    const hook = hooks.hooks.SessionStart[0].hooks[0];
+    assert.equal(hook.command, "node");
+    const args = hook.args.map((arg) =>
+      arg
+        .replaceAll("${CLAUDE_PLUGIN_ROOT}", pluginRoot)
+        .replaceAll("${CLAUDE_PROJECT_DIR}", consumer),
+    );
+    const context = JSON.parse(run(process.execPath, args)).hookSpecificOutput;
+    assert.equal(context.hookEventName, "SessionStart");
+    assert.match(context.additionalContext, /aligned \(equal\)/);
+    for (const path of [
+      "SKILL.md",
+      "knowledge/INDEX.md",
+      "knowledge/checking.md",
+      "knowledge/updating.md",
+      "knowledge/harnesses.md",
+      "memory/INDEX.md",
+    ])
+      assert.equal(
+        await readFile(join(pluginRoot, "skills/update", path), "utf8"),
+        await readFile(join(packageRoot, "skills/update", path), "utf8"),
+      );
+  }
   const hasJev = manifest.capabilities.includes("jev-typescript-library");
   if (hasJev) {
     const jevProbe = `import assert from 'node:assert/strict';
@@ -157,6 +213,15 @@ assert.equal(results.find(r => r.sequence === 1).ok,false);`;
           "bundled-resources",
           "cli-bin",
           "selection",
+          ...(hasMaintenance
+            ? [
+                "maintenance-library",
+                "maintenance-cli-pin",
+                "claude-plugin-version",
+                "claude-hook-command",
+                "canonical-update-skill",
+              ]
+            : []),
           ...(hasJev
             ? [
                 "jev-library-mock",

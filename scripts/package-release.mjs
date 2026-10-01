@@ -85,6 +85,9 @@ const manifest = {
     "explicit-selection-plans",
     "jev-typescript-library",
     "jev-cli-and-jsonl-batches",
+    "session-version-check",
+    "scoped-update-skill",
+    "claude-maintenance-plugin",
   ],
   notIncluded: [
     "automatic-project-detection",

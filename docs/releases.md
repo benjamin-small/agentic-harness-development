@@ -11,6 +11,7 @@ Run `npm run release:stamp` once while preparing a release. It generates the cur
 Each release contains:
 
 - An npm-compatible `.tgz` with compiled library/CLI, catalog, schemas, skills, roles, and documentation.
+- The tarball includes `dist/claude-plugin/poietic-harness`, a self-contained maintenance plugin generated from the canonical update skill and TypeScript runtime. Its manifest and runtime version come from the same package version; private local expertise is excluded from both copies.
 - A source `.tar.gz` made from the exact Git commit.
 - `manifest.json` containing version, `versioning: "utc-timestamp"`, the full ISO `versionTimestamp`, tag, source commit, runtime requirements, capabilities, limitations, sizes, and SHA-256 hashes.
 - `SHA256SUMS` covering both archives and the manifest.
@@ -35,5 +36,11 @@ The historical `v0.1.0-alpha.1` and `v0.1.0-alpha.2` releases retain their origi
 Checksums depend on trusting their source. They are not signatures. Artifact signing/attestation can be added when a consumer requires that stronger provenance contract.
 
 ## Consumer scope
+
+Use the [maintenance checker](maintenance.md) for startup alignment. Its exact
+version pin is separate from the future capability/install lock; continue recording
+artifact hashes and paths in provisioning records. A check never installs software
+or changes the pin. `poietic-harness:update` guides an explicit upgrade and
+preserves scoped local expertise.
 
 [BOOTSTRAP.md](../BOOTSTRAP.md) distinguishes personal defaults, project capabilities, and deployment provisioning. Dependencies for the current package are pinned to exact direct versions. Future installations must record release identity and integrity alongside project selection; an npm lockfile in the consumer also captures transitive dependency resolution.
