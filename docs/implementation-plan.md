@@ -18,6 +18,7 @@ Publish a reusable collection of skills, harness specialists, and TypeScript too
 - Native packaging is preferred over a new general-purpose package manager. Our bootstrap coordinates versions, capability selection, and verification.
 - Use MIT licensing and public GitHub releases. Keep the initial package private to npm until registry publication is deliberately selected.
 - Package versions encode UTC release-preparation date/time. Use `release:stamp`, exact timestamp tags, and explicit changelog/schema compatibility information; preserve historical releases.
+- Significant additions, fixes, removals, and behavior changes require a readable changelog entry in the same pull request, following [the shared policy](changelog.md) for people and harnesses.
 
 ## M0: Repository foundation — shipped in alpha.1
 

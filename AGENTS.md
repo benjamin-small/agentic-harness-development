@@ -22,7 +22,8 @@ This repository distributes portable skills, reusable agent roles, and TypeScrip
 - Explicit project selections override detection when detection is implemented. Installing a capability does not grant new external-action permissions.
 - Never commit credentials or copy local user configuration into releases. Read `.env.example` only for variable names; it is not a credential source.
 - Do not claim native compatibility, a live API check, or a published release based solely on local validation.
+- Every significant addition, fix, removal, or behavior change must update `CHANGELOG.md` in the same pull request, including changes to agent/skill behavior. Follow [the changelog policy](docs/changelog.md): readable impact, searchable component names, migration actions, and clear unreleased/released status.
 
 ## Completion
 
-Run the checks appropriate to the change. Update the implementation plan and changelog when behavior changes. Update measured coverage after changing runtime tests. For release changes, verify an external consumer of the exact artifact and confirm GitHub assets and status. Keep documentation clear about implemented versus planned behavior.
+Run the checks appropriate to the change. Update the implementation plan when behavior changes and apply the changelog rule above. Explain in the pull request when a minor change does not need a changelog entry. Update measured coverage after changing runtime tests. For release changes, verify an external consumer of the exact artifact and confirm GitHub assets and status. Keep documentation clear about implemented versus planned behavior.
