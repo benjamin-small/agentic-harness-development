@@ -6,11 +6,11 @@
       "id": "jev",
       "kind": "skill",
       "path": "skills/jev",
-      "description": "Design typed Jev decisions through OpenRouter; API execution is a planned milestone.",
+      "description": "Design and execute typed Jev decisions through the bundled OpenRouter CLI and TypeScript library.",
       "capabilities": ["structured-decisions"],
       "requires": [],
-      "software": [],
-      "status": "instructions-only"
+      "software": ["jev-runtime"],
+      "status": "tool-backed"
     },
     {
       "id": "ui-standards",

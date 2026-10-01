@@ -11,8 +11,8 @@ export interface Component {
   description: string;
   capabilities: string[];
   requires: string[];
-  software: never[];
-  status: "instructions-only";
+  software: "jev-runtime"[];
+  status: "instructions-only" | "tool-backed";
   execution?: {
     host: "harness";
     context: "fresh";
@@ -279,7 +279,7 @@ export function planSelection(catalog: Catalog, options: SelectionOptions) {
     })),
     limitations: [
       "This command does not inspect a project or install files.",
-      "Native agent adapters and executable dependencies are not included in this release.",
+      "Native agent adapters are not included. The bundled jev-runtime is installed with the package, separately from skill discovery.",
       ...(options.scope === "deployment"
         ? [
             "Deployment provisioning must supply explicit destinations and a pinned release.",

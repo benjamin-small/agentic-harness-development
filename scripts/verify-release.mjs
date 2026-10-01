@@ -100,6 +100,39 @@ assert.equal(plan.components[0].destination, '~/.agents/skills/ui-standards');`;
     ),
   );
   assert.equal(installed.version, manifest.version);
+  const hasJev = manifest.capabilities.includes("jev-typescript-library");
+  if (hasJev) {
+    const jevProbe = `import assert from 'node:assert/strict';
+import {createJevClient, decideBatch, validateRequest, JEV_MODEL} from '@benjamin-small/agentic-harness-development/jev';
+const request = {id:'consumer-check',state:'Synthetic input',questions:{check:{type:'noul',instructions:'Is the input synthetic?'}}};
+validateRequest(request);
+const client = createJevClient({apiKey:'fixture-only',fetch:async () => Response.json({model:JEV_MODEL,answers:{check:{type:'noul',noul:1}},usage:{input_tokens:1,output_tokens:1}})});
+const result = await client.decide(request);
+assert.equal(result.ok,true);
+assert.equal(result.requestId,'consumer-check');
+const results = [];
+for await (const item of decideBatch(client,[request,null])) results.push(item);
+assert.equal(results.length,2);
+assert.equal(results.find(r => r.sequence === 0).ok,true);
+assert.equal(results.find(r => r.sequence === 1).ok,false);`;
+    run(process.execPath, ["--input-type=module", "-e", jevProbe]);
+    const jevBin = join(consumer, "node_modules/.bin/jev");
+    assert.equal(run(jevBin, ["--version"]).trim(), manifest.version);
+    await writeFile(
+      join(consumer, "decision.json"),
+      JSON.stringify({
+        id: "consumer-check",
+        state: "Synthetic input",
+        questions: {
+          check: { type: "noul", instructions: "Is the input synthetic?" },
+        },
+      }),
+    );
+    assert.equal(
+      JSON.parse(run(jevBin, ["validate", "--input", "decision.json"])).valid,
+      true,
+    );
+  }
   console.log(
     JSON.stringify(
       {
@@ -113,6 +146,14 @@ assert.equal(plan.components[0].destination, '~/.agents/skills/ui-standards');`;
           "bundled-resources",
           "cli-bin",
           "selection",
+          ...(hasJev
+            ? [
+                "jev-library-mock",
+                "jev-batch",
+                "jev-cli-validation",
+                "jev-version",
+              ]
+            : []),
         ],
       },
       null,

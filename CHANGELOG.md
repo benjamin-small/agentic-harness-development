@@ -2,7 +2,14 @@
 
 Versions use semantic versioning. Prereleases may change interfaces; pin an exact release.
 
-## Unreleased — 0.1.0-alpha.2
+## 0.1.0-alpha.2 — 2026-10-01
+
+### Added
+
+- Jev TypeScript library export and CLI with choice, score, and noul decisions pinned to `typesafe/jev-1.13` through OpenRouter.
+- JSONL batches, bounded concurrency/input/output, sequence correlation, cancellation, request deadlines, sanitized errors, and bounded retries with explicit transport-replay opt-in.
+- Local request validation, injected transport, environment credentials, and progressive tool-use guidance.
+- Contract/fault/CLI tests, installed-consumer verification, and an opt-in one-attempt live smoke script.
 
 ### Changed
 
@@ -11,7 +18,7 @@ Versions use semantic versioning. Prereleases may change interfaces; pin an exac
 - Catalog/selection schema 2 uses component directories for both kinds; consumers must use the matching reader and regenerate selection plans.
 - Require knowledge/memory indexes during validation and exclude private `local/` material from Git and release artifacts.
 
-The read-only CLI does not maintain memory automatically. The published alpha.1 release remains unchanged.
+The catalog declares bundled `jev-runtime` software separately from instructions. The planner remains read-only and does not maintain memory automatically. Live provider verification is pending; no key was available. Alpha.1 remains unchanged.
 
 ## 0.1.0-alpha.1 — 2026-10-01
 

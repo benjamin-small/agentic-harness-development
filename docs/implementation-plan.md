@@ -1,6 +1,6 @@
 # Initial implementation plan
 
-Status: foundation implementation. Decisions established on 2026-10-01.
+Status: foundation and Jev runtime implemented; live Jev validation pending. Decisions established on 2026-10-01.
 
 ## Objective
 
@@ -18,7 +18,7 @@ Publish a reusable collection of skills, harness specialists, and TypeScript too
 - Native packaging is preferred over a new general-purpose package manager. Our bootstrap coordinates versions, capability selection, and verification.
 - Use MIT licensing and public GitHub releases. Keep the initial package private to npm until registry publication is deliberately selected.
 
-## M0: Repository foundation — this release
+## M0: Repository foundation — shipped in alpha.1
 
 Deliver mature documentation, validated portable resources, a read-only selection planner, TypeScript checks, and release infrastructure.
 
@@ -36,16 +36,17 @@ The external publication gate is a successful [CI run](https://github.com/benjam
 
 ## M1: Jev library and command-line tool
 
-Implement the [Jev contract](jev-runtime.md) under a separate package boundary. Pin the initial model to `typesafe/jev-1.13`; verify the upstream schema at implementation time.
+The [Jev runtime](jev-runtime.md) is implemented for alpha.2 through the `/jev` package export and separate executable. The initial model is pinned to `typesafe/jev-1.13`; the upstream schema was verified on 2026-10-01.
 
 Acceptance:
 
-- Single requests accept multiple named, independent typed questions over shared state.
-- JSONL batches support separate states, bounded concurrency and input size, caller IDs, ordered/correlatable results, cancellation, and per-request errors.
-- Strict input/output validation, structured errors, timeouts, and bounded retry behavior. Document possible duplicate billing after ambiguous network failures.
-- The library accepts injected transport and cancellation; the CLI uses environment credentials and JSON stdout.
-- Unit/contract tests cover response variants, malformed data, missing credentials, 401/429/5xx, cancellation, and partial batches.
-- Publish a consumable package and CLI artifact; run one explicitly configured, bounded live request and report model/usage without logging secrets or private state.
+- [x] Single requests accept multiple named, independent typed questions over shared state.
+- [x] JSONL batches support separate states, bounded concurrency/input size, caller IDs, completion-order results with sequence correlation, cancellation, and per-request errors.
+- [x] Strict input/output validation, structured errors, deadlines, and bounded retries; document duplicate-billing risks.
+- [x] Injected transport and cancellation in the library; environment credentials and JSON stdout in the CLI.
+- [x] Tests for response variants, malformed data, missing credentials, 401/429/5xx, cancellation, and partial batches.
+- [x] Include library and CLI in consumable package assets and isolated release-consumer verification.
+- [ ] Run one explicitly configured, bounded live request and report model/usage. The opt-in smoke script is ready; the implementation process has no OpenRouter key. This prerelease does not claim live verification.
 
 ## M2: Bootstrap and capability selection
 

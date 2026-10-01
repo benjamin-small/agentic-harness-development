@@ -14,12 +14,17 @@
     "node": "^24.0.0 || ^26.0.0"
   },
   "bin": {
-    "harness-kit": "dist/src/cli.js"
+    "harness-kit": "dist/src/cli.js",
+    "jev": "dist/src/jev/cli.js"
   },
   "exports": {
     ".": {
       "types": "./dist/src/index.d.ts",
       "import": "./dist/src/index.js"
+    },
+    "./jev": {
+      "types": "./dist/src/jev/index.d.ts",
+      "import": "./dist/src/jev/index.js"
     }
   },
   "files": [
@@ -42,6 +47,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "validate": "npm run build && node dist/src/cli.js validate",
+    "jev:smoke": "npm run build && node scripts/smoke-jev.mjs",
     "test": "npm run build && node --test dist/test/*.test.js",
     "test:coverage": "npm run build && c8 --include 'dist/src/**' --reporter=text --reporter=json-summary node --test dist/test/*.test.js",
     "check": "npm run format:check && npm run typecheck && npm run test:coverage && node dist/src/cli.js validate",
