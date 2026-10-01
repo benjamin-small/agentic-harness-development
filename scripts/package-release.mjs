@@ -78,9 +78,10 @@ const manifest = {
     "portable-instructions",
     "catalog-validation",
     "explicit-selection-plans",
+    "jev-typescript-library",
+    "jev-cli-and-jsonl-batches",
   ],
   notIncluded: [
-    "jev-api-client",
     "automatic-project-detection",
     "installation-writes",
     "native-agent-adapters",

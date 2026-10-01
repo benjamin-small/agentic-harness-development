@@ -1,10 +1,10 @@
 # Bootstrap this toolkit
 
-Read this file when asked to install or use this repository from a fresh harness. Use the version of this file associated with the selected release. The download example uses published **v0.1.0-alpha.1**; its original `references/` and flat agent layout remain unchanged. Current source introduces the unreleased [local expertise convention](docs/local-expertise.md) and catalog schema 2. Read the tag's bootstrap guide when consuming an older release.
+Read this file when asked to install or use this repository from a fresh harness. Use the guide associated with the selected release. This guide targets **v0.1.0-alpha.2**, with the Jev runtime, [local expertise convention](docs/local-expertise.md), and catalog schema 2. Read the tag's guide when consuming an older release.
 
 ## Know what this release provides
 
-It includes portable instruction assets and a read-only catalog planner. The Jev API client, automatic capability detector, installation writer, and native subagent adapters are planned. Do not invoke nonexistent `jev` commands, claim that the UI role has been registered as a subagent, or start a persistent service.
+It includes portable instructions, a read-only catalog planner, and the Jev TypeScript library/CLI. Automatic capability detection, installation writes, and native subagent adapters remain planned. Registering the UI reviewer still needs a harness-specific procedure; persistent services belong in their own runtime.
 
 ## Resolve scope and capabilities
 
@@ -25,14 +25,14 @@ Available capabilities: `ui` and `structured-decisions`. Agent role files are ca
 The consumer needs Node.js 24 LTS or 26 and npm. The following acquisition example additionally uses GitHub CLI and `shasum` on macOS/Linux. The four release assets can also be downloaded from the GitHub release page using another trusted download tool.
 
 ```sh
-toolkit_dir="$HOME/.local/share/agentic-harness-development/0.1.0-alpha.1"
+toolkit_dir="$HOME/.local/share/agentic-harness-development/0.1.0-alpha.2"
 mkdir -p "$toolkit_dir/assets"
-gh release download v0.1.0-alpha.1 \
+gh release download v0.1.0-alpha.2 \
   --repo benjamin-small/agentic-harness-development \
   --dir "$toolkit_dir/assets"
 (cd "$toolkit_dir/assets" && shasum -a 256 -c SHA256SUMS)
 npm install --prefix "$toolkit_dir/runtime" --ignore-scripts --no-audit --no-fund \
-  "$toolkit_dir/assets/benjamin-small-agentic-harness-development-0.1.0-alpha.1.tgz"
+  "$toolkit_dir/assets/benjamin-small-agentic-harness-development-0.1.0-alpha.2.tgz"
 "$toolkit_dir/runtime/node_modules/.bin/harness-kit" validate
 "$toolkit_dir/runtime/node_modules/.bin/harness-kit" plan \
   --capability ui --harness claude-code --scope project
@@ -51,6 +51,14 @@ When using the current indexed layout in a Git-tracked project, ensure the desti
 For the UI reviewer, a capable harness can read the canonical role and selected skill to carry out a review. Automatic native subagent registration is not provided yet. Verify the harness actually discovers the skills and distinguish that result from runtime/tool availability.
 
 For a deployment, use explicit destination paths and the executing service identity. Install during provisioning or image build. On restart, verify and reuse the pinned release; do not resolve latest or upgrade silently. Singleton ownership, state, event handling, and delegation belong to the separate service runtime.
+
+## Configure executable tools separately
+
+The catalog declares `jev-runtime` as software required to execute the Jev skill. It is bundled with the same package and version, exposed as `node_modules/.bin/jev` and the `/jev` library export. Installing only `skills/jev/` provides instructions, not this runtime. A UI-only selection needs no Jev credentials or inference.
+
+For personal use, keep the pinned runtime in the user-owned cache above and give the harness its absolute executable path. For project use, record that exact version, path, and artifact integrity in the project's setup instructions; a project-local npm tarball installation is also valid. For deployments, include the package during image/provisioning build and pass its path and secrets to the service identity. Do not modify global npm packages or shell profiles implicitly.
+
+Verify `"$toolkit_dir/runtime/node_modules/.bin/jev" --version`, then use its `validate` command on a synthetic request from the [runtime manual](docs/jev-runtime.md). Inject `OPENROUTER_API_KEY` only into processes authorized to invoke inference. A live `decide` or `batch` call sends state externally and may bill; package installation and local validation do neither. Live provider validation remains pending for this release.
 
 ## Record the result
 

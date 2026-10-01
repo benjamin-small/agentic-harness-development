@@ -39,4 +39,4 @@ A runtime must enforce ownership using a lease/lock with fencing and deduplicate
 
 `skills/` and `agents/` are authoritative instruction sources. Adapter output is derived and tested against native harness semantics. Models, permissions, hooks, and discovery locations stay in adapters. Our `catalog.json` describes packaging and selection; its schema is repository-owned, not an industry agent specification.
 
-The bootstrap CLI validates resources and computes selection only. No installation, project inspection, inference, or background work occurs in this release.
+The bootstrap CLI validates resources and computes selection only. A separate `jev` executable and `/jev` library export perform explicitly invoked inference. Installing the package supplies the runtime; registering a skill supplies its instructions. No automatic installation, project inspection, or background service runs.

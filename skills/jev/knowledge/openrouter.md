@@ -8,7 +8,7 @@ Verified against upstream documentation on 2026-10-01. The Decisions API is alph
 - Body: `model`, `state`, and a map of named `questions`.
 - A choice question has `type: "choice"`, instructions, and a criteria map keyed by option.
 - A score question has `type: "score"`, instructions, and ordered criteria.
-- A noul question has `type: "noul"`, instructions, and true/false criteria.
+- A noul question has `type: "noul"`, instructions, and optional true/false criteria. If supplied, both criteria are required.
 
 The response has typed answers and usage. Confidence, distributions, and cost may be optional in the schema; consumers must handle missing metadata explicitly. Do not require every field shown in a cookbook example.
 
@@ -18,6 +18,6 @@ Sources: [OpenRouter Jev guide](https://openrouter.ai/docs/guides/community/jev)
 
 ## Repository implementation status
 
-This release does not ship an API client or executable Jev command. The [runtime contract](https://github.com/benjamin-small/agentic-harness-development/blob/v0.1.0-alpha.1/docs/jev-runtime.md) defines the planned TypeScript library, CLI, batching, validation, cancellation, and retry behavior. A missing client is a setup limitation; it is not a model result.
+Toolkit 0.1.0-alpha.2 implements the TypeScript library, CLI, batching, validation, cancellation, and bounded retries. Start with [tool use](tool-use.md), then load the packaged runtime manual if needed. Tests validate contract fixtures; live provider verification is pending. A missing client or credential is a setup limitation, not a model result.
 
 Never place credentials in a request example, project selection, skill file, or stdout. Any live invocation sends the provided state to the configured service and can incur usage charges.
