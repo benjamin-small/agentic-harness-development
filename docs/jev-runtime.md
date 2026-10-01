@@ -2,7 +2,7 @@
 
 Introduced in **0.1.0-alpha.2** and included in subsequent timestamp releases. The package exports `@benjamin-small/agentic-harness-development/jev` and a `jev` executable. Node.js 24 or 26 is required. Installing or selecting instructions never calls the API. Invoking `decide` or `batch` sends supplied state to OpenRouter and can incur charges.
 
-The initial transport is pinned to `POST https://openrouter.ai/api/alpha/decisions` and `typesafe/jev-1.13`. It does not use chat completions or the separate TypeSafe SDK endpoint. The alpha [upstream schema](https://openrouter.ai/docs/api/api-reference/alphadecisions/submit-a-decisions-request) was checked on 2026-10-01. Fixtures test that contract; they do not establish live provider availability or model quality.
+The transport is pinned to `POST https://openrouter.ai/api/alpha/decisions` and `typesafe/jev-1.13`. It does not use chat completions or the separate TypeSafe SDK endpoint. The alpha [upstream schema](https://openrouter.ai/docs/api/api-reference/alphadecisions/submit-a-decisions-request) was checked on 2026-10-01. Fixtures test that contract; they do not establish live provider availability or model quality.
 
 ## Commands
 
@@ -90,7 +90,7 @@ for await (const result of decideBatch(client, requests, { concurrency: 4 })) {
 
 Each admitted request yields `{schemaVersion: 1, requestId, attempts, ok, response}` on success, or `{schemaVersion: 1, requestId, attempts, ok: false, error}` on failure. `attempts` counts transport attempts; validation failures have zero. Invalid request IDs return as `null`.
 
-A successful `response` has `model`, `answers`, and `usage`. Answers contain exactly the requested IDs and matching types: choice answers carry `choice`, score answers carry `score`, and noul answers carry `noul` (0–1). Usage requires `input_tokens` and `output_tokens`. The client validates types, ranges, choices, model, completeness, and usage. Optional confidence, probabilities, score legends, cost, provider, and provider request ID are preserved when present; absent metadata remains absent and unknown fields are dropped. Partial probability maps are preserved without filling missing values or renormalizing. Confidence is concentration, not empirical correctness.
+A successful `response` has `model`, `answers`, and `usage`. Requests use the `JEV_MODEL` alias `typesafe/jev-1.13`; responses may identify that alias or the documented `JEV_MODEL_REVISION`, `typesafe/jev-1.13-20260917`. Preserve the returned model ID. Other models and unknown revisions are rejected; matching arbitrary prefixes is not sufficient. Answers contain exactly the requested IDs and matching types: choice answers carry `choice`, score answers carry `score`, and noul answers carry `noul` (0–1). Usage requires `input_tokens` and `output_tokens`. The client validates types, ranges, choices, model, completeness, and usage. Optional confidence, probabilities, score legends, cost, provider, and provider request ID are preserved when present; absent metadata remains absent and unknown fields are dropped. Partial probability maps are preserved without filling missing values or renormalizing. Confidence is concentration, not empirical correctness.
 
 Errors have `{code, message, retryable, status?}`. Codes include `INVALID_INPUT`, `AUTHENTICATION`, `INSUFFICIENT_CREDITS`, `HTTP_ERROR`, `TRANSPORT_ERROR`, `INVALID_RESPONSE`, `RESPONSE_TOO_LARGE`, `TIMEOUT`, and `CANCELLED`.
 
@@ -119,4 +119,8 @@ Ambiguous transport errors are **not retried by default** because the provider m
 
 ## Validation status
 
-Contract, fault, CLI, and package tests use synthetic fixtures and injected transport. For an explicitly authorized live check, inject the key and run `JEV_LIVE_SMOKE=1 npm run jev:smoke`. It makes at most one small synthetic noul request, disables retries, and reports model/usage without input or credentials. Live verification is pending; no API key was available in the implementation process.
+Contract, fault, CLI, and package tests use synthetic fixtures and injected transport. A [live library and CLI check](verification/jev-2026-10-01.md) passed on 2026-10-01 after correcting resolved-model validation. Earlier releases through v2026.1001.174037 reject the observed dated model ID; upgrade the runtime and project pin together.
+
+For an explicitly authorized live check, inject only `OPENROUTER_API_KEY` and run `JEV_LIVE_SMOKE=1 npm run jev:smoke`. It makes up to two requests (library then CLI), each with choice, score, and noul questions, no retries, and a 20-second deadline. It emits correlated answers, model, usage, and illustrative consumer decisions; it does not print credentials or provider error bodies. The CLI child receives only the API key. If the library check fails, the CLI call is skipped.
+
+To test an already verified release instead of this checkout, run `JEV_LIVE_SMOKE=1 node scripts/smoke-jev.mjs --package-root /absolute/runtime/node_modules/@benjamin-small/agentic-harness-development`. The runner lives in the source checkout. Never put the key in command arguments, commit it, or paste it into chat. Fixture success proves bounded integration behavior, not general accuracy or permission to process private project data.

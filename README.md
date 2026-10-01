@@ -8,7 +8,7 @@ Portable skills, harness specialists, and reusable development tools. This repos
 
 ## Current status
 
-**Maturity: Alpha.** The core tools are packaged and tested, and [isolated Codex bootstrap and fresh-session use](docs/verification/codex-2026-10-01.md) are verified. Live Jev inference and other harness integrations remain pending. See the [maturity scale](docs/repository-maturity.md) for the criteria.
+**Maturity: Alpha.** The core tools are packaged and tested, and [isolated Codex bootstrap and fresh-session use](docs/verification/codex-2026-10-01.md) are verified. [Live Jev library and CLI inference](docs/verification/jev-2026-10-01.md) is also verified on a synthetic fixture; broader decision quality and other harness integrations remain unverified. See the [maturity scale](docs/repository-maturity.md) for the criteria.
 
 Releases use [UTC date-and-time versions](docs/releases.md), such as `2026.1001.171432` for 2026-10-01 at 17:14:32 UTC. Pin an exact timestamp; changes and compatibility details belong in the changelog.
 
@@ -23,7 +23,7 @@ The toolkit includes:
 - A read-only `poietic-harness` version checker, an update skill, and a Claude Code plugin providing `/poietic-harness:update` and a SessionStart check.
 - CI, contributor guidance, and GitHub release archives with checksums and a source manifest.
 
-Automatic project detection, installation writes, and native subagent adapters remain planned. The catalog CLI produces a selection plan without changing harness configuration. A persistent project-manager service is a separate future project. Jev contract and consumer tests use synthetic fixtures; live provider verification is pending.
+Automatic project detection, installation writes, and native subagent adapters remain planned. The catalog CLI produces a selection plan without changing harness configuration. A persistent project-manager service is a separate future project. Jev contract tests use injected transport; a separate opt-in live test verifies three typed questions through OpenRouter without treating one fixture as a quality benchmark.
 
 ## Quick start
 

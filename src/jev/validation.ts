@@ -1,5 +1,6 @@
 import {
   JEV_MODEL,
+  JEV_MODEL_REVISION,
   LIMITS,
   error,
   integer,
@@ -141,7 +142,7 @@ export function validateResponse(
     );
   if (
     !record(value) ||
-    value.model !== JEV_MODEL ||
+    (value.model !== JEV_MODEL && value.model !== JEV_MODEL_REVISION) ||
     !record(value.answers) ||
     !record(value.usage) ||
     !integer(value.usage.input_tokens as number, 0, Number.MAX_SAFE_INTEGER) ||

@@ -6,14 +6,18 @@ Entries follow the [changelog policy](docs/changelog.md). `Unreleased` describes
 
 ## Unreleased
 
+## 2026.1001.190334 — 2026-10-01 19:03:34 UTC
+
 ### Added
 
+- **Jev live verification:** Exercise real OpenRouter library and CLI inference with three independent typed questions, correlated JSON answers, and programmatic consumption. Expand the opt-in smoke test to at most two requests per run, with retries disabled and 20-second deadlines. The [dated evidence](docs/verification/jev-2026-10-01.md) covers one synthetic fixture, not general decision quality.
 - **Codex bootstrap evaluation:** Add an opt-in disposable-container runner with a blank configuration, example UI project, native before/after skill discovery, and a fresh-session probe. Verified public-release acquisition, project-scoped Jev/UI/update discovery, startup version alignment, and local Jev CLI/library validation with Codex 0.156.1. Jev must be explicitly selected for this fixture; a UI-only plan does not install it. See the [evidence review](docs/verification/codex-2026-10-01.md). No live inference, automatic installer, or native specialist registration is claimed.
-- **Repository maturity:** Add reusable Tinker → Alpha → Beta → Stable badges and a linked guide defining each stage, selection criteria, and README examples. Require a badge and evidence-based status explanation when bootstrapping or maintaining a project's primary README. Mark this toolkit Alpha because its core packages are tested while live provider and interactive harness verification remain pending; maturity stays independent of timestamp versions.
+- **Repository maturity:** Add reusable Tinker → Alpha → Beta → Stable badges and a linked guide defining each stage, selection criteria, and README examples. Require a badge and evidence-based status explanation when bootstrapping or maintaining a project's primary README. Keep this toolkit Alpha: bounded Codex and Jev checks now pass, while broader harness coverage and decision quality remain unverified. Maturity stays independent of timestamp versions.
 
 ### Fixed
 
-- **Jev memory guidance:** Correct the outdated statement that the runtime was unimplemented. The library/CLI are implemented and locally validated; live provider verification remains pending. Update this note when adopting the next release; v2026.1001.174037 still contains the old text.
+- **Jev response validation:** Accept OpenRouter's documented resolved model `typesafe/jev-1.13-20260917` as well as the request alias, preserving the actual returned ID. Earlier runtimes reject these valid live responses with `INVALID_RESPONSE`. Upgrade the runtime and project pin together; copying skill text alone is insufficient. Unrelated models, unknown revisions, malformed answers, and invalid usage still fail closed. Export `JEV_MODEL_REVISION` for consumers that inspect the accepted revision.
+- **Jev memory guidance:** Correct the outdated statement that the runtime was unimplemented. The library/CLI are implemented and now have bounded live evidence. Add an indexed model-resolution lesson and refresh integration guidance; v2026.1001.174037 retains the old text.
 
 ## 2026.1001.174037 — 2026-10-01 17:40:37 UTC
 

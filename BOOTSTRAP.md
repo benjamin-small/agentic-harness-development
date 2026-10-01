@@ -1,6 +1,6 @@
 # Bootstrap this toolkit
 
-Read this file when asked to install or use this repository from a fresh harness. Use the guide associated with the selected release. This guide targets **v2026.1001.174037**, with the Jev runtime, [local expertise convention](docs/local-expertise.md), and catalog schema 2. Package versions encode UTC date and time; they make no compatibility promise. Read the tag's guide when consuming an older release.
+Read this file when asked to install or use this repository from a fresh harness. Use the guide associated with the selected release. This guide targets **v2026.1001.190334**, with the Jev runtime, [local expertise convention](docs/local-expertise.md), and catalog schema 2. Package versions encode UTC date and time; they make no compatibility promise. Read the tag's guide when consuming an older release.
 
 ## Know what this release provides
 
@@ -25,14 +25,14 @@ Available capabilities: `ui`, `structured-decisions`, and `toolkit-maintenance`.
 The consumer needs Node.js 24 LTS or 26 and npm. The following acquisition example additionally uses GitHub CLI and `shasum` on macOS/Linux. The four release assets can also be downloaded from the GitHub release page using another trusted download tool.
 
 ```sh
-toolkit_dir="$HOME/.local/share/agentic-harness-development/2026.1001.174037"
+toolkit_dir="$HOME/.local/share/agentic-harness-development/2026.1001.190334"
 mkdir -p "$toolkit_dir/assets"
-gh release download v2026.1001.174037 \
+gh release download v2026.1001.190334 \
   --repo benjamin-small/agentic-harness-development \
   --dir "$toolkit_dir/assets"
 (cd "$toolkit_dir/assets" && shasum -a 256 -c SHA256SUMS)
 npm install --prefix "$toolkit_dir/runtime" --ignore-scripts --no-audit --no-fund \
-  "$toolkit_dir/assets/benjamin-small-agentic-harness-development-2026.1001.174037.tgz"
+  "$toolkit_dir/assets/benjamin-small-agentic-harness-development-2026.1001.190334.tgz"
 "$toolkit_dir/runtime/node_modules/.bin/harness-kit" validate
 "$toolkit_dir/runtime/node_modules/.bin/harness-kit" plan \
   --capability ui --harness claude-code --scope project
@@ -58,7 +58,7 @@ The catalog declares `jev-runtime` as software required to execute the Jev skill
 
 For personal use, keep the pinned runtime in the user-owned cache above and give the harness its absolute executable path. For project use, record that exact version, path, and artifact integrity in the project's setup instructions; a project-local npm tarball installation is also valid. For deployments, include the package during image/provisioning build and pass its path and secrets to the service identity. Do not modify global npm packages or shell profiles implicitly.
 
-Verify `"$toolkit_dir/runtime/node_modules/.bin/jev" --version`, then use its `validate` command on a synthetic request from the [runtime manual](docs/jev-runtime.md). Inject `OPENROUTER_API_KEY` only into processes authorized to invoke inference. A live `decide` or `batch` call sends state externally and may bill; package installation and local validation do neither. Live provider validation remains pending for this release.
+Verify `"$toolkit_dir/runtime/node_modules/.bin/jev" --version`, then use its `validate` command on a synthetic request from the [runtime manual](docs/jev-runtime.md). Inject `OPENROUTER_API_KEY` only into processes authorized to invoke inference. A live `decide` or `batch` call sends state externally and may bill; package installation and local validation do neither. Live library and CLI validation is recorded in the [Jev verification report](docs/verification/jev-2026-10-01.md); this does not establish decision quality for your workload.
 
 ## Record the result
 
