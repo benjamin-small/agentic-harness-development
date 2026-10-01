@@ -19,6 +19,7 @@ Publish a reusable collection of skills, harness specialists, and TypeScript too
 - Use MIT licensing and public GitHub releases. Keep the initial package private to npm until registry publication is deliberately selected.
 - Package versions encode UTC release-preparation date/time. Use `release:stamp`, exact timestamp tags, and explicit changelog/schema compatibility information; preserve historical releases.
 - Significant additions, fixes, removals, and behavior changes require a readable changelog entry in the same pull request, following [the shared policy](changelog.md) for people and harnesses.
+- Every project's primary README carries a linked [maturity badge](repository-maturity.md): Tinker, Alpha, Beta, or Stable. Assess the advertised core using documented evidence, independently of timestamp versions; keep the explanation and changelog current.
 
 ## M0: Repository foundation — shipped in alpha.1
 

@@ -89,6 +89,8 @@ skills or source-tree contents.
 
 ### Preserve expertise and report installation
 
+When setting up a consuming project, put its maturity badge directly below the primary README title and link it to [the shared scale](docs/repository-maturity.md). Use the guide's absolute-link example for another repository, select Tinker, Alpha, Beta, or Stable from that project's evidence, and add a brief status explanation. Assess the consuming project independently of this toolkit's maturity. Preserve an existing justified assessment; log any stage change.
+
 For components using the indexed layout, provision their own writable, scoped directories for knowledge and memory, separate from the pinned package/cache. Copy the released indexes and topics, preserve local material during upgrades, and use local search before loading detailed files. Do not copy private `knowledge/local/` or `memory/local/` content into another project or a shared release. See [local expertise](docs/local-expertise.md) for maintenance and scope rules. This remains a host-managed procedure until the installer milestone is implemented.
 
 Report the release/tag and source commit, scope, chosen capabilities and evidence, destination paths, executable dependencies installed, validation performed, and remaining limitations. The structured project selection/lockfile and idempotent install command are specified in [the implementation plan](docs/implementation-plan.md) and will arrive in a later milestone.

@@ -1,10 +1,14 @@
 # Agentic Harness Development
 
+[![Repository maturity: Alpha](docs/badges/maturity-alpha.svg)](docs/repository-maturity.md#alpha)
+
 Portable skills, harness specialists, and reusable development tools. This repository provides versioned guidance that can be consumed by a developer's coding harness or by a deployed agent.
 
 [Implementation plan](docs/implementation-plan.md) · [Bootstrap instructions](BOOTSTRAP.md) · [Architecture](docs/architecture.md) · [Releases](https://github.com/benjamin-small/agentic-harness-development/releases)
 
 ## Current status
+
+**Maturity: Alpha.** The core tools are packaged and tested; live Jev inference and interactive harness verification remain pending. See the [maturity scale](docs/repository-maturity.md) for the criteria.
 
 Releases use [UTC date-and-time versions](docs/releases.md), such as `2026.1001.171432` for 2026-10-01 at 17:14:32 UTC. Pin an exact timestamp; changes and compatibility details belong in the changelog.
 

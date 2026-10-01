@@ -10,6 +10,8 @@ npm run check
 
 Open a pull request with the problem, resulting behavior, and relevant validation. Focus tests on observable behavior: malformed inputs, dependency selection, partial failures, and consumer compatibility. Avoid tests that only mirror instruction wording.
 
+Every project's primary README should display a linked maturity badge below its title. Follow the [shared maturity scale](docs/repository-maturity.md), keep the stage and status explanation consistent, and support promotions or regressions with evidence and a changelog entry. A release or passing CI alone does not justify promotion.
+
 For skills and agents, follow [the local expertise convention](docs/local-expertise.md): a component directory with a small entrypoint, indexed knowledge, and indexed memory. Preserve the Agent Skills format, use precise descriptions, and put conditional detail in linked topic files. Record authoritative sources, verification dates, and lesson applicability. Search locally and load only relevant material. Do not copy entire third-party manuals or commit private local notes. UI standards should respect the consuming project's design system and requirements.
 
 For tools, put reusable logic in the TypeScript library. Commands must keep machine-readable output on stdout and diagnostics on stderr. Maintain source and package version alignment.
