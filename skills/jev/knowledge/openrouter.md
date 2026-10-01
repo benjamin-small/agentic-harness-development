@@ -18,6 +18,6 @@ Sources: [OpenRouter Jev guide](https://openrouter.ai/docs/guides/community/jev)
 
 ## Repository implementation status
 
-Toolkit 0.1.0-alpha.2 implements the TypeScript library, CLI, batching, validation, cancellation, and bounded retries. Start with [tool use](tool-use.md), then load the packaged runtime manual if needed. Tests validate contract fixtures; live provider verification is pending. A missing client or credential is a setup limitation, not a model result.
+Toolkit 0.1.0-alpha.2 introduced the TypeScript library, CLI, batching, validation, cancellation, and bounded retries. Start with [tool use](tool-use.md), then load the packaged runtime manual if needed. Tests validate contract fixtures; live provider verification is pending. A missing client or credential is a setup limitation, not a model result.
 
 Never place credentials in a request example, project selection, skill file, or stdout. Any live invocation sends the provided state to the configured service and can incur usage charges.

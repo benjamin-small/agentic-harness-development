@@ -5,6 +5,7 @@ This repository distributes portable skills, reusable agent roles, and TypeScrip
 ## Commands
 
 - `npm ci` installs the locked toolchain; use Node.js 24 LTS or 26.
+- `npm run release:stamp` prepares a new UTC date/time version; do not choose major/minor/patch increments. See `docs/releases.md`.
 - `npm run check` formats-checks, typechecks, measures test coverage, and validates catalog resources.
 - `npm run release:pack` validates and assembles release assets.
 - `npm run release:verify` installs the exact tarball in a temporary consumer and checks library and CLI behavior.

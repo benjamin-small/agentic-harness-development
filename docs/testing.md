@@ -8,7 +8,9 @@ Tests cover catalog structure/dependencies, selection, skill metadata/destinatio
 
 Jev tests exercise choice/score/noul contracts, structured guidance, missing/optional metadata, partial and malformed responses, invalid UTF-8, bounded inputs/responses, credential handling, 401/402/429/5xx errors, Retry-After, deadlines, cancellation during fetch/body/backoff, bounded streaming batches, repeated IDs, source errors, output backpressure, and SIGINT/SIGTERM. Transport is injected; no API key or network is needed for the suite.
 
-Measured on 2026-10-01 with Node.js 26.10.0: **99.71% lines/statements, 100% functions, and 98.36% branches**, across 40 passing tests. Reproduce with `npm run test:coverage`; CI uploads its own per-runtime measurements. Coverage covers `src/` runtime code, not the release scripts or skill decision quality. There is no arbitrary global coverage threshold.
+Release-version tests cover UTC conversion, whole-second precision, midnight, leap days, invalid dates/times, numeric padding, package/lockfile agreement, legacy migration, and duplicate/backward timestamp rejection. Stamping tests use temporary package fixtures and preserve dependency versions.
+
+Measured on 2026-10-01 with Node.js 26.10.0: **99.71% lines/statements, 100% functions, and 98.36% branches**, across 44 passing tests. Reproduce with `npm run test:coverage`; CI uploads its own per-runtime measurements. Coverage covers `src/` runtime code, not the release scripts or skill decision quality. There is no arbitrary global coverage threshold.
 
 ## Artifact verification
 
