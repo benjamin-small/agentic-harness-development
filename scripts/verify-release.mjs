@@ -11,6 +11,7 @@ const out = resolve(root, process.argv[2] ?? "release");
 const manifestText = await readFile(join(out, "manifest.json"), "utf8");
 const manifest = JSON.parse(manifestText);
 assert.equal(manifest.schemaVersion, 1);
+assert.ok([1, 2].includes(manifest.catalogSchemaVersion));
 assert.equal(
   manifest.packageName,
   "@benjamin-small/agentic-harness-development",
@@ -67,6 +68,7 @@ try {
   const probe = `import assert from 'node:assert/strict';
 import {loadCatalog, validateResources, planSelection} from '@benjamin-small/agentic-harness-development';
 const catalog = await loadCatalog();
+assert.equal(catalog.schemaVersion, ${JSON.stringify(manifest.catalogSchemaVersion)});
 await validateResources(catalog);
 assert.deepEqual(planSelection(catalog, {harness:'pi',scope:'user'}).components, []);
 const plan = planSelection(catalog, {harness:'pi',scope:'user',capabilities:['ui']});

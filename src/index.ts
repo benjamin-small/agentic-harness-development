@@ -23,7 +23,7 @@ export interface Component {
 
 export interface Catalog {
   $schema?: string;
-  schemaVersion: 1;
+  schemaVersion: 2;
   components: Component[];
 }
 
@@ -61,7 +61,7 @@ export function validateCatalog(value: unknown): Catalog {
     const expected =
       component.kind === "skill"
         ? `skills/${component.id}`
-        : `agents/${component.id}.md`;
+        : `agents/${component.id}`;
     if (component.path !== expected)
       throw new Error(`Component path must be ${expected}`);
   }
@@ -106,9 +106,19 @@ export async function validateResources(
   root = toolkitRoot,
 ): Promise<void> {
   validateCatalog(catalog);
+  const canonicalRoot = await realpath(root);
   const checked = new Set<string>();
   async function checkMarkdown(resource: string): Promise<string> {
-    const path = await containedPath(root, resource);
+    const path = await containedPath(canonicalRoot, resource);
+    if (
+      /(?:^|\/)(?:knowledge|memory)\/local(?:\/|$)/.test(
+        relative(canonicalRoot, path).replaceAll("\\", "/"),
+      )
+    ) {
+      throw new Error(
+        "Shipped resources must not link private local expertise",
+      );
+    }
     if (checked.has(path)) return "";
     checked.add(path);
     const text = await readFile(path, "utf8");
@@ -129,7 +139,7 @@ export async function validateResources(
     const resource =
       component.kind === "skill"
         ? `${component.path}/SKILL.md`
-        : component.path;
+        : `${component.path}/AGENT.md`;
     const resourcePath = await containedPath(root, resource);
     if (!(await stat(resourcePath)).isFile())
       throw new Error(`Expected file: ${resource}`);
@@ -187,6 +197,10 @@ export async function validateResources(
       ) {
         throw new Error(`Invalid skill metadata values: ${component.id}`);
       }
+    }
+    // Indexes are discovery routes, not an instruction to load the entire corpus.
+    for (const area of ["knowledge", "memory"]) {
+      await checkMarkdown(`${component.path}/${area}/INDEX.md`);
     }
   }
 }
@@ -251,7 +265,7 @@ export function planSelection(catalog: Catalog, options: SelectionOptions) {
   const skillRoot =
     options.harness === "claude-code" ? ".claude/skills" : ".agents/skills";
   return {
-    schemaVersion: 1 as const,
+    schemaVersion: 2 as const,
     mode: "plan-only" as const,
     harness: options.harness,
     scope: options.scope,

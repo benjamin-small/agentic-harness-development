@@ -1,6 +1,6 @@
 # Bootstrap this toolkit
 
-Read this file when asked to install or use this repository from a fresh harness. Use the version of this file associated with the selected release. Start at **v0.1.0-alpha.1**, a foundation prerelease.
+Read this file when asked to install or use this repository from a fresh harness. Use the version of this file associated with the selected release. The download example uses published **v0.1.0-alpha.1**; its original `references/` and flat agent layout remain unchanged. Current source introduces the unreleased [local expertise convention](docs/local-expertise.md) and catalog schema 2. Read the tag's bootstrap guide when consuming an older release.
 
 ## Know what this release provides
 
@@ -46,10 +46,14 @@ The package contains `skills/`, `agents/`, and `catalog.json` under `runtime/nod
 
 For each selected skill, copy its entire directory, including references, to the planner's destination. Resolve `~` as the intended harness user's home. Compare existing content before replacing anything; preserve local edits. Installing skills does not require an OpenRouter key. A host may need a reload before discovering new skills.
 
+When using the current indexed layout in a Git-tracked project, ensure the destination's `knowledge/local/` and `memory/local/` directories are ignored before recording private notes. Source-tree ignore files are not guaranteed to survive npm packaging or installation into another repository; the installing harness must verify the destination rules.
+
 For the UI reviewer, a capable harness can read the canonical role and selected skill to carry out a review. Automatic native subagent registration is not provided yet. Verify the harness actually discovers the skills and distinguish that result from runtime/tool availability.
 
 For a deployment, use explicit destination paths and the executing service identity. Install during provisioning or image build. On restart, verify and reuse the pinned release; do not resolve latest or upgrade silently. Singleton ownership, state, event handling, and delegation belong to the separate service runtime.
 
 ## Record the result
+
+For components using the indexed layout, provision their own writable, scoped directories for knowledge and memory, separate from the pinned package/cache. Copy the released indexes and topics, preserve local material during upgrades, and use local search before loading detailed files. Do not copy private `knowledge/local/` or `memory/local/` content into another project or a shared release. See [local expertise](docs/local-expertise.md) for maintenance and scope rules. This remains a host-managed procedure until the installer milestone is implemented.
 
 Report the release/tag and source commit, scope, chosen capabilities and evidence, destination paths, executable dependencies installed, validation performed, and remaining limitations. The structured project selection/lockfile and idempotent install command are specified in [the implementation plan](docs/implementation-plan.md) and will arrive in a later milestone.

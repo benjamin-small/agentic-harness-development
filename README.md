@@ -6,6 +6,8 @@ Portable skills, harness specialists, and reusable development tools. This repos
 
 ## Current status
 
+Current source adds an unreleased [shared local expertise layout](docs/local-expertise.md): every skill and agent owns indexed `knowledge/` and `memory/` directories. Search locally, load relevant material progressively, and maintain scoped lessons with evidence. Catalog schema 2 requires a matching reader; the published foundation release retains schema 1 and its original paths.
+
 The first release, **0.1.0-alpha.1**, is a foundation release. It includes:
 
 - Agent Skills for Jev question design and UI standards, with progressive reference loading.
@@ -48,14 +50,14 @@ For installation from a pinned GitHub release, start with [BOOTSTRAP.md](BOOTSTR
 
 ## Contents
 
-| Location                   | Purpose                                                                               |
-| -------------------------- | ------------------------------------------------------------------------------------- |
-| `skills/jev/`              | When to use Jev, typed question design, OpenRouter details, and interpretation limits |
-| `skills/ui-standards/`     | UI review criteria, scoped to the project's actual design system                      |
-| `agents/ui-reviewer.md`    | Portable role instructions; native harness wrappers are planned                       |
-| `catalog.json`, `schemas/` | Repository-owned component metadata and its JSON Schema                               |
-| `src/`                     | Catalog library and read-only CLI                                                     |
-| `docs/`                    | Plan, architecture, installation contract, tests, and release process                 |
+| Location                   | Purpose                                                                                 |
+| -------------------------- | --------------------------------------------------------------------------------------- |
+| `skills/jev/`              | When to use Jev, typed question design, OpenRouter details, and interpretation limits   |
+| `skills/ui-standards/`     | UI review criteria, scoped to the project's actual design system                        |
+| `agents/ui-reviewer/`      | Portable role, local knowledge, and memory indexes; native harness wrappers are planned |
+| `catalog.json`, `schemas/` | Repository-owned component metadata and its JSON Schema                                 |
+| `src/`                     | Catalog library and read-only CLI                                                       |
+| `docs/`                    | Plan, architecture, installation contract, tests, and release process                   |
 
 Skills follow the [Agent Skills format](https://agentskills.io/specification). Repository instructions use [AGENTS.md](https://agents.md/). Agent metadata in this repository is a local packaging contract, not a claim of a universal agent standard. See [conventions and compatibility](docs/conventions.md).
 

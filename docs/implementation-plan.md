@@ -9,6 +9,7 @@ Publish a reusable collection of skills, harness specialists, and TypeScript too
 ## Decisions
 
 - Agent Skills is the canonical skill format; AGENTS.md supplies repository guidance.
+- Both skills and agents own indexed local `knowledge/` and `memory/` directories using [the shared convention](local-expertise.md). Prefer local search and progressive disclosure; maintain provenance and scoped lessons as expertise evolves.
 - A skill teaches a procedure; an agent definition selects a role, skills, and tools; an instance owns identity and state.
 - Harness specialists receive fresh task context. A future project manager has persistent identity and one active coordinator per project.
 - Keep durable services in a separate repository, consuming versioned definitions from this one.
@@ -55,6 +56,7 @@ Acceptance:
 - Detect actual UI evidence across web/mobile/desktop projects and scoped monorepo roots. A framework dependency alone is insufficient.
 - Explicit includes/excludes override detection; report reasoning and uncertain evidence.
 - User configuration contains personal defaults. Projects record capabilities and exact release integrity. Deployments require explicit pinned manifests.
+- Materialize writable per-component expertise roots separate from release caches. Preserve scoped `knowledge/local/` and `memory/local/` during upgrades, isolate projects/identities, and verify local material is excluded from publication.
 - Idempotent installation owns a bounded set of files, preserves user edits, supports removal/rollback, and never silently pulls latest during runtime startup.
 - Test installation twice, upgrades, conflicts, interrupted downloads, missing dependencies, corrupted assets, and offline use of verified cached content.
 - Reuse native skill/package installers where suitable; verify their version and pinning behavior before delegation.
@@ -67,6 +69,7 @@ Acceptance:
 
 - Adapt canonical UI reviewer instructions and required skills into native formats without copying a second source of policy.
 - An invocation starts with isolated context, a bounded task brief, relevant references, and a defined findings/result contract.
+- Both specialist types recover expertise through small local indexes and targeted searches. Maintenance updates relevant knowledge/lessons with evidence and dates without loading or rewriting the entire corpus.
 - Declare unsupported settings rather than silently weakening tool restrictions or claiming identical semantics across harnesses.
 - Pi extension registers a Jev tool backed by the shared TypeScript library; package it using Pi conventions.
 - Verify personal/project discovery and a realistic review in each supported harness. Mark documentation-only integrations separately.

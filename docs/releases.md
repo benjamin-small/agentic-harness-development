@@ -11,6 +11,8 @@ Use semantic versions and exact Git tags (`v0.1.0-alpha.1` initially). Prereleas
 
 The package is not published to the npm registry. Its `private` flag prevents accidental registry publication while allowing `npm pack` and tarball installation. No postinstall script runs. Native standalone binaries are planned as a later distribution choice.
 
+Current source ships each component's entrypoint and reviewed `knowledge/` and `memory/` indexes/topics. Private `knowledge/local/` and `memory/local/` working material is excluded from npm packages. Packaging rejects any such files that were forcibly added to Git, protecting source archives too. The package tests verify the exclusion with synthetic notes. See [the local expertise convention](local-expertise.md) for maintenance and promotion rules.
+
 ## Release procedure
 
 1. Update package version and lockfile, changelog, relevant bootstrap examples, and `docs/release-notes/v<VERSION>.md`. Use a pull request after initial repository creation.

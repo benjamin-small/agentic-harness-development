@@ -1,6 +1,6 @@
 {
   "name": "@benjamin-small/agentic-harness-development",
-  "version": "0.1.0-alpha.1",
+  "version": "0.1.0-alpha.2",
   "description": "Portable agent skills, harness specialists, and versioned development tooling.",
   "private": true,
   "type": "module",
