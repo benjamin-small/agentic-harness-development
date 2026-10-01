@@ -1,6 +1,6 @@
 # Using the Jev tool
 
-Repository behavior verified with contract fixtures on 2026-10-01. Applies to toolkit releases carrying the Jev runtime; a live provider check is still pending.
+Contract fixtures and live library/CLI requests were verified on 2026-10-01 for the v2026.1001.190334 candidate. Earlier releases reject the observed model revision; consult the [model-resolution lesson](../memory/model-alias-resolution.md). Live coverage is one synthetic three-question fixture, not general accuracy.
 
 1. Locate the **pinned toolkit installation**, then run its `node_modules/.bin/jev --version`. In a built source checkout, use `node dist/src/jev/cli.js`. A skill directory alone does not install the executable.
 2. Read the selected local question-design topic. Prepare `{id, state, questions}` as JSON. Use meaningful instructions; IDs are correlation labels. Multiple questions share state and do not consume each other's answers.

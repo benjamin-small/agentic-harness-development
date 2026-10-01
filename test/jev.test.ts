@@ -171,12 +171,28 @@ test("transport sends only provider wire fields to the pinned endpoint and prese
   assert.deepEqual(validateResponse(partial, request), partial);
 });
 
+test("OpenRouter's resolved Jev revision is accepted and preserved while requests use the alias", async () => {
+  // Revision observed in a real OpenRouter response on 2026-10-01.
+  const resolved = { ...response, model: "typesafe/jev-1.13-20260917" };
+  const result = await client(
+    transport((_url, init) => {
+      assert.equal(JSON.parse(init?.body as string).model, "typesafe/jev-1.13");
+      return Response.json(resolved);
+    }),
+  ).decide(request);
+  assert.equal(result.ok, true);
+  if (result.ok) assert.deepEqual(result.response, resolved);
+});
+
 test("malformed, partial, wrong-model and out-of-range provider responses fail closed", async () => {
   const bad: unknown[] = [
     null,
     [],
     {},
     { ...response, model: "another-model" },
+    { ...response, model: "typesafe/jev-1.13-20990101" },
+    { ...response, model: "typesafe/jev-1.13-20260917-extra" },
+    { ...response, model: "typesafe/jev-1.14-20260917" },
     { ...response, usage: {} },
     { ...response, usage: { input_tokens: -1, output_tokens: 1 } },
     { ...response, usage: { input_tokens: 1, output_tokens: 1.5 } },

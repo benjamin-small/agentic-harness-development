@@ -1,6 +1,6 @@
 # Initial implementation plan
 
-Status: foundation and Jev runtime implemented; live Jev validation pending. Decisions established on 2026-10-01.
+Status: foundation and Jev runtime implemented; bounded live library/CLI verification completed. Decisions established on 2026-10-01.
 
 ## Objective
 
@@ -49,7 +49,7 @@ Acceptance:
 - [x] Injected transport and cancellation in the library; environment credentials and JSON stdout in the CLI.
 - [x] Tests for response variants, malformed data, missing credentials, 401/429/5xx, cancellation, and partial batches.
 - [x] Include library and CLI in consumable package assets and isolated release-consumer verification.
-- [ ] Run one explicitly configured, bounded live request and report model/usage. The opt-in smoke script is ready; the implementation process has no OpenRouter key. Current releases do not claim live verification.
+- [x] Run explicitly configured, bounded live requests and report model/usage. The [2026-10-01 check](verification/jev-2026-10-01.md) verified library and CLI inference with three typed questions after fixing resolved-model validation. This does not establish general decision quality.
 
 ## M2: Bootstrap and capability selection
 

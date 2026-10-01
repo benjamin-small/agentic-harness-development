@@ -17,7 +17,7 @@ structured CLI exits, and fail-soft startup context. The generated Claude plugin
 actual exec command is run against a temporary project pin; it includes only
 maintenance, with no UI registration or inference.
 
-Measured on 2026-10-01 with Node.js 26.10.0: **99.76% lines/statements, 100% functions, and 98.11% branches**, across 52 passing tests. Reproduce with `npm run test:coverage`; CI uploads its own per-runtime measurements. Coverage covers `src/` runtime code, not the release scripts or skill decision quality. There is no arbitrary global coverage threshold.
+Measured on 2026-10-01 with Node.js 26.10.0: **99.76% lines/statements, 100% functions, and 98.12% branches**, across 53 passing tests. Reproduce with `npm run test:coverage`; CI uploads its own per-runtime measurements. Coverage covers `src/` runtime code, not the release scripts or skill decision quality. There is no arbitrary global coverage threshold.
 
 ## Artifact verification
 
@@ -41,10 +41,12 @@ interactive skill discovery, hook invocation by a running Claude session, or a
 successful real user upgrade. Those remain separate verification steps; no host
 global configuration is modified for these tests.
 
-Tests do not establish skill quality or live Jev usefulness. Native specialist
-adapters and skill behavior evaluations remain later milestones. A live provider
-check is still pending: no key was available during implementation. From a source
-checkout, `JEV_LIVE_SMOKE=1 npm run jev:smoke` makes at most one synthetic request
-with no retries and a 20-second deadline when credentials are explicitly injected.
-It reports model/usage without secrets or input. That bounded integration check
-would still not prove decision quality across tasks.
+Tests do not establish skill quality or general Jev usefulness. Native specialist
+adapters and skill behavior evaluations remain later milestones. The [live Jev
+verification](verification/jev-2026-10-01.md) covers library and CLI requests with
+choice, score, and noul questions, correlated results, and a simple consumer
+decision. From source, `JEV_LIVE_SMOKE=1 npm run jev:smoke` makes up to two
+synthetic requests, with no retries and a 20-second deadline per request, when
+credentials are explicitly injected. It reports typed answers, model, attempts,
+and usage, never credentials. These fixture expectations are not calibrated
+thresholds or a decision-quality benchmark.
