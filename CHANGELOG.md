@@ -11,6 +11,7 @@ Entries follow the [changelog policy](docs/changelog.md). `Unreleased` describes
 ### Fixed
 
 - **Jev deadline tests:** Use controlled timers after transport/body admission so persistent log writes on busy macOS runners cannot expire a 20 ms test deadline before the intended phase. Keep assertions for pre-dispatch cancellation, active fetch cancellation, stalled body reads, and retry backoff; runtime deadlines and logging remain unchanged.
+- **Jev batch tests:** Coordinate transport starts and completions explicitly so concurrency and out-of-order assertions remain valid when log-write latency varies. Runtime admission limits and completion ordering are unchanged.
 
 ### Added
 
