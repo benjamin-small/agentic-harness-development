@@ -6,6 +6,16 @@ Entries follow the [changelog policy](docs/changelog.md). `Unreleased` describes
 
 ## Unreleased
 
+## 2026.1002.125921 — 2026-10-02 12:59:21 UTC
+
+### Fixed
+
+- **Jev credential reuse:** Record an authorized credential connection in the installed skill's private local knowledge during setup and consult it before rediscovering projects or authentication. Keep provider identifiers and an injection recipe in knowledge; support explicitly requested offline credential caching in a separate owner-only file or OS credential store, with explicit refresh and no silent network fallback. Existing installations can add the local record without changing their runtime pin.
+
+### Added
+
+- **Startup skill:** Add `poietic-harness-start` to the maintenance capability. A short AGENTS.md invocation loads routine checks or initial setup guidance on demand, keeping detailed procedures out of every prompt. Install the complete skill and verify discovery before shortening existing startup instructions. Older releases do not contain it; record separate provenance for a source installation. Existing runtime pins, explicit-update requirements, and private component expertise are preserved.
+
 ## 2026.1002.2233 — 2026-10-02 00:22:33 UTC
 
 ### Fixed

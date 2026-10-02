@@ -21,7 +21,7 @@ const clone = () => structuredClone(catalog);
 
 test("shipped catalog and progressively linked resources validate", async () => {
   await validateResources(catalog);
-  assert.equal(catalog.components.length, 4);
+  assert.equal(catalog.components.length, 5);
 });
 
 test("UI capability includes its skill dependency before the reviewer", () => {
@@ -34,6 +34,24 @@ test("UI capability includes its skill dependency before the reviewer", () => {
   assert.equal(plan.components[0]!.destination, ".claude/skills/ui-standards");
   assert.equal(plan.components[1]!.destination, null);
   assert.equal(plan.mode, "plan-only");
+});
+
+test("Codex user maintenance selects startup and update without optional capabilities", () => {
+  const plan = planSelection(catalog, {
+    harness: "codex",
+    scope: "user",
+    capabilities: ["toolkit-maintenance"],
+  });
+  assert.deepEqual(
+    plan.components.map(({ id, destination }) => ({ id, destination })),
+    [
+      { id: "update", destination: "~/.agents/skills/update" },
+      {
+        id: "poietic-harness-start",
+        destination: "~/.agents/skills/poietic-harness-start",
+      },
+    ],
+  );
 });
 
 test("no implicit UI install; explicit selection and exclusion are honored", () => {

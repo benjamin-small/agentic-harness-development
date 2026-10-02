@@ -59,7 +59,7 @@ trees, stale compiled code, or manually copied instruction files.
 
 ## Fast polling without inference
 
-**Unreleased:** `poll` is available in this source checkout after building. The
+**Released in v2026.1002.2233:** `poll` is available in the installed runtime. The
 published v2026.1001.190334 runtime supports `check`; acquire a release containing
 `poll` before using it from a pinned installation. Do not rewrite an existing pin
 or modify an immutable installed runtime to pick up this command.
@@ -204,15 +204,21 @@ discovery directory. Its portable name is `update`; colons belong to the native
 plugin namespace, not the Agent Skills name. A request for `poietic-harness:update`
 is described in its metadata, but native slash syntax differs by harness.
 
-Add this instruction to the consumer's existing startup guidance, substituting
-recorded absolute paths:
+Install the complete [poietic-harness-start skill](../skills/poietic-harness-start/SKILL.md)
+before adding this single line to the consumer's startup guidance:
 
-> Once at session start, run `/absolute/runtime/node_modules/.bin/poietic-harness check --project /absolute/project`.
-> Report mismatch or unavailable status and continue the task. Do not update at
-> startup. Use the Poietic Harness update skill for an explicit update request,
-> preserving the selected scope and local knowledge/memory.
+> At session start, run $poietic-harness-start. Initial user-scope setup is authorized.
 
-This repository's [AGENTS.md](../AGENTS.md) uses the equivalent source command.
+The skill loads routine checking or first-time setup guidance only when needed.
+It preserves existing pins and reuses recorded runtime paths. Omit the second
+sentence if initial setup requires separate authorization in that environment.
+This repository's [AGENTS.md](../AGENTS.md) also delegates startup to the skill.
+
+The startup skill is included starting in **v2026.1002.125921**. Releases through v2026.1002.2233
+contain only the update skill. For those versions, retain existing startup
+instructions unless explicitly installing this source skill and recording its
+separate provenance; never point AGENTS.md at an unavailable skill.
+
 Cooperative instructions alone are not a native lifecycle hook for every harness.
 For a long-running agent, run `check --config /absolute/pin.json --offline` during
 startup and decide in its supervisor whether mismatch should fail readiness.

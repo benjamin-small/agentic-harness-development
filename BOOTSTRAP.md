@@ -1,6 +1,6 @@
 # Bootstrap this toolkit
 
-Read this file when asked to install or use this repository from a fresh harness. Use the guide associated with the selected release. This guide targets **v2026.1002.2233**, with the Jev runtime, [local expertise convention](docs/local-expertise.md), and catalog schema 2. Package versions encode UTC date and time; they make no compatibility promise. Read the tag's guide when consuming an older release.
+Read this file when asked to install or use this repository from a fresh harness. Use the guide associated with the selected release. This guide targets **v2026.1002.125921**, with the Jev runtime, [local expertise convention](docs/local-expertise.md), and catalog schema 2. Package versions encode UTC date and time; they make no compatibility promise. Read the tag's guide when consuming an older release.
 
 ## Know what this release provides
 
@@ -25,14 +25,14 @@ Available capabilities: `ui`, `structured-decisions`, and `toolkit-maintenance`.
 The consumer needs Node.js 24 LTS or 26 and npm. The following acquisition example additionally uses GitHub CLI and `shasum` on macOS/Linux. The four release assets can also be downloaded from the GitHub release page using another trusted download tool.
 
 ```sh
-toolkit_dir="$HOME/.local/share/agentic-harness-development/2026.1002.2233"
+toolkit_dir="$HOME/.local/share/agentic-harness-development/2026.1002.125921"
 mkdir -p "$toolkit_dir/assets"
-gh release download v2026.1002.2233 \
+gh release download v2026.1002.125921 \
   --repo benjamin-small/agentic-harness-development \
   --dir "$toolkit_dir/assets"
 (cd "$toolkit_dir/assets" && shasum -a 256 -c SHA256SUMS)
 npm install --prefix "$toolkit_dir/runtime" --ignore-scripts --no-audit --no-fund \
-  "$toolkit_dir/assets/benjamin-small-agentic-harness-development-2026.1002.2233.tgz"
+  "$toolkit_dir/assets/benjamin-small-agentic-harness-development-2026.1002.125921.tgz"
 "$toolkit_dir/runtime/node_modules/.bin/harness-kit" validate
 "$toolkit_dir/runtime/node_modules/.bin/harness-kit" plan \
   --capability ui --harness claude-code --scope project
@@ -97,8 +97,11 @@ For Claude Code, launch with
 `claude --plugin-dir "$toolkit_dir/runtime/node_modules/@benjamin-small/agentic-harness-development/dist/claude-plugin/poietic-harness"`.
 Preserve that argument in the chosen launch configuration. This enables the
 native startup check and `/poietic-harness:update` without registering UI or Jev
-components. For another harness, install `skills/update/` and add the explicit
-session-start instruction from [the maintenance guide](docs/maintenance.md).
+components. For another harness, follow [the maintenance guide](docs/maintenance.md)
+to install the selected maintenance skills and add a short session-start invocation.
+This release includes the `poietic-harness-start` skill; releases through
+v2026.1002.2233 contain only `update`. Install and verify the startup skill before
+replacing existing startup guidance with its invocation.
 Use one registration path per consumer; portable skill copying does not enable
 native hooks. The release includes the checker as `node_modules/.bin/poietic-harness`
 and the `/maintenance` TypeScript library export.
@@ -108,6 +111,10 @@ acquisition, staged installation, preservation of local expertise, and rollback.
 It does not silently upgrade a shared cache, running service, or development
 checkout. Version equality checks metadata; it does not verify manually copied
 skills or source-tree contents.
+
+### Record credential connections
+
+When the user configures Jev credentials, save the non-secret connection details and verified injection recipe under the installed Jev skill's `knowledge/local/`, with a local index. Record the provider, profile/identity, project identifier, environment, secret path/name, and verification date. Reuse the provider's existing login/session; never copy secret values into skill files, installation records, or releases. Preserve this record during updates. Do not retrieve credentials or run inference merely to complete ordinary startup. When the user requests local credential caching, provision the actual key in an owner-only credential file or OS credential store outside repositories and skill content. Record the local read recipe and explicit refresh policy; normal invocation must not silently fall back to a network fetch. A configured secret source is separate from live inference verification.
 
 ### Preserve expertise and report installation
 
