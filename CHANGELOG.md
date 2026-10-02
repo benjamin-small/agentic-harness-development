@@ -6,6 +6,16 @@ Entries follow the [changelog policy](docs/changelog.md). `Unreleased` describes
 
 ## Unreleased
 
+### Added
+
+- **Maintenance polling:** Add `poietic-harness poll` and `pollVersion` for direct execution by schedulers without inference. Optional five-minute caching avoids repeated network calls; expired entries use ETag revalidation with a default 1.5-second deadline. Poll exit codes distinguish no newer release (0), update available (1), and unavailable/invalid (2), independently of pin alignment. Failed refreshes never present stale data as current. Existing `check` and `session-start` behavior is preserved. Acquire a release containing this command before using it from a pinned runtime; use a dedicated writable cache outside the installation.
+
+### Changed
+
+- **Jev CLI logging:** Enable timestamped JSONL activity on stderr for `decide` and `batch`, showing command/request starts, outcomes, attempt counts, durations, and completion totals. Stdout remains JSON/JSONL. Logs omit credentials and request contents, and create no files or telemetry. Add `--quiet` for earlier diagnostics-only stderr behavior; stderr consumers must otherwise distinguish `event` records from `error` diagnostics. Library calls remain silent.
+
+- **Bootstrap and update guidance:** Verify public GitHub connectivity from the actual hook/scheduler context and record the host's network permission setup. Package instructions cannot grant sandbox access. Route authorized blocked checks through the host permission flow, report unresolved availability honestly, and continue without changing pins or global permissions. Routine polling runs the executable directly; it does not require skill evaluation or an agent turn.
+
 ## 2026.1001.190334 — 2026-10-01 19:03:34 UTC
 
 ### Added

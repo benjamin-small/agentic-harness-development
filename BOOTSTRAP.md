@@ -71,6 +71,20 @@ default; request `--latest` separately to discover new releases. For a user or
 deployment pin outside a project, use `--config /absolute/pin.json --offline`.
 Do not change pins or install updates at startup.
 
+Verify online discovery from the actual startup hook or scheduler context and
+record its network setup alongside the runtime path. The checker needs outbound
+HTTPS to `api.github.com`; package instructions do not grant sandbox permissions.
+Use the host's supported permission flow for an authorized blocked lookup, and
+report unavailable status if access cannot be granted. Do not change global
+permissions at startup. Inspect `latest.status` as well as alignment: a pinned
+`check --latest` may exit 0 even when the remote lookup failed. See
+[network setup and failure handling](docs/maintenance.md#network-permissions-at-installation-and-startup).
+
+The next release adds [fast deterministic polling](docs/maintenance.md#fast-polling-without-inference)
+for direct scheduler execution without a model turn. The published release named
+at the top of this guide does not yet contain `poll`; keep using its `check`
+command until an explicit upgrade selects a release containing that feature.
+
 For Claude Code, launch with
 `claude --plugin-dir "$toolkit_dir/runtime/node_modules/@benjamin-small/agentic-harness-development/dist/claude-plugin/poietic-harness"`.
 Preserve that argument in the chosen launch configuration. This enables the

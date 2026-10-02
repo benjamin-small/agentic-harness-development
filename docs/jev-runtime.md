@@ -100,6 +100,45 @@ Cancellation stops admission and aborts active requests, which yield cancellatio
 
 Stdout contains JSON for `decide`, JSONL for `batch`, or a small local-validation result for `validate`. Setup, file/stream errors, and batch-level failures go to stderr as JSON; provider failures remain in result envelopes. `--help`/`--version` print text. Exit codes: 0 success (including an empty batch), 1 any decision/batch/IO failure, 2 usage/setup/validation failure, 130 SIGINT, 143 SIGTERM. A partial batch can have valid stdout results and a nonzero exit.
 
+## Activity logging
+
+**Pending release:** `decide` and `batch` now log activity to stderr by default.
+This is available in the built source checkout; the published v2026.1001.190334
+runtime does not yet provide these logs. `validate`, `--help`, and `--version`
+keep their existing output behavior.
+
+Each activity line is JSON with `schemaVersion: 1`, an `event`, UTC `timestamp`,
+and `command`. Events are:
+
+- `jev.command.start`: the command is running, with the fixed request model.
+- `jev.request.start`: processing began for a zero-based request `sequence`.
+- `jev.request.finish`: sequence, success/failure status, transport `attempts`,
+  duration in `elapsedMs`, and a sanitized `errorCode` on failure.
+- `jev.command.finish`: exit code, total requests, completed requests, and duration.
+
+The command-start event appears before waiting for input. Request-start means
+processing, including local validation; it does not prove an API call happened.
+The finish event's attempt count identifies actual transport attempts. Batch log
+sequences match stdout sequences, even when completions arrive out of order.
+Logs contain no API keys, headers, file paths, request IDs, state, questions,
+answers, or provider response bodies. Logging uses stderr only and does not
+create files or send telemetry. A closed activity pipe does not change decisions.
+
+```sh
+# See activity in the terminal while saving the JSON result.
+jev decide --input request.json > result.json
+# Save activity and any command diagnostics separately.
+jev batch --input requests.jsonl > results.jsonl 2> activity.jsonl
+# Suppress activity; command errors still go to stderr.
+jev decide --input request.json --quiet
+```
+
+Consumers reading stderr must handle JSONL and distinguish activity's `event`
+field from command diagnostics' `error` field. Add `--quiet` to retain the earlier
+diagnostics-only behavior. A command-level error can follow start events and is
+then followed by the command-finish event. Setup failures can occur before
+logging starts. Library calls remain silent; these events belong to the CLI.
+
 ## Bounds, retries, and billing
 
 | Limit                                                  | Default / maximum                   |

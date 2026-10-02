@@ -33,3 +33,11 @@ or unavailable checks, and invoke this skill only for a requested update. Use an
 explicit `--config <pin>` and `--offline` for service restart checks. An instruction
 is cooperative behavior, not a guarantee that an arbitrary harness has a native
 startup event. Avoid duplicate registration if the Claude plugin already checks.
+
+Verify online checks from that same hook context during installation and record
+the host's network permission setup. Startup instructions cannot grant HTTPS
+access to `api.github.com`. If an authorized check is blocked, use the supported
+host permission flow; otherwise report unavailable status and continue. See
+[checking guidance](checking.md#network-setup) for verification and failure
+handling. A deterministic external scheduler can run the maintenance executable
+directly; a scheduled prompt that tells an agent to check still uses inference.

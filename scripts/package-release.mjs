@@ -86,6 +86,7 @@ const manifest = {
     "jev-typescript-library",
     "jev-cli-and-jsonl-batches",
     "session-version-check",
+    "deterministic-release-polling",
     "scoped-update-skill",
     "claude-maintenance-plugin",
   ],

@@ -135,6 +135,30 @@ assert.equal(result.integrity,'not-checked');`;
     );
     assert.equal(report.alignment, "aligned");
     assert.equal(report.latest.status, "not-checked");
+    if (manifest.capabilities.includes("deterministic-release-polling")) {
+      const cache = join(consumer, "release-cache.json");
+      const pollProbe = `import assert from 'node:assert/strict';
+import {pollVersion} from '@benjamin-small/agentic-harness-development/maintenance';
+const options = {root:${JSON.stringify(packageRoot)},project:${JSON.stringify(consumer)},cache:${JSON.stringify(cache)}};
+const fresh = await pollVersion({...options, fetch:async () => Response.json({tag_name:${JSON.stringify(manifest.tag)},draft:false,prerelease:false})});
+assert.equal(fresh.updateAvailable,false);
+assert.equal(fresh.polling.cache,'written');
+const cached = await pollVersion({...options,offline:true});
+assert.equal(cached.polling.source,'cache');`;
+      run(process.execPath, ["--input-type=module", "-e", pollProbe]);
+      const polled = JSON.parse(
+        run(maintenanceBin, [
+          "poll",
+          "--project",
+          consumer,
+          "--cache",
+          cache,
+          "--offline",
+        ]),
+      );
+      assert.equal(polled.updateAvailable, false);
+      assert.equal(polled.polling.source, "cache");
+    }
     const pluginRoot = join(packageRoot, "dist/claude-plugin/poietic-harness");
     const plugin = JSON.parse(
       await readFile(join(pluginRoot, ".claude-plugin/plugin.json"), "utf8"),
@@ -217,6 +241,11 @@ assert.equal(results.find(r => r.sequence === 1).ok,false);`;
             ? [
                 "maintenance-library",
                 "maintenance-cli-pin",
+                ...(manifest.capabilities.includes(
+                  "deterministic-release-polling",
+                )
+                  ? ["maintenance-poll-library", "maintenance-poll-cli-cache"]
+                  : []),
                 "claude-plugin-version",
                 "claude-hook-command",
                 "canonical-update-skill",

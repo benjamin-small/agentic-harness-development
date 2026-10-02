@@ -51,3 +51,43 @@ means version equality is not proof that manually copied skills, generated files
 or a dirty source tree match a release. The checker verifies package/lock/plugin
 version consistency when those metadata files exist. Verify hashes at acquisition
 and inspect Git status before source updates.
+
+## Fast polling (pending release)
+
+The current source adds `poietic-harness poll --config /absolute/pin.json --cache
+/absolute/writable/latest-release.json`. Published v2026.1001.190334 has only
+`check`; verify the installed command before using `poll`. Run the executable
+directly for routine polling; it needs no model, skill evaluation, or agent turn.
+An external scheduler owns recurrence and notification deduplication.
+
+Successful lookups are reused for five minutes, then conditionally revalidated
+with ETag. The default request/body deadline is 1500 ms. `--max-age SECONDS`
+changes freshness (`0` refreshes); `--timeout-ms MS` accepts 1 through 5000.
+`--offline` permits a fresh cache only. A failed refresh or stale offline entry
+means unknown availability, even if the pin aligns. The explicitly selected cache
+is disposable public metadata; keep it separate from pins, installation records,
+and immutable runtimes. It is the only write, and omitting `--cache` avoids it.
+
+`poll` exits **0 no newer release, 1 update available, 2 unavailable/error**.
+This differs from `check` alignment exits: an aligned old pin can yield 1.
+The report retains alignment fields and adds cache source/status and lookup time
+under `polling`. Always check those fields before describing data as newly fetched.
+
+## Network setup
+
+The online checker needs DNS/TLS and outbound HTTPS to `api.github.com` only.
+During installation, verify `check --latest` or an uncached `poll` from the actual
+hook/scheduler context and record its supported network permission mechanism.
+`check --latest` can exit 0 for an aligned pin while `latest.status` is unavailable.
+Do not equate that exit with successful online discovery.
+
+Sandbox permissions are host configuration; an instruction file cannot grant
+them. For an authorized lookup blocked at startup, use the host's supported
+approval flow if available. If permission is unavailable, report that limitation
+and continue local work. Do not retrieve credentials, reinstall the toolkit,
+change global permissions, or assume GitHub is down from a generic failure.
+For unattended polling, configure the scheduler identity's access during setup.
+See [Codex sandboxing](https://learn.chatgpt.com/docs/sandboxing) and
+[GitHub conditional requests](https://docs.github.com/en/rest/using-the-rest-api/best-practices-for-using-the-rest-api#use-conditional-requests-if-appropriate),
+verified 2026-10-01. Conditional public requests remain rate-limited; no credentials
+are read merely to increase limits.
