@@ -1,4 +1,5 @@
 import { test } from "node:test";
+import { once } from "node:events";
 import assert from "node:assert/strict";
 import { Readable, Writable } from "node:stream";
 import { spawn, spawnSync } from "node:child_process";
@@ -248,22 +249,32 @@ test("invalid UTF-8 is rejected without silently changing request state", async 
 
 test("CLI SIGINT and SIGTERM terminate blocked input with conventional exits", async () => {
   for (const signal of ["SIGINT", "SIGTERM"] as const) {
-    const child = spawn(process.execPath, [bin, "validate", "--input", "-"], {
-      env: noKeyEnv,
+    const child = spawn(process.execPath, [bin, "decide", "--input", "-"], {
+      env: { ...noKeyEnv, OPENROUTER_API_KEY: "unused-test-placeholder" },
     });
     let stderr = "";
     child.stderr.setEncoding("utf8");
     child.stderr.on("data", (chunk: string) => {
       stderr += chunk;
     });
-    // The request remains incomplete; give the Node entrypoint time to install handlers.
-    await new Promise((resolve) => setTimeout(resolve, 150));
+    // No input is supplied, so no inference occurs. Activity proves handlers are ready.
+    try {
+      await once(child.stderr, "data", { signal: AbortSignal.timeout(5000) });
+      assert.equal(JSON.parse(stderr.trim()).event, "jev.command.start");
+    } catch (error) {
+      child.kill("SIGKILL");
+      throw error;
+    }
+    const exited = once(child, "exit");
     child.kill(signal);
-    const result = await new Promise<number | null>((resolve) =>
-      child.once("exit", resolve),
-    );
+    const [result] = await exited;
     assert.equal(result, signal === "SIGINT" ? 130 : 143, stderr);
-    assert.equal(JSON.parse(stderr).error.code, "CANCELLED");
+    const diagnostic = stderr
+      .trim()
+      .split("\n")
+      .map((line) => JSON.parse(line))
+      .find((entry) => entry.error);
+    assert.equal(diagnostic.error.code, "CANCELLED");
   }
 });
 

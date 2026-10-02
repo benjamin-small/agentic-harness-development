@@ -59,6 +59,8 @@ records to a persistent local log. `--quiet` affects terminal activity only.
 Logging omits credentials and request contents; deployments must provision a
 writable log path, and failed persistence returns non-retryable `IO_ERROR`.
 
+Released in v2026.1002.125921, setup guidance also records configured Jev credential connections in private component-local knowledge and reuses them on invocation. This is a host-managed connection record, not a credential store or automatic authentication adapter.
+
 ## M2: Bootstrap and capability selection
 
 Add deterministic project inspection and installation planning. Inputs include the explicit project manifest, detected evidence, selected harness, scope, and pinned release.
@@ -68,6 +70,12 @@ an exact version-pin schema, the `poietic-harness:update` skill, and a generated
 Claude Code maintenance plugin. Startup is read-only; pinned checks are offline
 by default. The skill guides scoped updates and preserves local expertise; an
 automatic installer, capability manifest, and atomic updater remain future work.
+
+Released in v2026.1002.125921: `poietic-harness-start` moves startup procedures out of
+always-loaded AGENTS.md into a short skill entrypoint with separate routine-check
+and initial-setup references. The maintenance capability selects it with `update`.
+Install and verify discovery before replacing global guidance with its invocation;
+this does not add a native hook or upgrade an existing runtime.
 
 Released in v2026.1002.2233: `poietic-harness poll` and `pollVersion` provide
 one-shot deterministic release polling without an agent/model turn. Successful

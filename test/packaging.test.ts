@@ -11,6 +11,7 @@ const components = [
   "skills/ui-standards",
   "agents/ui-reviewer",
   "skills/update",
+  "skills/poietic-harness-start",
 ];
 
 test("npm packages include local indexes and topics but exclude private working notes", async () => {

@@ -47,6 +47,16 @@
       "requires": [],
       "software": ["maintenance-runtime"],
       "status": "tool-backed"
+    },
+    {
+      "id": "poietic-harness-start",
+      "kind": "skill",
+      "path": "skills/poietic-harness-start",
+      "description": "Check installed Poietic Harness versions at session start and bootstrap missing user components with progressive guidance.",
+      "capabilities": ["toolkit-maintenance"],
+      "requires": ["update"],
+      "software": ["maintenance-runtime"],
+      "status": "tool-backed"
     }
   ]
 }
