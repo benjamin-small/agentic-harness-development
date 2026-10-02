@@ -51,7 +51,7 @@ Acceptance:
 - [x] Include library and CLI in consumable package assets and isolated release-consumer verification.
 - [x] Run explicitly configured, bounded live requests and report model/usage. The [2026-10-01 check](verification/jev-2026-10-01.md) verified library and CLI inference with three typed questions after fixing resolved-model validation. This does not establish general decision quality.
 
-Pending next release, the Jev CLI now emits default JSONL activity on stderr for
+Released in v2026.1002.2233, the Jev CLI emits default JSONL activity on stderr for
 command/request starts and finishes, with batch sequence correlation, attempt
 counts, durations, and totals. `--quiet` preserves diagnostics-only stderr.
 Every shared-client library and CLI call also appends start, attempt, and finish
@@ -69,7 +69,7 @@ Claude Code maintenance plugin. Startup is read-only; pinned checks are offline
 by default. The skill guides scoped updates and preserves local expertise; an
 automatic installer, capability manifest, and atomic updater remain future work.
 
-Implemented next, pending release: `poietic-harness poll` and `pollVersion` provide
+Released in v2026.1002.2233: `poietic-harness poll` and `pollVersion` provide
 one-shot deterministic release polling without an agent/model turn. Successful
 lookups have an explicit optional five-minute cache, conditional ETag refresh,
 and a shorter configurable network deadline. Poll exits distinguish availability

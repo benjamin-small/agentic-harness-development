@@ -52,11 +52,11 @@ or a dirty source tree match a release. The checker verifies package/lock/plugin
 version consistency when those metadata files exist. Verify hashes at acquisition
 and inspect Git status before source updates.
 
-## Fast polling (pending release)
+## Fast polling
 
-The current source adds `poietic-harness poll --config /absolute/pin.json --cache
-/absolute/writable/latest-release.json`. Published v2026.1001.190334 has only
-`check`; verify the installed command before using `poll`. Run the executable
+Release v2026.1002.2233 provides `poietic-harness poll --config
+/absolute/pin.json --cache /absolute/writable/latest-release.json`. Older releases
+may have only `check`; verify the installed command before using `poll`. Run the executable
 directly for routine polling; it needs no model, skill evaluation, or agent turn.
 An external scheduler owns recurrence and notification deduplication.
 
