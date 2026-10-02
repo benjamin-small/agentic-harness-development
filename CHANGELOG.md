@@ -10,6 +10,8 @@ Entries follow the [changelog policy](docs/changelog.md). `Unreleased` describes
 
 ### Fixed
 
+- **Jev signal tests:** Wait for the CLI startup event before sending SIGINT/SIGTERM, avoiding a fixed-delay race on slower CI runners while still verifying cancellation and conventional exit codes.
+
 - **Jev credential reuse:** Record an authorized credential connection in the installed skill's private local knowledge during setup and consult it before rediscovering projects or authentication. Keep provider identifiers and an injection recipe in knowledge; support explicitly requested offline credential caching in a separate owner-only file or OS credential store, with explicit refresh and no silent network fallback. Existing installations can add the local record without changing their runtime pin.
 
 ### Added
