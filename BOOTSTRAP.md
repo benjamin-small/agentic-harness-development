@@ -64,6 +64,15 @@ Verify `"$toolkit_dir/runtime/node_modules/.bin/jev" --version`, then use its `v
 
 ### Register session checks and the update skill
 
+The next release also enables persistent logging for every shared-client Jev
+library and CLI call at `~/.local/state/poietic-harness/jev/calls.jsonl`. Record
+the writable log path and execution identity during provisioning; use
+`JEV_LOG_PATH` or client `logPath` for an absolute override outside the immutable
+runtime. The file is created on the first call. Terminal `--quiet` does not
+disable persistent logging. Failed persistence returns non-retryable `IO_ERROR`.
+The published release named above does not yet contain this feature; see the
+[logging contract](docs/jev-runtime.md#persistent-call-logging) before upgrading.
+
 Record the chosen exact release in the consumer's `.poietic-harness.json` using
 `{ "schemaVersion": 1, "version": "<selected timestamp>" }`. Run that installation's
 `poietic-harness check --project /absolute/project`. Pinned checks stay local by

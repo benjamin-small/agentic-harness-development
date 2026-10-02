@@ -10,6 +10,7 @@ import {
   type JevClient,
 } from "./types.js";
 import { requestId, validateRequest, validateResponse } from "./validation.js";
+import { callLogger, jevLogPath } from "./logging.js";
 
 export function aborted(signal: AbortSignal): JevError {
   return signal.reason instanceof JevError
@@ -158,8 +159,10 @@ export function createJevClient(options: ClientOptions): JevClient {
       "Invalid timeout, retry, or transport configuration.",
     );
   const apiKey = options.apiKey;
+  const logPath = jevLogPath(options.logPath);
   return {
     async decide(input, call = {}): Promise<DecisionResult> {
+      const log = callLogger(logPath);
       let attempts = 0;
       const base = { schemaVersion: 1 as const, requestId: requestId(input) };
       const controller = new AbortController();
@@ -174,6 +177,7 @@ export function createJevClient(options: ClientOptions): JevClient {
       );
       const signal = controller.signal;
       try {
+        await log("jev.call.start", { model: JEV_MODEL });
         const request = validateRequest(input);
         const body = JSON.stringify({
           model: JEV_MODEL,
@@ -181,6 +185,8 @@ export function createJevClient(options: ClientOptions): JevClient {
           questions: request.questions,
         });
         while (true) {
+          if (signal.aborted) throw aborted(signal);
+          await log("jev.call.attempt", { attempt: attempts + 1 });
           if (signal.aborted) throw aborted(signal);
           attempts++;
           let delay = retryDelay(null, attempts);
@@ -209,6 +215,16 @@ export function createJevClient(options: ClientOptions): JevClient {
               await readResponse(response, signal),
               request,
             );
+            await log("jev.call.finish", {
+              status: "success",
+              attempts,
+              model: result.model,
+              inputTokens: result.usage.input_tokens,
+              outputTokens: result.usage.output_tokens,
+              ...(result.usage.cost === undefined
+                ? {}
+                : { cost: result.usage.cost }),
+            });
             return { ...base, attempts, ok: true, response: result };
           } catch (cause) {
             const failure = signal.aborted
@@ -230,13 +246,22 @@ export function createJevClient(options: ClientOptions): JevClient {
           }
         }
       } catch (cause) {
-        const failure =
+        let failure =
           cause instanceof JevError
             ? cause
             : error(
                 "INVALID_INPUT",
                 "Input could not be processed as a JSON decision request.",
               );
+        try {
+          await log("jev.call.finish", {
+            status: "failure",
+            attempts,
+            errorCode: failure.detail.code,
+          });
+        } catch (loggingFailure) {
+          failure = loggingFailure as JevError;
+        }
         return { ...base, attempts, ok: false, error: failure.detail };
       } finally {
         clearTimeout(timer);

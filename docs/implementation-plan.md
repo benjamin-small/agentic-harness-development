@@ -54,7 +54,10 @@ Acceptance:
 Pending next release, the Jev CLI now emits default JSONL activity on stderr for
 command/request starts and finishes, with batch sequence correlation, attempt
 counts, durations, and totals. `--quiet` preserves diagnostics-only stderr.
-Logging omits credentials and request contents; library execution remains silent.
+Every shared-client library and CLI call also appends start, attempt, and finish
+records to a persistent local log. `--quiet` affects terminal activity only.
+Logging omits credentials and request contents; deployments must provision a
+writable log path, and failed persistence returns non-retryable `IO_ERROR`.
 
 ## M2: Bootstrap and capability selection
 

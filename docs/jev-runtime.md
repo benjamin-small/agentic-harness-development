@@ -100,7 +100,50 @@ Cancellation stops admission and aborts active requests, which yield cancellatio
 
 Stdout contains JSON for `decide`, JSONL for `batch`, or a small local-validation result for `validate`. Setup, file/stream errors, and batch-level failures go to stderr as JSON; provider failures remain in result envelopes. `--help`/`--version` print text. Exit codes: 0 success (including an empty batch), 1 any decision/batch/IO failure, 2 usage/setup/validation failure, 130 SIGINT, 143 SIGTERM. A partial batch can have valid stdout results and a nonzero exit.
 
-## Activity logging
+## Persistent call logging
+
+**Pending release:** every call through the shared `createJevClient().decide`
+runtime appends JSONL records to `~/.local/state/poietic-harness/jev/calls.jsonl`.
+This covers library calls, CLI `decide`, every admitted `batch` entry, retries,
+validation failures, cancellation, and API errors. The published
+v2026.1001.190334 runtime does not yet provide this logging. Calls made outside
+this toolkit are outside its logging boundary; earlier calls cannot be recovered.
+
+The default path on this user's machine is
+`/Users/bsmall/.local/state/poietic-harness/jev/calls.jsonl`. Set `JEV_LOG_PATH` to
+an absolute file path for a process-wide override, or pass `logPath` to
+`createJevClient` for that client. `jevLogPath()` exposes the resolved path.
+An explicit client option takes precedence over the environment. The file and
+parent directories are created on the first call; new files use mode 0600 and
+new directories use 0700. Records append across calls and processes. No automatic
+rotation is implemented. A deployment must supply a writable log path outside
+its immutable runtime installation.
+
+Each record includes `schemaVersion`, UTC `timestamp`, process `pid`, generated
+`callId`, and `elapsedMs`. `jev.call.start` identifies a new call and its fixed
+model. `jev.call.attempt` records intent to dispatch each numbered attempt before
+transport runs. `jev.call.finish` records success/failure, actual attempt count,
+resolved model and token/cost usage when supplied, or a sanitized error code.
+All records for one call share a generated ID; request IDs and contents are omitted.
+
+Persistent logging cannot be disabled with `--quiet`; that option controls
+terminal activity only. Failure to persist a record returns a non-retryable
+`IO_ERROR`. No transport is dispatched until its start and attempt records have
+been written. If logging fails after dispatch, the call may already have been
+billed; do not automatically repeat it. Local log I/O remains subject to the
+host's filesystem permissions, which package instructions cannot grant.
+
+```sh
+tail -f "$HOME/.local/state/poietic-harness/jev/calls.jsonl"
+```
+
+`validate`, `--help`, and `--version` perform no decision call. Invalid CLI input
+that cannot be read into a call produces a CLI diagnostic rather than a call
+record. Setup failures before a client is created likewise produce no call.
+Logs omit credentials, headers, paths, request IDs, state, questions, answers,
+and provider response bodies. Logs are local; no telemetry is sent.
+
+## Terminal activity logging
 
 **Pending release:** `decide` and `batch` now log activity to stderr by default.
 This is available in the built source checkout; the published v2026.1001.190334
@@ -121,8 +164,8 @@ processing, including local validation; it does not prove an API call happened.
 The finish event's attempt count identifies actual transport attempts. Batch log
 sequences match stdout sequences, even when completions arrive out of order.
 Logs contain no API keys, headers, file paths, request IDs, state, questions,
-answers, or provider response bodies. Logging uses stderr only and does not
-create files or send telemetry. A closed activity pipe does not change decisions.
+answers, or provider response bodies. These additional activity events use stderr. A closed terminal activity pipe
+does not change decisions; the persistent call log still applies.
 
 ```sh
 # See activity in the terminal while saving the JSON result.
@@ -137,7 +180,7 @@ Consumers reading stderr must handle JSONL and distinguish activity's `event`
 field from command diagnostics' `error` field. Add `--quiet` to retain the earlier
 diagnostics-only behavior. A command-level error can follow start events and is
 then followed by the command-finish event. Setup failures can occur before
-logging starts. Library calls remain silent; these events belong to the CLI.
+logging starts. Library calls append persistent records without producing terminal activity.
 
 ## Bounds, retries, and billing
 

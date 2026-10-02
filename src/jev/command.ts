@@ -28,6 +28,8 @@ Options for decide/batch:
   --concurrency <1..16>       Batch only (default 4).
   --quiet                     Suppress activity logs; errors still go to stderr.
 
+Every library/CLI call appends to ~/.local/state/poietic-harness/jev/calls.jsonl.
+JEV_LOG_PATH overrides the absolute file path. --quiet never disables this log.
 Credentials: OPENROUTER_API_KEY environment variable, never a command argument.
 Exit codes: 0 success; 1 request/batch/IO failure; 2 usage/setup/validation failure;
 130 SIGINT; 143 SIGTERM. Activity logs and diagnostics go to stderr as JSONL.

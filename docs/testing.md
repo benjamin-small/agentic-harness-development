@@ -6,7 +6,7 @@ Run `npm run check` for formatting, TypeScript, coverage tests, and resource val
 
 Tests cover catalog structure/dependencies, selection, skill metadata/destinations, resource containment, local knowledge/memory indexes, and CLI output channels. Packaging tests inject synthetic private notes into isolated fixtures and verify their exclusion. Git ignore rules are checked without writing private notes into the repository.
 
-Jev tests exercise choice/score/noul contracts, structured guidance, missing/optional metadata, partial and malformed responses, invalid UTF-8, bounded inputs/responses, credential handling, 401/402/429/5xx errors, Retry-After, deadlines, cancellation during fetch/body/backoff, bounded streaming batches, repeated IDs, source errors, output backpressure, and SIGINT/SIGTERM. CLI activity tests verify start events before transport completes, batch outcome/sequence correlation, private-data omission, diagnostics-only quiet mode, and continued decisions when the log pipe closes. Transport is injected; no API key or network is needed for the suite.
+Jev tests exercise choice/score/noul contracts, structured guidance, missing/optional metadata, partial and malformed responses, invalid UTF-8, bounded inputs/responses, credential handling, 401/402/429/5xx errors, Retry-After, deadlines, cancellation during fetch/body/backoff, bounded streaming batches, repeated IDs, source errors, output backpressure, and SIGINT/SIGTERM. CLI activity tests verify start events before transport completes, batch outcome/sequence correlation, private-data omission, diagnostics-only quiet mode, and continued decisions when the terminal log pipe closes. Persistent-call tests verify library and quiet CLI writes, retry correlation, concurrent clients, invalid entries, private-data omission, restrictive new-file permissions, and preventing dispatch when persistence fails. Transport is injected; no API key or network is needed for the suite.
 
 Release-version tests cover UTC conversion, whole-second precision, midnight, leap days, invalid dates/times, numeric padding, package/lockfile agreement, legacy migration, and duplicate/backward timestamp rejection. Stamping tests use temporary package fixtures and preserve dependency versions.
 
@@ -23,7 +23,7 @@ future-dated cache recovery, offline misses, unavailable stale results, atomic
 concurrent writes, cache write failures, separate update-availability exits, and
 both header/body deadlines. A real CLI subprocess reads a fresh cache offline.
 
-Measured on 2026-10-01 with Node.js 26.10.0: **99.80% lines/statements, 100% functions, and 98.15% branches**, across 64 passing tests. Reproduce with `npm run test:coverage`; CI uploads its own per-runtime measurements. Coverage covers `src/` runtime code, not the release scripts or skill decision quality. There is no arbitrary global coverage threshold.
+Measured on 2026-10-01 with Node.js 26.10.0: **99.81% lines/statements, 100% functions, and 98.08% branches**, across 69 passing tests. Reproduce with `npm run test:coverage`; CI uploads its own per-runtime measurements. Coverage covers `src/` runtime code, not the release scripts or skill decision quality. There is no arbitrary global coverage threshold.
 
 ## Artifact verification
 

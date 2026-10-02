@@ -197,7 +197,7 @@ assert.equal(cached.polling.source,'cache');`;
 import {createJevClient, decideBatch, validateRequest, JEV_MODEL} from '@benjamin-small/agentic-harness-development/jev';
 const request = {id:'consumer-check',state:'Synthetic input',questions:{check:{type:'noul',instructions:'Is the input synthetic?'}}};
 validateRequest(request);
-const client = createJevClient({apiKey:'fixture-only',fetch:async () => Response.json({model:JEV_MODEL,answers:{check:{type:'noul',noul:1}},usage:{input_tokens:1,output_tokens:1}})});
+const client = createJevClient({apiKey:'fixture-only',logPath:${JSON.stringify(join(consumer, "jev-calls.jsonl"))},fetch:async () => Response.json({model:JEV_MODEL,answers:{check:{type:'noul',noul:1}},usage:{input_tokens:1,output_tokens:1}})});
 const result = await client.decide(request);
 assert.equal(result.ok,true);
 assert.equal(result.requestId,'consumer-check');
@@ -207,6 +207,22 @@ assert.equal(results.length,2);
 assert.equal(results.find(r => r.sequence === 0).ok,true);
 assert.equal(results.find(r => r.sequence === 1).ok,false);`;
     run(process.execPath, ["--input-type=module", "-e", jevProbe]);
+    if (manifest.capabilities.includes("jev-persistent-call-logging")) {
+      const calls = (await readFile(join(consumer, "jev-calls.jsonl"), "utf8"))
+        .trim()
+        .split("\n")
+        .map((line) => JSON.parse(line));
+      assert.equal(
+        calls.filter((item) => item.event === "jev.call.start").length,
+        3,
+      );
+      assert.equal(
+        calls.filter((item) => item.event === "jev.call.finish").length,
+        3,
+      );
+      assert.equal(new Set(calls.map((item) => item.callId)).size, 3);
+      assert.ok(!JSON.stringify(calls).includes("fixture-only"));
+    }
     const jevBin = join(consumer, "node_modules/.bin/jev");
     assert.equal(run(jevBin, ["--version"]).trim(), manifest.version);
     await writeFile(
@@ -254,6 +270,11 @@ assert.equal(results.find(r => r.sequence === 1).ok,false);`;
           ...(hasJev
             ? [
                 "jev-library-mock",
+                ...(manifest.capabilities.includes(
+                  "jev-persistent-call-logging",
+                )
+                  ? ["jev-persistent-call-log"]
+                  : []),
                 "jev-batch",
                 "jev-cli-validation",
                 "jev-version",

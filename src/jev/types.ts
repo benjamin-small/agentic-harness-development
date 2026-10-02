@@ -95,6 +95,8 @@ export interface ClientOptions {
   maxRetries?: number;
   maxRetryDelayMs?: number;
   retryTransportErrors?: boolean;
+  /** Persistent log for every call; default is jevLogPath(). Cannot be disabled. */
+  logPath?: string;
 }
 export interface CallOptions {
   signal?: AbortSignal;

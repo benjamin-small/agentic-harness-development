@@ -85,6 +85,7 @@ const manifest = {
     "explicit-selection-plans",
     "jev-typescript-library",
     "jev-cli-and-jsonl-batches",
+    "jev-persistent-call-logging",
     "session-version-check",
     "deterministic-release-polling",
     "scoped-update-skill",
