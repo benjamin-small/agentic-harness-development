@@ -495,14 +495,22 @@ test("deadlines and cancellation abort active fetch, body reads, and retry waits
 test("batch bounds concurrency and correlates out-of-order and invalid results", async () => {
   let active = 0;
   let peak = 0;
+  let markBothStarted!: () => void;
+  const bothStarted = new Promise<void>((resolve) => {
+    markBothStarted = resolve;
+  });
+  let releaseSlow!: () => void;
+  const slowReleased = new Promise<void>((resolve) => {
+    releaseSlow = resolve;
+  });
   const controlled = client(
     transport(async (_, init) => {
       active++;
       peak = Math.max(peak, active);
+      if (active === 2) markBothStarted();
       const body = JSON.parse(init?.body as string) as { state: string };
-      await new Promise((resolve) =>
-        setTimeout(resolve, body.state === "slow" ? 30 : 1),
-      );
+      if (body.state === "slow") await slowReleased;
+      else if (body.state === "fast") await bothStarted;
       active--;
       return Response.json(response);
     }),
@@ -513,9 +521,13 @@ test("batch bounds concurrency and correlates out-of-order and invalid results",
     null,
     { ...request, id: "last" },
   ];
-  const results = await collect(
-    decideBatch(controlled, inputs, { concurrency: 2 }),
-  );
+  const results = [];
+  for await (const result of decideBatch(controlled, inputs, {
+    concurrency: 2,
+  })) {
+    results.push(result);
+    if (results.length === 1) releaseSlow();
+  }
   assert.equal(peak, 2);
   assert.equal(results.length, 4);
   assert.equal(results[0]?.sequence, 1);
