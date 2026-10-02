@@ -1,4 +1,12 @@
 import { JEV_MODEL, type DecisionRequest } from "../src/jev/index.js";
+import { mkdtempSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { after } from "node:test";
+
+const logDirectory = mkdtempSync(join(tmpdir(), "jev-test-log-"));
+process.env.JEV_LOG_PATH = join(logDirectory, "calls.jsonl");
+after(() => rmSync(logDirectory, { recursive: true, force: true }));
 
 export const request: DecisionRequest = {
   id: "ticket-42",

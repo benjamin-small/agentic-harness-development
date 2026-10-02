@@ -8,6 +8,8 @@ Once at session start, run `node dist/src/maintenance/cli.js check --project .` 
 
 Never upgrade, rewrite a pin, or discard local work at startup. For an explicit update request, read `skills/update/SKILL.md` (`poietic-harness:update`; `/poietic-harness:update` in the Claude plugin). Use [the maintenance guide](docs/maintenance.md) for other consumer scopes and offline checks.
 
+Live discovery requires HTTPS access to `api.github.com` from the actual execution context. For an authorized check blocked by the sandbox, use the host's supported permission flow when available; instructions alone do not grant access. If access remains unavailable, report it and continue. Do not reinstall, retrieve credentials, or change global network settings at startup. Inspect `latest.status` separately from local pin alignment.
+
 ## Commands
 
 - `npm ci` installs the locked toolchain; use Node.js 24 LTS or 26.

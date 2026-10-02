@@ -6,7 +6,9 @@ Run `npm run check` for formatting, TypeScript, coverage tests, and resource val
 
 Tests cover catalog structure/dependencies, selection, skill metadata/destinations, resource containment, local knowledge/memory indexes, and CLI output channels. Packaging tests inject synthetic private notes into isolated fixtures and verify their exclusion. Git ignore rules are checked without writing private notes into the repository.
 
-Jev tests exercise choice/score/noul contracts, structured guidance, missing/optional metadata, partial and malformed responses, invalid UTF-8, bounded inputs/responses, credential handling, 401/402/429/5xx errors, Retry-After, deadlines, cancellation during fetch/body/backoff, bounded streaming batches, repeated IDs, source errors, output backpressure, and SIGINT/SIGTERM. Transport is injected; no API key or network is needed for the suite.
+Jev tests exercise choice/score/noul contracts, structured guidance, missing/optional metadata, partial and malformed responses, invalid UTF-8, bounded inputs/responses, credential handling, 401/402/429/5xx errors, Retry-After, deadlines, cancellation during fetch/body/backoff, bounded streaming batches, repeated IDs, source errors, output backpressure, and SIGINT/SIGTERM. CLI activity tests verify start events before transport completes, batch outcome/sequence correlation, private-data omission, diagnostics-only quiet mode, and continued decisions when the terminal log pipe closes. Persistent-call tests verify library and quiet CLI writes, retry correlation, concurrent clients, invalid entries, private-data omission, restrictive new-file permissions, and preventing dispatch when persistence fails. Transport is injected; no API key or network is needed for the suite.
+
+Jev deadline tests use controlled timers after transport or body-read admission, so log-write latency does not determine the phase under test.
 
 Release-version tests cover UTC conversion, whole-second precision, midnight, leap days, invalid dates/times, numeric padding, package/lockfile agreement, legacy migration, and duplicate/backward timestamp rejection. Stamping tests use temporary package fixtures and preserve dependency versions.
 
@@ -17,13 +19,30 @@ structured CLI exits, and fail-soft startup context. The generated Claude plugin
 actual exec command is run against a temporary project pin; it includes only
 maintenance, with no UI registration or inference.
 
-Measured on 2026-10-01 with Node.js 26.10.0: **99.76% lines/statements, 100% functions, and 98.12% branches**, across 53 passing tests. Reproduce with `npm run test:coverage`; CI uploads its own per-runtime measurements. Coverage covers `src/` runtime code, not the release scripts or skill decision quality. There is no arbitrary global coverage threshold.
+Polling tests additionally cover fresh-cache transport avoidance, rechecking
+changed pins/runtimes, ETag/304 revalidation, expiry, forced refresh, corrupt and
+future-dated cache recovery, offline misses, unavailable stale results, atomic
+concurrent writes, cache write failures, separate update-availability exits, and
+both header/body deadlines. A real CLI subprocess reads a fresh cache offline.
+
+Measured on 2026-10-01 with Node.js 26.10.0: **99.81% lines/statements, 100% functions, and 98.08% branches**, across 69 passing tests. Reproduce with `npm run test:coverage`; CI uploads its own per-runtime measurements. Coverage covers `src/` runtime code, not the release scripts or skill decision quality. There is no arbitrary global coverage threshold.
 
 ## Artifact verification
 
 `npm run release:pack` followed by `npm run release:verify` validates checksums and installs the exact tarball into a fresh temporary npm consumer. It verifies catalog/library exports, shipped resource paths, selection, installed CLI execution, and version consistency. Jev verification imports the `/jev` entry, uses injected transport for a decision and partial batch, and invokes the installed `jev` binary for local validation/version. Maintenance verification imports `/maintenance`, invokes the installed version checker against a project pin, checks plugin/runtime version agreement and canonical skill copies, and runs the packaged hook command. Package installation needs access to npm for the locked direct runtime dependencies.
 
 ## Outside this baseline
+
+On 2026-10-01, the unreleased polling implementation also passed a separate
+installation of its working-tree npm tarball in a temporary consumer. The
+`/maintenance` import, installed CLI, cached/offline polling, update exit 1 with
+an aligned pin, standalone plugin polling, and packaged legacy hook all passed.
+This was local artifact verification, not a published release or scheduler setup.
+A bounded public GitHub spot check with approved host network access measured
+312 ms cold, 45 ms cached, and 166 ms for conditional revalidation (one sample
+each, including process startup; not a performance benchmark). The same recorded
+installed check succeeded with approved host network access after sandboxed
+startup lookups were unavailable. No model or credentials were used by polling.
 
 The [isolated Codex dogfood runner](codex-dogfood.md) provides a separate opt-in
 installation test with an empty container home and example UI project. Its

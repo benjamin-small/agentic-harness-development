@@ -6,6 +6,22 @@ Entries follow the [changelog policy](docs/changelog.md). `Unreleased` describes
 
 ## Unreleased
 
+## 2026.1002.2233 — 2026-10-02 00:22:33 UTC
+
+### Fixed
+
+- **Jev deadline tests:** Use controlled timers after transport/body admission so persistent log writes on busy macOS runners cannot expire a 20 ms test deadline before the intended phase. Keep assertions for pre-dispatch cancellation, active fetch cancellation, stalled body reads, and retry backoff; runtime deadlines and logging remain unchanged.
+
+### Added
+
+- **Maintenance polling:** Add `poietic-harness poll` and `pollVersion` for direct execution by schedulers without inference. Optional five-minute caching avoids repeated network calls; expired entries use ETag revalidation with a default 1.5-second deadline. Poll exit codes distinguish no newer release (0), update available (1), and unavailable/invalid (2), independently of pin alignment. Failed refreshes never present stale data as current. Existing `check` and `session-start` behavior is preserved. Acquire a release containing this command before using it from a pinned runtime; use a dedicated writable cache outside the installation.
+
+### Changed
+
+- **Jev call logging:** Persist every shared-client library/CLI call and retry to `~/.local/state/poietic-harness/jev/calls.jsonl`, with generated call IDs, timestamps, process IDs, durations, outcomes, attempt counts, and reported token/cost usage. Configure an absolute path with `JEV_LOG_PATH` or client `logPath`; `jevLogPath()` exposes the resolved path. Records append locally and omit credentials and request contents. Failed log writes return non-retryable `IO_ERROR`; provision a writable path, and do not repeat a dispatched request automatically after a logging error. CLI `decide` and `batch` additionally emit JSONL activity on stderr. `--quiet` suppresses terminal activity only; persistent logging stays enabled. Stdout remains JSON/JSONL. Stderr consumers must distinguish `event` records from `error` diagnostics.
+
+- **Bootstrap and update guidance:** Verify public GitHub connectivity from the actual hook/scheduler context and record the host's network permission setup. Package instructions cannot grant sandbox access. Route authorized blocked checks through the host permission flow, report unresolved availability honestly, and continue without changing pins or global permissions. Routine polling runs the executable directly; it does not require skill evaluation or an agent turn.
+
 ## 2026.1001.190334 — 2026-10-01 19:03:34 UTC
 
 ### Added

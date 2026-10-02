@@ -40,3 +40,10 @@ A runtime must enforce ownership using a lease/lock with fencing and deduplicate
 `skills/` and `agents/` are authoritative instruction sources. Adapter output is derived and tested against native harness semantics. Models, permissions, hooks, and discovery locations stay in adapters. Our `catalog.json` describes packaging and selection; its schema is repository-owned, not an industry agent specification.
 
 The bootstrap CLI validates resources and computes selection only. A separate `jev` executable and `/jev` library export perform explicitly invoked inference. Installing the package supplies the runtime; registering a skill supplies its instructions. No automatic installation, project inspection, or background service runs.
+
+The maintenance runtime separates local version/pin validation, bounded public
+release transport, and optional disposable caching. `check` remains read-only;
+`poll` writes only its explicitly selected release cache and can be invoked
+directly by an external scheduler without inference. Scheduling, notifications,
+and host network permissions stay with the consumer, not the package. Neither
+command changes pins, downloads runtime assets, or installs an update.

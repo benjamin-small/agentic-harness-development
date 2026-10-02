@@ -401,7 +401,10 @@ test("ambiguous transport failures are not replayed by default; explicit replay 
   );
 });
 
-test("deadlines and cancellation abort active fetch, body reads, and retry waits", async () => {
+test("deadlines and cancellation abort active fetch, body reads, and retry waits", async (t) => {
+  // Logging uses real disk I/O. Advance deadlines only after reaching the phase
+  // being tested, so a busy runner cannot time out before transport admission.
+  t.mock.timers.enable({ apis: ["setTimeout"] });
   const before = new AbortController();
   before.abort("PRIVATE STATE");
   failure(
@@ -412,41 +415,75 @@ test("deadlines and cancellation abort active fetch, body reads, and retry waits
     0,
   );
   let transportSignal: AbortSignal | undefined;
+  let markTransportStarted!: () => void;
+  const transportStarted = new Promise<void>((resolve) => {
+    markTransportStarted = resolve;
+  });
   const hanging = client(
     transport((_, init) => {
       transportSignal = init?.signal ?? undefined;
+      markTransportStarted();
       return new Promise(() => {});
     }),
     { timeoutMs: 20 },
   );
-  failure(await hanging.decide(request), "TIMEOUT", 1);
+  const hangingResult = hanging.decide(request);
+  await transportStarted;
+  t.mock.timers.tick(20);
+  failure(await hangingResult, "TIMEOUT", 1);
   assert.equal(transportSignal?.aborted, true);
   const controller = new AbortController();
-  const pending = client(transport(() => new Promise(() => {}))).decide(
-    request,
-    { signal: controller.signal },
-  );
+  let markCancellationStarted!: () => void;
+  const cancellationStarted = new Promise<void>((resolve) => {
+    markCancellationStarted = resolve;
+  });
+  const pending = client(
+    transport(() => {
+      markCancellationStarted();
+      return new Promise(() => {});
+    }),
+  ).decide(request, { signal: controller.signal });
+  await cancellationStarted;
   controller.abort("PRIVATE STATE");
-  failure(await pending, "CANCELLED");
-  const body = new ReadableStream<Uint8Array>({ start() {} });
-  failure(
-    await client(
-      transport(() => new Response(body)),
-      { timeoutMs: 20 },
-    ).decide(request),
-    "TIMEOUT",
+  failure(await pending, "CANCELLED", 1);
+  let markBodyRead!: () => void;
+  const bodyRead = new Promise<void>((resolve) => {
+    markBodyRead = resolve;
+  });
+  const body = new ReadableStream<Uint8Array>(
+    {
+      pull() {
+        markBodyRead();
+      },
+    },
+    { highWaterMark: 0 },
   );
-  failure(
-    await client(
-      transport(
-        () =>
-          new Response(null, { status: 429, headers: { "retry-after": "1" } }),
-      ),
-      { timeoutMs: 20 },
-    ).decide(request),
-    "TIMEOUT",
-    1,
-  );
+  const bodyResult = client(
+    transport(() => new Response(body)),
+    { timeoutMs: 20 },
+  ).decide(request);
+  await bodyRead;
+  t.mock.timers.tick(20);
+  failure(await bodyResult, "TIMEOUT", 1);
+  let markRetryResponse!: () => void;
+  const retryResponse = new Promise<void>((resolve) => {
+    markRetryResponse = resolve;
+  });
+  const retryResult = client(
+    transport(() => {
+      markRetryResponse();
+      return new Response(null, {
+        status: 429,
+        headers: { "retry-after": "1" },
+      });
+    }),
+    { timeoutMs: 20 },
+  ).decide(request);
+  await retryResponse;
+  // Drain the resolved response's promise continuations into the retry wait.
+  await new Promise<void>((resolve) => setImmediate(resolve));
+  t.mock.timers.tick(20);
+  failure(await retryResult, "TIMEOUT", 1);
   const already = new AbortController();
   already.abort();
   await assert.rejects(

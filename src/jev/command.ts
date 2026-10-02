@@ -6,7 +6,13 @@ import { createJevClient } from "./client.js";
 import { decideBatch } from "./batch.js";
 import { readInput, readJsonLines } from "./input.js";
 import { validateRequest } from "./validation.js";
-import { JevError, error, integer } from "./types.js";
+import {
+  JEV_MODEL,
+  JevError,
+  error,
+  integer,
+  type JevClient,
+} from "./types.js";
 
 const help = `Usage: jev <decide|batch|validate> --input <file|-> [options]
        jev --version
@@ -20,10 +26,14 @@ Options for decide/batch:
   --max-retries <0..5>        Retries after transient HTTP failures (default 2).
   --retry-transport-errors    Also replay ambiguous transport failures (may bill twice).
   --concurrency <1..16>       Batch only (default 4).
+  --quiet                     Suppress activity logs; errors still go to stderr.
 
+Every library/CLI call appends to ~/.local/state/poietic-harness/jev/calls.jsonl.
+JEV_LOG_PATH overrides the absolute file path. --quiet never disables this log.
 Credentials: OPENROUTER_API_KEY environment variable, never a command argument.
 Exit codes: 0 success; 1 request/batch/IO failure; 2 usage/setup/validation failure;
-130 SIGINT; 143 SIGTERM. Diagnostics go to stderr. See docs/jev-runtime.md.
+130 SIGINT; 143 SIGTERM. Activity logs and diagnostics go to stderr as JSONL.
+Activity logs omit credentials and request contents. See docs/jev-runtime.md.
 `;
 
 export interface CommandIO {
@@ -51,6 +61,37 @@ export async function runCommand(
   let input: Readable | undefined;
   const cancel = () => input?.destroy();
   let setup = true;
+  let activityCommand: string | undefined;
+  let commandStarted = 0;
+  let admitted = 0;
+  let completed = 0;
+  let quiet = false;
+  const activity = async (
+    event: string,
+    fields: Record<string, string | number> = {},
+  ) => {
+    if (quiet || activityCommand === undefined) return;
+    try {
+      await write(io.stderr, {
+        schemaVersion: 1,
+        event,
+        timestamp: new Date().toISOString(),
+        command: activityCommand,
+        ...fields,
+      });
+    } catch {
+      /* Activity logging is best effort; a closed log pipe does not change decisions. */
+    }
+  };
+  const finish = async (exitCode: number) => {
+    await activity("jev.command.finish", {
+      exitCode,
+      requests: admitted,
+      completed,
+      elapsedMs: Math.round(performance.now() - commandStarted),
+    });
+    return exitCode;
+  };
   try {
     if (args.length === 1 && args[0] === "--version") {
       const pkg = JSON.parse(
@@ -80,6 +121,7 @@ export async function runCommand(
         allowPositionals: false,
         options: {
           input: { type: "string" },
+          quiet: { type: "boolean" },
           ...(command === "validate"
             ? {}
             : {
@@ -100,6 +142,7 @@ export async function runCommand(
     }
     if (typeof values.input !== "string" || !values.input)
       throw error("INVALID_INPUT", "Provide --input <file|->.");
+    quiet = values.quiet === true;
     const numeric = (
       name: string,
       fallback: number,
@@ -146,20 +189,40 @@ export async function runCommand(
       return 0;
     }
     setup = false;
+    activityCommand = command;
+    commandStarted = performance.now();
+    await activity("jev.command.start", { model: JEV_MODEL });
+    const loggedClient: JevClient = {
+      async decide(value, options) {
+        const sequence = admitted++;
+        const started = performance.now();
+        await activity("jev.request.start", { sequence });
+        const result = await client!.decide(value, options);
+        completed++;
+        await activity("jev.request.finish", {
+          sequence,
+          status: result.ok ? "success" : "failure",
+          attempts: result.attempts,
+          elapsedMs: Math.round(performance.now() - started),
+          ...(!result.ok ? { errorCode: result.error.code } : {}),
+        });
+        return result;
+      },
+    };
     if (command === "decide") {
-      const result = await client!.decide(await readInput(input), call);
+      const result = await loggedClient.decide(await readInput(input), call);
       await write(io.stdout, result);
-      return result.ok ? 0 : 1;
+      return finish(result.ok ? 0 : 1);
     }
     let failed = false;
-    for await (const result of decideBatch(client!, readJsonLines(input), {
+    for await (const result of decideBatch(loggedClient, readJsonLines(input), {
       concurrency,
       ...call,
     })) {
       if (!result.ok) failed = true;
       await write(io.stdout, result);
     }
-    return io.signal?.aborted || failed ? 1 : 0;
+    return finish(io.signal?.aborted || failed ? 1 : 0);
   } catch (cause) {
     const failure = io.signal?.aborted
       ? error("CANCELLED", "The command was cancelled.")
@@ -171,7 +234,7 @@ export async function runCommand(
     } catch {
       /* Closed diagnostic pipe. */
     }
-    return setup ? 2 : 1;
+    return finish(setup ? 2 : 1);
   } finally {
     io.signal?.removeEventListener("abort", cancel);
     input?.destroy();

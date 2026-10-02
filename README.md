@@ -20,7 +20,7 @@ The toolkit includes:
 - A portable UI reviewer role intended for fresh, isolated task contexts.
 - A validated capability catalog, TypeScript library, and read-only selection CLI.
 - An importable Jev client and `jev` CLI for typed decisions and bounded JSONL batches through OpenRouter.
-- A read-only `poietic-harness` version checker, an update skill, and a Claude Code plugin providing `/poietic-harness:update` and a SessionStart check.
+- A read-only `poietic-harness` version checker, an update skill, and a Claude Code plugin providing `/poietic-harness:update` and a SessionStart check. It also provides [fast cached polling without inference](docs/maintenance.md#fast-polling-without-inference).
 - CI, contributor guidance, and GitHub release archives with checksums and a source manifest.
 
 Automatic project detection, installation writes, and native subagent adapters remain planned. The catalog CLI produces a selection plan without changing harness configuration. A persistent project-manager service is a separate future project. Jev contract tests use injected transport; a separate opt-in live test verifies three typed questions through OpenRouter without treating one fixture as a quality benchmark.

@@ -13,6 +13,10 @@ Check before changing anything. A session-start check reports version alignment;
 it does not authorize an upgrade or a change to a project/deployment pin.
 An explicit update request authorizes work within its stated scope.
 
+Routine version polling should invoke the deterministic maintenance executable
+directly, without an agent turn. Use [checking guidance](knowledge/checking.md)
+for the available command, cache/exit semantics, and host network permissions.
+
 1. Locate the active installation and project root from the invoking harness's
    configured paths. Read [the knowledge index](knowledge/INDEX.md), then only
    the topic needed. Do not assume the current directory is the toolkit.

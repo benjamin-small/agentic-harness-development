@@ -1,4 +1,5 @@
 export { createJevClient } from "./client.js";
+export { jevLogPath } from "./logging.js";
 export { decideBatch } from "./batch.js";
 export { parseInput, validateRequest } from "./validation.js";
 export {

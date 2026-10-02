@@ -4,7 +4,8 @@ Use local search, then load one topic. Verified 2026-10-01 against this toolkit'
 maintenance implementation and the linked upstream documentation.
 
 - [Checking versions](checking.md): pin precedence, offline checks, JSON results,
-  and how to invoke the runtime from source, a release, or the Claude plugin.
+  fast deterministic polling, network permissions, and how to invoke the runtime
+  from source, a release, or the Claude plugin.
 - [Updating an installation](updating.md): scope, release verification, local
   expertise preservation, switching consumers, and rollback.
 - [Harness integration](harnesses.md): portable session guidance and the native

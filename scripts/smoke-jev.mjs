@@ -133,7 +133,23 @@ if (process.env.JEV_LIVE_SMOKE !== "1") {
     const result = JSON.parse(cli.stdout);
     accept("cli", result, cliRequest.id);
     assert.equal(cli.status, 0);
-    assert.equal(cli.stderr, "");
+    // Older releases are silent; newer CLI releases emit sanitized JSONL activity.
+    if (cli.stderr.trim()) {
+      const activity = cli.stderr
+        .trim()
+        .split("\n")
+        .map((line) => JSON.parse(line));
+      assert.deepEqual(
+        activity.map((item) => item.event),
+        [
+          "jev.command.start",
+          "jev.request.start",
+          "jev.request.finish",
+          "jev.command.finish",
+        ],
+      );
+      assert.equal(activity.at(-1).exitCode, 0);
+    }
     report.verified = true;
   } catch {
     report.failure =

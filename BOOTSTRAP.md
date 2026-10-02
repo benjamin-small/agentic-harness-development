@@ -1,6 +1,6 @@
 # Bootstrap this toolkit
 
-Read this file when asked to install or use this repository from a fresh harness. Use the guide associated with the selected release. This guide targets **v2026.1001.190334**, with the Jev runtime, [local expertise convention](docs/local-expertise.md), and catalog schema 2. Package versions encode UTC date and time; they make no compatibility promise. Read the tag's guide when consuming an older release.
+Read this file when asked to install or use this repository from a fresh harness. Use the guide associated with the selected release. This guide targets **v2026.1002.2233**, with the Jev runtime, [local expertise convention](docs/local-expertise.md), and catalog schema 2. Package versions encode UTC date and time; they make no compatibility promise. Read the tag's guide when consuming an older release.
 
 ## Know what this release provides
 
@@ -25,14 +25,14 @@ Available capabilities: `ui`, `structured-decisions`, and `toolkit-maintenance`.
 The consumer needs Node.js 24 LTS or 26 and npm. The following acquisition example additionally uses GitHub CLI and `shasum` on macOS/Linux. The four release assets can also be downloaded from the GitHub release page using another trusted download tool.
 
 ```sh
-toolkit_dir="$HOME/.local/share/agentic-harness-development/2026.1001.190334"
+toolkit_dir="$HOME/.local/share/agentic-harness-development/2026.1002.2233"
 mkdir -p "$toolkit_dir/assets"
-gh release download v2026.1001.190334 \
+gh release download v2026.1002.2233 \
   --repo benjamin-small/agentic-harness-development \
   --dir "$toolkit_dir/assets"
 (cd "$toolkit_dir/assets" && shasum -a 256 -c SHA256SUMS)
 npm install --prefix "$toolkit_dir/runtime" --ignore-scripts --no-audit --no-fund \
-  "$toolkit_dir/assets/benjamin-small-agentic-harness-development-2026.1001.190334.tgz"
+  "$toolkit_dir/assets/benjamin-small-agentic-harness-development-2026.1002.2233.tgz"
 "$toolkit_dir/runtime/node_modules/.bin/harness-kit" validate
 "$toolkit_dir/runtime/node_modules/.bin/harness-kit" plan \
   --capability ui --harness claude-code --scope project
@@ -64,12 +64,34 @@ Verify `"$toolkit_dir/runtime/node_modules/.bin/jev" --version`, then use its `v
 
 ### Register session checks and the update skill
 
+This release enables persistent logging for every shared-client Jev
+library and CLI call at `~/.local/state/poietic-harness/jev/calls.jsonl`. Record
+the writable log path and execution identity during provisioning; use
+`JEV_LOG_PATH` or client `logPath` for an absolute override outside the immutable
+runtime. The file is created on the first call. Terminal `--quiet` does not
+disable persistent logging. Failed persistence returns non-retryable `IO_ERROR`.
+See the
+[logging contract](docs/jev-runtime.md#persistent-call-logging) before upgrading.
+
 Record the chosen exact release in the consumer's `.poietic-harness.json` using
 `{ "schemaVersion": 1, "version": "<selected timestamp>" }`. Run that installation's
 `poietic-harness check --project /absolute/project`. Pinned checks stay local by
 default; request `--latest` separately to discover new releases. For a user or
 deployment pin outside a project, use `--config /absolute/pin.json --offline`.
 Do not change pins or install updates at startup.
+
+Verify online discovery from the actual startup hook or scheduler context and
+record its network setup alongside the runtime path. The checker needs outbound
+HTTPS to `api.github.com`; package instructions do not grant sandbox permissions.
+Use the host's supported permission flow for an authorized blocked lookup, and
+report unavailable status if access cannot be granted. Do not change global
+permissions at startup. Inspect `latest.status` as well as alignment: a pinned
+`check --latest` may exit 0 even when the remote lookup failed. See
+[network setup and failure handling](docs/maintenance.md#network-permissions-at-installation-and-startup).
+
+This release provides [fast deterministic polling](docs/maintenance.md#fast-polling-without-inference)
+for direct scheduler execution without a model turn. Use the installed `poll`
+command for routine availability checks; it does not update the runtime or pin.
 
 For Claude Code, launch with
 `claude --plugin-dir "$toolkit_dir/runtime/node_modules/@benjamin-small/agentic-harness-development/dist/claude-plugin/poietic-harness"`.

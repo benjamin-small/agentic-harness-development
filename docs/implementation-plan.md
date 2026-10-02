@@ -51,6 +51,14 @@ Acceptance:
 - [x] Include library and CLI in consumable package assets and isolated release-consumer verification.
 - [x] Run explicitly configured, bounded live requests and report model/usage. The [2026-10-01 check](verification/jev-2026-10-01.md) verified library and CLI inference with three typed questions after fixing resolved-model validation. This does not establish general decision quality.
 
+Released in v2026.1002.2233, the Jev CLI emits default JSONL activity on stderr for
+command/request starts and finishes, with batch sequence correlation, attempt
+counts, durations, and totals. `--quiet` preserves diagnostics-only stderr.
+Every shared-client library and CLI call also appends start, attempt, and finish
+records to a persistent local log. `--quiet` affects terminal activity only.
+Logging omits credentials and request contents; deployments must provision a
+writable log path, and failed persistence returns non-retryable `IO_ERROR`.
+
 ## M2: Bootstrap and capability selection
 
 Add deterministic project inspection and installation planning. Inputs include the explicit project manifest, detected evidence, selected harness, scope, and pinned release.
@@ -60,6 +68,15 @@ an exact version-pin schema, the `poietic-harness:update` skill, and a generated
 Claude Code maintenance plugin. Startup is read-only; pinned checks are offline
 by default. The skill guides scoped updates and preserves local expertise; an
 automatic installer, capability manifest, and atomic updater remain future work.
+
+Released in v2026.1002.2233: `poietic-harness poll` and `pollVersion` provide
+one-shot deterministic release polling without an agent/model turn. Successful
+lookups have an explicit optional five-minute cache, conditional ETag refresh,
+and a shorter configurable network deadline. Poll exits distinguish availability
+from pin alignment; stale failures remain unknown. Installation guidance now
+requires testing GitHub access in the actual execution context and recording the
+host permission setup. External schedulers own recurrence and notifications;
+neither a scheduler nor network permission changes are installed automatically.
 
 An [isolated Codex evaluation](verification/codex-2026-10-01.md) verified manual
 bootstrap from public guidance using release v2026.1001.174037, native discovery

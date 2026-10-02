@@ -29,10 +29,11 @@ async function command(
   apiKey = "fixture",
   fetch = goodFetch,
   signal?: AbortSignal,
+  quiet = true,
 ) {
   const stdout = capture();
   const stderr = capture();
-  const status = await runCommand(args, {
+  const status = await runCommand(quiet ? [...args, "--quiet"] : args, {
     stdin: Readable.from([content]),
     stdout: stdout.stream,
     stderr: stderr.stream,
@@ -204,7 +205,7 @@ test("command cancellation and IO failures are structured", async () => {
     },
   });
   assert.equal(
-    await runCommand(["batch", "--input", "-"], {
+    await runCommand(["batch", "--input", "-", "--quiet"], {
       stdin: broken,
       stdout: stdout.stream,
       stderr: stderr.stream,
@@ -221,7 +222,7 @@ test("command cancellation and IO failures are structured", async () => {
   });
   brokenOut.on("error", () => {});
   assert.equal(
-    await runCommand(["decide", "--input", "-"], {
+    await runCommand(["decide", "--input", "-", "--quiet"], {
       stdin: Readable.from([JSON.stringify(request)]),
       stdout: brokenOut,
       stderr: stderr.stream,
@@ -306,18 +307,21 @@ test("a blocked output consumer prevents unbounded batch admission", async () =>
     },
   });
   const stderr = capture();
-  const pending = runCommand(["batch", "--input", "-", "--concurrency", "3"], {
-    stdin: Readable.from([
-      Array.from({ length: 20 }, () => JSON.stringify(request)).join("\n"),
-    ]),
-    stdout,
-    stderr: stderr.stream,
-    apiKey: "fixture",
-    fetch: transport(() => {
-      calls++;
-      return Response.json(response);
-    }),
-  });
+  const pending = runCommand(
+    ["batch", "--input", "-", "--concurrency", "3", "--quiet"],
+    {
+      stdin: Readable.from([
+        Array.from({ length: 20 }, () => JSON.stringify(request)).join("\n"),
+      ]),
+      stdout,
+      stderr: stderr.stream,
+      apiKey: "fixture",
+      fetch: transport(() => {
+        calls++;
+        return Response.json(response);
+      }),
+    },
+  );
   await blocked;
   await new Promise((resolve) => setImmediate(resolve));
   assert.ok(calls <= 3, `Scheduled ${calls} requests while output was blocked`);
@@ -325,4 +329,137 @@ test("a blocked output consumer prevents unbounded batch admission", async () =>
   assert.equal(await pending, 0);
   assert.equal(calls, 20);
   assert.equal(stderr.text(), "");
+});
+
+test("default activity logs show a running decision before transport completes and omit private data", async () => {
+  const stdout = capture();
+  const stderr = capture();
+  let release!: () => void;
+  let started!: () => void;
+  const transportStarted = new Promise<void>((resolve) => {
+    started = resolve;
+  });
+  const pending = runCommand(["decide", "--input", "-"], {
+    stdin: Readable.from([
+      JSON.stringify({ ...request, id: "private-id", state: "private-state" }),
+    ]),
+    stdout: stdout.stream,
+    stderr: stderr.stream,
+    apiKey: "private-api-key",
+    fetch: async () => {
+      started();
+      await new Promise<void>((resolve) => {
+        release = resolve;
+      });
+      return Response.json(response);
+    },
+  });
+  await transportStarted;
+  assert.equal(stdout.text(), "");
+  const running = stderr
+    .text()
+    .trim()
+    .split("\n")
+    .map((line) => JSON.parse(line));
+  assert.deepEqual(
+    running.map((item) => item.event),
+    ["jev.command.start", "jev.request.start"],
+  );
+  release();
+  assert.equal(await pending, 0);
+  const events = stderr
+    .text()
+    .trim()
+    .split("\n")
+    .map((line) => JSON.parse(line));
+  assert.deepEqual(
+    events.map((item) => item.event),
+    [
+      "jev.command.start",
+      "jev.request.start",
+      "jev.request.finish",
+      "jev.command.finish",
+    ],
+  );
+  assert.equal(events[2].status, "success");
+  assert.equal(events[2].attempts, 1);
+  assert.equal(events[3].completed, 1);
+  assert.equal(events[3].exitCode, 0);
+  assert.ok(
+    events.every((item) => Number.isFinite(Date.parse(item.timestamp))),
+  );
+  assert.doesNotMatch(
+    stderr.text(),
+    /private-id|private-state|private-api-key/,
+  );
+  assert.equal(JSON.parse(stdout.text()).requestId, "private-id");
+});
+
+test("batch activity correlates every request outcome with its stdout sequence", async () => {
+  const batch = await command(
+    ["batch", "--input", "-", "--concurrency", "2"],
+    `${JSON.stringify(request)}\ninvalid\n${JSON.stringify(request)}`,
+    "fixture",
+    goodFetch,
+    undefined,
+    false,
+  );
+  assert.equal(batch.status, 1);
+  const events = batch.stderr
+    .trim()
+    .split("\n")
+    .map((line) => JSON.parse(line));
+  const results = batch.stdout
+    .trim()
+    .split("\n")
+    .map((line) => JSON.parse(line));
+  const finished = events.filter((item) => item.event === "jev.request.finish");
+  assert.equal(finished.length, 3);
+  for (const result of results) {
+    const log = finished.find((item) => item.sequence === result.sequence);
+    assert.equal(log.status, result.ok ? "success" : "failure");
+    assert.equal(log.attempts, result.attempts);
+    if (!result.ok) assert.equal(log.errorCode, result.error.code);
+  }
+  assert.equal(events.at(-1).exitCode, 1);
+  assert.equal(events.at(-1).requests, 3);
+  assert.equal(events.at(-1).completed, 3);
+  const invalid = await command(
+    ["decide", "--input", "-"],
+    "private-invalid-input",
+    "fixture",
+    goodFetch,
+    undefined,
+    false,
+  );
+  const diagnostics = invalid.stderr
+    .trim()
+    .split("\n")
+    .map((line) => JSON.parse(line));
+  assert.equal(
+    diagnostics.find((item) => item.error)?.error.code,
+    "INVALID_INPUT",
+  );
+  assert.equal(diagnostics.at(-1).event, "jev.command.finish");
+  assert.equal(diagnostics.at(-1).exitCode, 1);
+  assert.doesNotMatch(invalid.stderr, /private-invalid-input/);
+});
+
+test("a closed activity log pipe does not prevent a decision or change its exit", async () => {
+  const stdout = capture();
+  const stderr = new Writable({
+    write(_chunk, _encoding, callback) {
+      callback(new Error("closed log pipe"));
+    },
+  });
+  stderr.on("error", () => {});
+  const status = await runCommand(["decide", "--input", "-"], {
+    stdin: Readable.from([JSON.stringify(request)]),
+    stdout: stdout.stream,
+    stderr,
+    apiKey: "fixture",
+    fetch: goodFetch,
+  });
+  assert.equal(status, 0);
+  assert.equal(JSON.parse(stdout.text()).ok, true);
 });
