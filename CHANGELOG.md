@@ -6,6 +6,10 @@ Entries follow the [changelog policy](docs/changelog.md). `Unreleased` describes
 
 ## Unreleased
 
+### Fixed
+
+- **Jev deadline tests:** Use controlled timers after transport/body admission so persistent log writes on busy macOS runners cannot expire a 20 ms test deadline before the intended phase. Keep assertions for pre-dispatch cancellation, active fetch cancellation, stalled body reads, and retry backoff; runtime deadlines and logging remain unchanged.
+
 ### Added
 
 - **Maintenance polling:** Add `poietic-harness poll` and `pollVersion` for direct execution by schedulers without inference. Optional five-minute caching avoids repeated network calls; expired entries use ETag revalidation with a default 1.5-second deadline. Poll exit codes distinguish no newer release (0), update available (1), and unavailable/invalid (2), independently of pin alignment. Failed refreshes never present stale data as current. Existing `check` and `session-start` behavior is preserved. Acquire a release containing this command before using it from a pinned runtime; use a dedicated writable cache outside the installation.

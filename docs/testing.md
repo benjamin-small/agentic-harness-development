@@ -8,6 +8,8 @@ Tests cover catalog structure/dependencies, selection, skill metadata/destinatio
 
 Jev tests exercise choice/score/noul contracts, structured guidance, missing/optional metadata, partial and malformed responses, invalid UTF-8, bounded inputs/responses, credential handling, 401/402/429/5xx errors, Retry-After, deadlines, cancellation during fetch/body/backoff, bounded streaming batches, repeated IDs, source errors, output backpressure, and SIGINT/SIGTERM. CLI activity tests verify start events before transport completes, batch outcome/sequence correlation, private-data omission, diagnostics-only quiet mode, and continued decisions when the terminal log pipe closes. Persistent-call tests verify library and quiet CLI writes, retry correlation, concurrent clients, invalid entries, private-data omission, restrictive new-file permissions, and preventing dispatch when persistence fails. Transport is injected; no API key or network is needed for the suite.
 
+Jev deadline tests use controlled timers after transport or body-read admission, so log-write latency does not determine the phase under test.
+
 Release-version tests cover UTC conversion, whole-second precision, midnight, leap days, invalid dates/times, numeric padding, package/lockfile agreement, legacy migration, and duplicate/backward timestamp rejection. Stamping tests use temporary package fixtures and preserve dependency versions.
 
 Maintenance tests cover pin precedence, chronological comparisons, ahead/behind
