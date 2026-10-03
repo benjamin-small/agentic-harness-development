@@ -102,6 +102,8 @@ Acceptance:
 - Test installation twice, upgrades, conflicts, interrupted downloads, missing dependencies, corrupted assets, and offline use of verified cached content.
 - Reuse native skill/package installers where suitable; verify their version and pinning behavior before delegation.
 
+Released in v2026.1003.142920: the startup skill includes a no-argument Codex helper and a documented command-specific access grant. Standard user installations can record and reuse one deterministic invocation; full update installation remains host-managed. The portable host-access contract documents shared requirements and verification for other harnesses and service identities without claiming native adapters.
+
 ## M3: Native harness specialists
 
 Begin with Claude Code, Codex, and Pi. Add Cursor, Copilot, OpenCode, and Gemini adapters only after targeted consumer verification.

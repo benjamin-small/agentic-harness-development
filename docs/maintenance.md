@@ -132,6 +132,8 @@ poll per shared cache. Public requests, including conditional ones, remain
 subject to GitHub's unauthenticated limits; the cache reduces request frequency.
 See [GitHub's conditional-request guidance](https://docs.github.com/en/rest/using-the-rest-api/best-practices-for-using-the-rest-api#use-conditional-requests-if-appropriate).
 
+See the [portable startup contract](../skills/poietic-harness-start/knowledge/host-access.md) for the shared provisioning checklist, host adapter boundaries, cached invocation, and verification procedure.
+
 ## Network permissions at installation and startup
 
 Live version discovery needs outbound HTTPS (port 443), DNS, and TLS trust for

@@ -25,7 +25,7 @@ future-dated cache recovery, offline misses, unavailable stale results, atomic
 concurrent writes, cache write failures, separate update-availability exits, and
 both header/body deadlines. A real CLI subprocess reads a fresh cache offline.
 
-Measured on 2026-10-01 with Node.js 26.10.0: **99.81% lines/statements, 100% functions, and 98.08% branches**, across 70 passing tests. Reproduce with `npm run test:coverage`; CI uploads its own per-runtime measurements. Coverage covers `src/` runtime code, not the release scripts or skill decision quality. There is no arbitrary global coverage threshold.
+Measured on 2026-10-03 with Node.js 26.10.0: **99.81% lines/statements, 100% functions, and 98.08% branches**, across 71 passing tests. Reproduce with `npm run test:coverage`; CI uploads its own per-runtime measurements. Coverage covers `src/` runtime code, not the release scripts or skill decision quality. There is no arbitrary global coverage threshold.
 
 ## Artifact verification
 
