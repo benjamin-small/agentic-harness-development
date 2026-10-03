@@ -1,5 +1,5 @@
 ---
-name: update
+name: poietic-harness-update
 description: Check Poietic Harness toolkit version alignment or update its installed skills and runtime to an exact GitHub release. Use for poietic-harness:update, startup version mismatches, or requests to upgrade this guidance repository. Preserves project pins and scoped local expertise.
 license: MIT
 compatibility: Version checks require Node.js 24 or 26. Release acquisition uses GitHub access and a checksum tool. Native namespaced invocation and automatic startup hooks require the bundled Claude Code plugin.

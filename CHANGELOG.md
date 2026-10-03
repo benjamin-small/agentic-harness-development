@@ -6,6 +6,27 @@ Entries follow the [changelog policy](docs/changelog.md). `Unreleased` describes
 
 ## Unreleased
 
+## 2026.1003.200942 — 2026-10-03 20:09:42 UTC
+
+### Added
+
+- **Jev recipes and native tools:** Add executable `evidence_relevance` and `finding_support` recipes through the existing library, CLI, and opt-in `jev-mcp` stdio adapter. Native discovery exposes bounded decisions, batches, offline status and feedback; provider/credentials remain host-controlled. Recipes/MCP default to zero retries. Existing `decide` and `batch` behavior remains compatible; install a runtime containing these additions before selecting the new commands, and explicitly register/reload native tools.
+- **Jev adoption evaluation:** Add opt-in fresh Codex tasks that test implicit tool selection, actual dispatch and correlated result use with a synthetic mock provider, plus arithmetic/prose negative cases. Existing offline bootstrap tests remain unchanged. This does not establish provider accuracy, native compatibility in other harnesses, or compaction speed gains.
+
+- **Harness adversarial reviewers:** Add opt-in Claude Code, Codex, Pi and OpenCode roles with separate indexed expertise. This repository requires fresh-context design and implementation review for substantive changes, with bounded proposal packets, evidence-based findings and parent reconciliation. Explicitly distinguish role loading from native registration and fresh history from execution isolation. Missing native delegation is reported, not simulated; consumer repositories do not inherit this development gate.
+
+### Fixed
+
+- **Maintenance lockfile checks:** Allow bounded npm lockfiles up to 4 MiB while keeping small metadata/pin limits unchanged. The added MCP SDK dependency graph exceeded the former 64 KiB limit and otherwise caused a valid source installation to fail startup checks.
+
+### Changed
+
+- **Jev usefulness and review workflow:** Return persistent `callId` values, log allowlisted recipe/version/surface metadata, and accept caller-reported used/overridden/unavailable outcomes without request contents. Add concrete default-use triggers and include Jev access and outcome reporting in UI and harness review contracts. UI reviewer selection now also requires Jev; existing users should refresh the complete skill and preserve private expertise. Feedback is not an accuracy score.
+
+- **Default Jev access:** Prefer Jev for suitable bounded decisions across tasks and fresh specialist reviews. Personal setup includes Jev by default; reviewer selection now brings its skill/runtime dependency. Dispatch carries explicit execution scope without secrets; unavailable inference does not block evidence-based review. Existing users should refresh skill guidance and add the short global preference, preserving pins and local expertise. Host permissions and explicit exclusions still apply.
+
+- **Breaking — portable update skill:** Rename the portable component from `update` to `poietic-harness-update`, including Codex discovery and catalog dependencies. The generated Claude adapter preserves `/poietic-harness:update` by translating its entrypoint name. Migrate existing portable directories and installation records while preserving private knowledge/memory; verify the new name before retiring the old copy. Runtime pins are unaffected.
+
 ## 2026.1003.142920 — 2026-10-03 14:29:20 UTC
 
 ### Added

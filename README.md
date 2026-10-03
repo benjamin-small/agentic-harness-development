@@ -6,6 +6,8 @@ Portable skills, harness specialists, and reusable development tools. This repos
 
 [Implementation plan](docs/implementation-plan.md) · [Bootstrap instructions](BOOTSTRAP.md) · [Architecture](docs/architecture.md) · [Releases](https://github.com/benjamin-small/agentic-harness-development/releases)
 
+Jev is callable through its CLI and TypeScript library. The toolkit provides [bounded recipes](skills/jev/knowledge/recipes.md), correlated outcome logging, and opt-in [MCP tool discovery](docs/jev-mcp.md). Native compaction hooks and measured speedups are not claimed.
+
 ## Current status
 
 **Maturity: Alpha.** The core tools are packaged and tested, and [isolated Codex bootstrap and fresh-session use](docs/verification/codex-2026-10-01.md) are verified. [Live Jev library and CLI inference](docs/verification/jev-2026-10-01.md) is also verified on a synthetic fixture; broader decision quality and other harness integrations remain unverified. See the [maturity scale](docs/repository-maturity.md) for the criteria.
@@ -19,7 +21,7 @@ The toolkit includes:
 - Agent Skills for Jev question design and UI standards, with progressive reference loading.
 - A portable UI reviewer role intended for fresh, isolated task contexts.
 - A validated capability catalog, TypeScript library, and read-only selection CLI.
-- An importable Jev client and `jev` CLI for typed decisions and bounded JSONL batches through OpenRouter.
+- An importable Jev client, `jev` CLI and opt-in `jev-mcp` adapter for typed decisions, bounded batches, evidence/finding recipes and correlated outcome logging through OpenRouter.
 - A read-only `poietic-harness` version checker, an update skill, and a Claude Code plugin providing `/poietic-harness:update` and a SessionStart check. It also provides [fast cached polling without inference](docs/maintenance.md#fast-polling-without-inference).
 - CI, contributor guidance, and GitHub release archives with checksums and a source manifest.
 
@@ -65,15 +67,15 @@ The same client is available through `@benjamin-small/agentic-harness-developmen
 
 ## Contents
 
-| Location                   | Purpose                                                                                 |
-| -------------------------- | --------------------------------------------------------------------------------------- |
-| `skills/jev/`              | When to use Jev, typed question design, OpenRouter details, and interpretation limits   |
-| `skills/update/`           | Poietic Harness version checks and explicit scoped updates preserving local expertise   |
-| `skills/ui-standards/`     | UI review criteria, scoped to the project's actual design system                        |
-| `agents/ui-reviewer/`      | Portable role, local knowledge, and memory indexes; native harness wrappers are planned |
-| `catalog.json`, `schemas/` | Repository-owned component metadata and its JSON Schema                                 |
-| `src/`                     | Catalog library/planner and separate Jev library/CLI                                    |
-| `docs/`                    | Plan, architecture, installation contract, tests, and release process                   |
+| Location                         | Purpose                                                                                 |
+| -------------------------------- | --------------------------------------------------------------------------------------- |
+| `skills/jev/`                    | When to use Jev, typed question design, OpenRouter details, and interpretation limits   |
+| `skills/poietic-harness-update/` | Poietic Harness version checks and explicit scoped updates preserving local expertise   |
+| `skills/ui-standards/`           | UI review criteria, scoped to the project's actual design system                        |
+| `agents/ui-reviewer/`            | Portable role, local knowledge, and memory indexes; native harness wrappers are planned |
+| `catalog.json`, `schemas/`       | Repository-owned component metadata and its JSON Schema                                 |
+| `src/`                           | Catalog library/planner and separate Jev library/CLI                                    |
+| `docs/`                          | Plan, architecture, installation contract, tests, and release process                   |
 
 Skills follow the [Agent Skills format](https://agentskills.io/specification). Repository instructions use [AGENTS.md](https://agents.md/). Agent metadata in this repository is a local packaging contract, not a claim of a universal agent standard. See [conventions and compatibility](docs/conventions.md).
 
@@ -84,3 +86,5 @@ The catalog CLI reads only the bundled catalog and command arguments. The mainte
 See [testing](docs/testing.md) for measured coverage, tested boundaries, and checks that still require a real harness. Contributions follow [CONTRIBUTING.md](CONTRIBUTING.md); vulnerabilities can be reported privately through [SECURITY.md](SECURITY.md).
 
 MIT licensed. Upstream documentation is linked and summarized with attribution; upstream names and services retain their respective ownership.
+
+Repository changes use [four independent harness compatibility reviewers](docs/harness-review.md). Their portable definitions are opt-in through the `harness-compatibility-review` capability; native registration is not automatic.

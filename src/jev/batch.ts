@@ -86,7 +86,10 @@ export async function* decideBatch(
           active.set(
             sequence,
             client
-              .decide(event.item.value, { signal: controller.signal })
+              .decide(event.item.value, {
+                signal: controller.signal,
+                ...(options.metadata ? { metadata: options.metadata } : {}),
+              })
               .then((result) => ({
                 kind: "result" as const,
                 result: { ...result, sequence },

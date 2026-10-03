@@ -83,6 +83,8 @@ export class JevError extends Error {
 export type DecisionResult = {
   schemaVersion: 1;
   requestId: string | null;
+  /** Present on shared-client results; optional for existing custom clients. */
+  callId?: string;
   attempts: number;
 } & (
   { ok: true; response: DecisionResponse } | { ok: false; error: ErrorDetail }
@@ -100,6 +102,12 @@ export interface ClientOptions {
 }
 export interface CallOptions {
   signal?: AbortSignal;
+  metadata?: CallMetadata;
+}
+export interface CallMetadata {
+  recipe: "custom" | "evidence_relevance" | "finding_support";
+  recipeVersion: 1;
+  surface: "library" | "cli" | "mcp";
 }
 export interface BatchOptions extends CallOptions {
   concurrency?: number;

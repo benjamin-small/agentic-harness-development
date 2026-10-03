@@ -152,6 +152,22 @@ test("unconfigured offline is unknown; latest and explicit targets compare numer
   });
 });
 
+test("npm lockfiles admit bounded dependency graphs while pin limits stay small", async () => {
+  await fixture(async (root, options) => {
+    await json(root, "package-lock.json", {
+      version,
+      packages: { "": { version } },
+      fixture: "x".repeat(80_000),
+    });
+    assert.equal(
+      (await checkVersion({ ...options, expected: version })).alignment,
+      "aligned",
+    );
+    await writeFile(join(root, "package-lock.json"), "x".repeat(4_194_305));
+    await assert.rejects(checkVersion(options), /metadata/);
+  });
+});
+
 test("malformed or conflicting local metadata fails closed with no remote fallback", async () => {
   await fixture(async (root, options) => {
     await json(root, "package-lock.json", {

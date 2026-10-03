@@ -32,7 +32,7 @@ Current [Claude instruction loading](https://code.claude.com/docs/en/memory#agen
 
 This release includes a generated [Claude Code maintenance plugin](maintenance.md)
 with the `poietic-harness` namespace, `/poietic-harness:update` skill, and SessionStart
-version check. Its canonical portable skill remains `skills/update/SKILL.md`.
+version check. Its canonical portable skill remains `skills/poietic-harness-update/SKILL.md`.
 This adapter does not register native subagents or establish equivalent startup
 hooks in the other harnesses. See [testing](testing.md) for what was verified.
 

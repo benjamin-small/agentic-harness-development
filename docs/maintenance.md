@@ -3,7 +3,7 @@
 At session start, check that the active toolkit runtime matches the consumer's
 selected version. Alignment checks are read-only; optional polling caches contain
 only disposable public release metadata. Updating is an explicit operation carried
-out by the [update skill](../skills/update/SKILL.md), whose component-owned knowledge
+out by the [update skill](../skills/poietic-harness-update/SKILL.md), whose component-owned knowledge
 and memory describe the procedure progressively.
 
 ## Version alignment
@@ -196,13 +196,13 @@ startup. No plugin or model permissions are widened.
 The generated adapter follows the upstream [plugin namespace](https://code.claude.com/docs/en/plugins)
 and [exec-form hook contract](https://code.claude.com/docs/en/hooks). It is validated
 against Claude Code 2.1.281; see [testing](testing.md) for the exact verification
-boundary. Its source is `skills/update/` and the shared TypeScript maintenance
+boundary. Its source is `skills/poietic-harness-update/` and the shared TypeScript maintenance
 library. Do not hand-edit generated files.
 
 ## Other harnesses and persistent services
 
-Install the canonical `skills/update/` component in the selected harness's
-discovery directory. Its portable name is `update`; colons belong to the native
+Install the canonical `skills/poietic-harness-update/` component in the selected harness's
+discovery directory. Its portable name is `poietic-harness-update`; colons belong to the native
 plugin namespace, not the Agent Skills name. A request for `poietic-harness:update`
 is described in its metadata, but native slash syntax differs by harness.
 
@@ -234,7 +234,7 @@ changelog/migration entries, acquires verified assets in a new cache, checks the
 new runtime, merges only selected public component files, and switches the
 consumer path and pin. Keep the old version for rollback. Preserve all scoped
 `knowledge/local/` and `memory/local/` data and resolve edits before replacing
-public files. See the [complete local procedure](../skills/update/knowledge/updating.md).
+public files. See the [complete local procedure](../skills/poietic-harness-update/knowledge/updating.md).
 
 There is no automatic installer or atomic updater in this release. The skill
 guides the harness through those steps and requires honest reporting of partial

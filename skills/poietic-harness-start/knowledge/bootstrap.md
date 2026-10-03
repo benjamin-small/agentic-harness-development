@@ -22,9 +22,18 @@ or a new release is not permission to reinstall or upgrade.
    and perform the [routine checks](checking.md). Report release, scope, paths,
    results, and any reload needed. No credentials or paid inference are needed.
 
-In the global AGENTS.md, keep only:
+Keep standing context short. In the host's global instructions, retain the startup
+invocation and add the default Jev preference after discovery is verified:
 
 > At session start, run $poietic-harness-start. Initial user-scope setup is authorized.
+> Use $jev by default for suitable bounded structured decisions; read its skill and pass its entrypoint and authorized execution access to subagents.
+
+For hosts without dollar-name invocation, explicitly instruct the agent to read
+the installed Jev SKILL.md at its absolute path. Provision other hosts with their
+own personal discovery and global instruction locations; a Codex installation
+does not configure every harness. Keep execution and child-access details in the
+installed Jev skill, following its `knowledge/default-use.md`. This setup does not
+itself authorize inference; record applicable user authorization separately.
 
 For repository development, follow the release's project-scope procedure. Add UI
 standards and the portable UI role only for actual UI work, honoring explicit

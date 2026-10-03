@@ -28,7 +28,7 @@
       "path": "agents/ui-reviewer",
       "description": "Review a bounded UI task in fresh context and return actionable findings with evidence.",
       "capabilities": ["ui"],
-      "requires": ["ui-standards"],
+      "requires": ["ui-standards", "jev"],
       "software": [],
       "status": "instructions-only",
       "execution": {
@@ -39,9 +39,9 @@
       }
     },
     {
-      "id": "update",
+      "id": "poietic-harness-update",
       "kind": "skill",
-      "path": "skills/update",
+      "path": "skills/poietic-harness-update",
       "description": "Check Poietic Harness version alignment and explicitly update a scoped installation without losing local expertise.",
       "capabilities": ["toolkit-maintenance"],
       "requires": [],
@@ -54,9 +54,73 @@
       "path": "skills/poietic-harness-start",
       "description": "Check installed Poietic Harness versions at session start and bootstrap missing user components with progressive guidance.",
       "capabilities": ["toolkit-maintenance"],
-      "requires": ["update"],
+      "requires": ["poietic-harness-update"],
       "software": ["maintenance-runtime"],
       "status": "tool-backed"
+    },
+    {
+      "id": "claude-code-reviewer",
+      "kind": "agent",
+      "path": "agents/claude-code-reviewer",
+      "description": "Adversarial Claude Code compatibility review of repository proposals and implementations.",
+      "capabilities": ["harness-compatibility-review"],
+      "requires": ["jev"],
+      "software": [],
+      "status": "instructions-only",
+      "execution": {
+        "host": "harness",
+        "context": "fresh",
+        "identityScope": "invocation",
+        "concurrency": "multiple"
+      }
+    },
+    {
+      "id": "codex-reviewer",
+      "kind": "agent",
+      "path": "agents/codex-reviewer",
+      "description": "Adversarial Codex compatibility review of repository proposals and implementations.",
+      "capabilities": ["harness-compatibility-review"],
+      "requires": ["jev"],
+      "software": [],
+      "status": "instructions-only",
+      "execution": {
+        "host": "harness",
+        "context": "fresh",
+        "identityScope": "invocation",
+        "concurrency": "multiple"
+      }
+    },
+    {
+      "id": "pi-reviewer",
+      "kind": "agent",
+      "path": "agents/pi-reviewer",
+      "description": "Adversarial Pi compatibility review of repository proposals and implementations.",
+      "capabilities": ["harness-compatibility-review"],
+      "requires": ["jev"],
+      "software": [],
+      "status": "instructions-only",
+      "execution": {
+        "host": "harness",
+        "context": "fresh",
+        "identityScope": "invocation",
+        "concurrency": "multiple"
+      }
+    },
+    {
+      "id": "opencode-reviewer",
+      "kind": "agent",
+      "path": "agents/opencode-reviewer",
+      "description": "Adversarial OpenCode compatibility review of repository proposals and implementations.",
+      "capabilities": ["harness-compatibility-review"],
+      "requires": ["jev"],
+      "software": [],
+      "status": "instructions-only",
+      "execution": {
+        "host": "harness",
+        "context": "fresh",
+        "identityScope": "invocation",
+        "concurrency": "multiple"
+      }
     }
   ]
 }

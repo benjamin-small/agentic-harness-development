@@ -1,6 +1,6 @@
 # Bootstrap this toolkit
 
-Read this file when asked to install or use this repository from a fresh harness. Use the guide associated with the selected release. This guide targets **v2026.1003.142920**, with the Jev runtime, [local expertise convention](docs/local-expertise.md), and catalog schema 2. Package versions encode UTC date and time; they make no compatibility promise. Read the tag's guide when consuming an older release.
+Read this file when asked to install or use this repository from a fresh harness. Use the guide associated with the selected release. This guide targets **v2026.1003.200942**, with the Jev runtime, [local expertise convention](docs/local-expertise.md), and catalog schema 2. Package versions encode UTC date and time; they make no compatibility promise. Read the tag's guide when consuming an older release.
 
 ## Know what this release provides
 
@@ -16,23 +16,30 @@ Use the user's request and existing project choices to select a scope. Ask only 
 | Project    | Skills relevant to this project; UI specialist selected only for UI work              | Pin release and integrity in project configuration; tools may live in a shared cache | External to committed configuration |
 | Deployment | Explicit skills and roles for the deployed identity                                   | Immutable artifact or image, explicit paths, pinned release                          | Deployment secret injection         |
 
+For new personal setup, select `structured-decisions` and `toolkit-maintenance`
+as baseline capabilities unless the user explicitly excludes them. This is
+installation guidance; the planner still requires explicit capability arguments.
+Do not reinstall Jev into every project when the host can use its verified
+personal copy. Project/deployment scope remains explicit.
+
 This release requires explicit capabilities. The installing harness may inspect the repository and explain its choice: a real frontend, mobile screen, or desktop UI supports `ui`; a backend-only service does not. Do not infer UI solely from a transitive dependency. In a monorepo, identify the UI subproject. Explicit user/project includes and exclusions override that assessment.
 
-Available capabilities: `ui`, `structured-decisions`, and `toolkit-maintenance`. Agent role files are canonical instructions for future native wrappers. Their dependencies can be selected now, but registration remains manual and harness-specific.
+Available capabilities: `ui`, `structured-decisions`, `toolkit-maintenance`, and
+`harness-compatibility-review`. Agent role files are canonical instructions for future native wrappers. Their dependencies can be selected now, but registration remains manual and harness-specific.
 
 ## Obtain a pinned release
 
 The consumer needs Node.js 24 LTS or 26 and npm. The following acquisition example additionally uses GitHub CLI and `shasum` on macOS/Linux. The four release assets can also be downloaded from the GitHub release page using another trusted download tool.
 
 ```sh
-toolkit_dir="$HOME/.local/share/agentic-harness-development/2026.1003.142920"
+toolkit_dir="$HOME/.local/share/agentic-harness-development/2026.1003.200942"
 mkdir -p "$toolkit_dir/assets"
-gh release download v2026.1003.142920 \
+gh release download v2026.1003.200942 \
   --repo benjamin-small/agentic-harness-development \
   --dir "$toolkit_dir/assets"
 (cd "$toolkit_dir/assets" && shasum -a 256 -c SHA256SUMS)
 npm install --prefix "$toolkit_dir/runtime" --ignore-scripts --no-audit --no-fund \
-  "$toolkit_dir/assets/benjamin-small-agentic-harness-development-2026.1003.142920.tgz"
+  "$toolkit_dir/assets/benjamin-small-agentic-harness-development-2026.1003.200942.tgz"
 "$toolkit_dir/runtime/node_modules/.bin/harness-kit" validate
 "$toolkit_dir/runtime/node_modules/.bin/harness-kit" plan \
   --capability ui --harness claude-code --scope project
@@ -59,6 +66,17 @@ The catalog declares `jev-runtime` as software required to execute the Jev skill
 For personal use, keep the pinned runtime in the user-owned cache above and give the harness its absolute executable path. For project use, record that exact version, path, and artifact integrity in the project's setup instructions; a project-local npm tarball installation is also valid. For deployments, include the package during image/provisioning build and pass its path and secrets to the service identity. Do not modify global npm packages or shell profiles implicitly.
 
 Verify `"$toolkit_dir/runtime/node_modules/.bin/jev" --version`, then use its `validate` command on a synthetic request from the [runtime manual](docs/jev-runtime.md). Inject `OPENROUTER_API_KEY` only into processes authorized to invoke inference. A live `decide` or `batch` call sends state externally and may bill; package installation and local validation do neither. Live library and CLI validation is recorded in the [Jev verification report](docs/verification/jev-2026-10-01.md); this does not establish decision quality for your workload.
+
+## Make Jev available across tasks
+
+After verifying personal skill discovery, add a short default instruction to the
+host's global guidance: use Jev for suitable bounded structured decisions and
+pass its entrypoint and authorized execution access to fresh subagents. Follow
+[default use](skills/jev/knowledge/default-use.md) for per-harness locations,
+explicit child exposure, credential/log scope and unavailable-tool behavior.
+Keep detailed guidance in the skill. Do not infer authorization for paid calls
+from installation alone; record the user's actual standing authorization. A
+remote or deployed identity needs its own provisioning.
 
 ## Record the result
 

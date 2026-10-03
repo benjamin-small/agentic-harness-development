@@ -6,6 +6,7 @@ import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import assert from "node:assert/strict";
 import { versionTimestamp } from "./release-version.mjs";
+import { verifyJevAdapter } from "./verify-jev-adapter.mjs";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const out = resolve(root, process.argv[2] ?? "release");
@@ -83,7 +84,7 @@ assert.equal(catalog.schemaVersion, ${JSON.stringify(manifest.catalogSchemaVersi
 await validateResources(catalog);
 assert.deepEqual(planSelection(catalog, {harness:'pi',scope:'user'}).components, []);
 const plan = planSelection(catalog, {harness:'pi',scope:'user',capabilities:['ui']});
-assert.deepEqual(plan.components.map(c => c.id), ['ui-standards','ui-reviewer']);
+assert.deepEqual(plan.components.map(c => c.id), ['ui-standards','jev','ui-reviewer']);
 assert.equal(plan.components[0].destination, '~/.agents/skills/ui-standards');`;
   run(process.execPath, ["--input-type=module", "-e", probe]);
   const bin = join(consumer, "node_modules/.bin/harness-kit");
@@ -178,6 +179,12 @@ assert.equal(cached.polling.source,'cache');`;
     const context = JSON.parse(run(process.execPath, args)).hookSpecificOutput;
     assert.equal(context.hookEventName, "SessionStart");
     assert.match(context.additionalContext, /aligned \(equal\)/);
+    const portableUpdate = await readFile(
+      join(packageRoot, "skills/poietic-harness-update/SKILL.md"),
+      "utf8",
+    )
+      .then(() => "skills/poietic-harness-update")
+      .catch(() => "skills/update");
     for (const path of [
       "SKILL.md",
       "knowledge/INDEX.md",
@@ -188,7 +195,9 @@ assert.equal(cached.polling.source,'cache');`;
     ])
       assert.equal(
         await readFile(join(pluginRoot, "skills/update", path), "utf8"),
-        await readFile(join(packageRoot, "skills/update", path), "utf8"),
+        (
+          await readFile(join(packageRoot, portableUpdate, path), "utf8")
+        ).replace(/^name: poietic-harness-update$/m, "name: update"),
       );
   }
   const hasJev = manifest.capabilities.includes("jev-typescript-library");
@@ -240,6 +249,12 @@ assert.equal(results.find(r => r.sequence === 1).ok,false);`;
       true,
     );
   }
+  if (manifest.capabilities.includes("jev-stdio-mcp")) {
+    await verifyJevAdapter(
+      join(consumer, "node_modules", manifest.packageName),
+      consumer,
+    );
+  }
   console.log(
     JSON.stringify(
       {
@@ -253,6 +268,9 @@ assert.equal(results.find(r => r.sequence === 1).ok,false);`;
           "bundled-resources",
           "cli-bin",
           "selection",
+          ...(manifest.capabilities.includes("jev-stdio-mcp")
+            ? ["jev-mcp-discovery-recipe-outcome"]
+            : []),
           ...(hasMaintenance
             ? [
                 "maintenance-library",
