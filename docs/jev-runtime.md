@@ -102,7 +102,7 @@ Stdout contains JSON for `decide`, JSONL for `batch`, or a small local-validatio
 
 ## Persistent call logging
 
-**Pending release:** every call through the shared `createJevClient().decide`
+**Released in v2026.1002.2233:** every call through the shared `createJevClient().decide`
 runtime appends JSONL records to `~/.local/state/poietic-harness/jev/calls.jsonl`.
 This covers library calls, CLI `decide`, every admitted `batch` entry, retries,
 validation failures, cancellation, and API errors. The published
@@ -145,7 +145,7 @@ and provider response bodies. Logs are local; no telemetry is sent.
 
 ## Terminal activity logging
 
-**Pending release:** `decide` and `batch` now log activity to stderr by default.
+**Released in v2026.1002.2233:** `decide` and `batch` now log activity to stderr by default.
 This is available in the built source checkout; the published v2026.1001.190334
 runtime does not yet provide these logs. `validate`, `--help`, and `--version`
 keep their existing output behavior.
@@ -206,3 +206,23 @@ Contract, fault, CLI, and package tests use synthetic fixtures and injected tran
 For an explicitly authorized live check, inject only `OPENROUTER_API_KEY` and run `JEV_LIVE_SMOKE=1 npm run jev:smoke`. It makes up to two requests (library then CLI), each with choice, score, and noul questions, no retries, and a 20-second deadline. It emits correlated answers, model, usage, and illustrative consumer decisions; it does not print credentials or provider error bodies. The CLI child receives only the API key. If the library check fails, the CLI call is skipped.
 
 To test an already verified release instead of this checkout, run `JEV_LIVE_SMOKE=1 node scripts/smoke-jev.mjs --package-root /absolute/runtime/node_modules/@benjamin-small/agentic-harness-development`. The runner lives in the source checkout. Never put the key in command arguments, commit it, or paste it into chat. Fixture success proves bounded integration behavior, not general accuracy or permission to process private project data.
+
+## Recipes, correlation and native tool access
+
+Introduced in **v2026.1003.200942**.
+
+The existing CLI and library remain supported. New `evidence-relevance` and
+`finding-support` CLI commands share the [versioned recipes](../skills/jev/knowledge/recipes.md)
+and default to zero retries. Library exports include the two pure builders,
+`runRecipe`, and `recordJevOutcome`. Shared-client results add an opaque `callId`
+that matches the persistent log. It is optional in the public result type for
+compatibility with custom clients; the shared client always supplies it.
+
+Start records now include allowlisted `recipe`, `recipeVersion`, and `surface`.
+`jev outcome` / `recordJevOutcome` append `jev.outcome` records for caller-reported
+use, override, or unavailability without sending data to a provider. These records
+are not accuracy measurements. Request IDs and input text remain absent from logs.
+
+The opt-in [stdio MCP adapter](jev-mcp.md) exposes the same runtime to native tool
+discovery. Installation or discovery performs no inference. Native compaction
+hooks, native Pi extensions, and measured speedups remain unimplemented/unverified.

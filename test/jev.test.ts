@@ -150,6 +150,7 @@ test("transport sends only provider wire fields to the pinned endpoint and prese
   assert.deepEqual(result, {
     schemaVersion: 1,
     requestId: request.id,
+    callId: result.callId,
     attempts: 1,
     ok: true,
     response,

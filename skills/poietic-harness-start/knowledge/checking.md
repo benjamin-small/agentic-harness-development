@@ -25,6 +25,16 @@ The default personal cache is `~/.local/share/agentic-harness-development/<versi
 An existing pin with a missing runtime is a broken installation: report it rather
 than reinstalling, selecting a different executable, or changing the pin silently.
 
+## Default Jev availability
+
+Using the host installation record and available skill inventory, check that the
+user-scoped Jev entrypoint and recorded runtime exist. Respect explicit project
+exclusions and pins. Report missing/disallowed Jev once; continue ordinary work.
+Do not retrieve credentials, run inference, repair installations or upgrade at
+startup. Fresh subagents need an explicit Jev packet; user discovery alone does
+not prove child access. Read Jev's default-use topic only when configuring or
+using that capability.
+
 ## Project or source checkout
 
 Honor the project's selected runtime and root `.poietic-harness.json`; run its
@@ -44,7 +54,7 @@ aligned pin can have an unavailable lookup or a newer release. Version equality
 is not an integrity check. Online discovery needs HTTPS to `api.github.com`;
 use the host's supported permission flow if an authorized lookup is sandbox-blocked.
 If unavailable, report it and continue. Do not retrieve credentials, change global
-network policy, upgrade, or rewrite pins. Explicit upgrades belong to the `update`
+network policy, upgrade, or rewrite pins. Explicit upgrades belong to the `poietic-harness-update`
 skill (`poietic-harness:update`).
 
 For repeated background polling, use the installed deterministic `poll` command

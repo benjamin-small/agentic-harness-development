@@ -4,7 +4,7 @@ Verified 2026-10-01. Sources: [Agent Skills specification](https://agentskills.i
 [Claude plugins](https://code.claude.com/docs/en/plugins),
 [Claude hooks](https://code.claude.com/docs/en/hooks).
 
-The portable skill's identifier is `update`. Colons are not portable skill-name
+The portable skill's identifier is `poietic-harness-update` (Codex: `$poietic-harness-update`). The Claude build maps only its generated entrypoint name back to `update`. Colons are not portable skill-name
 characters. The generated Claude plugin is named `poietic-harness`; Claude's
 namespace produces `/poietic-harness:update`. Other harnesses can read this skill
 when asked for `poietic-harness:update`, but their discovery/invocation syntax
@@ -41,3 +41,7 @@ host permission flow; otherwise report unavailable status and continue. See
 [checking guidance](checking.md#network-setup) for verification and failure
 handling. A deterministic external scheduler can run the maintenance executable
 directly; a scheduled prompt that tells an agent to check still uses inference.
+
+## Rename migration
+
+Earlier releases used the portable ID `update`. During an explicit upgrade, back up and migrate the installed directory to `poietic-harness-update`, preserving all private knowledge/memory and local edits. Change the portable frontmatter name and verify native discovery before retiring the old directory. Do not keep two active copies or overwrite an existing destination. Update recorded component paths; runtime pins do not change merely because a skill was renamed. Claude retains `/poietic-harness:update`.

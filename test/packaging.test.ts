@@ -10,7 +10,11 @@ const components = [
   "skills/jev",
   "skills/ui-standards",
   "agents/ui-reviewer",
-  "skills/update",
+  "agents/claude-code-reviewer",
+  "agents/codex-reviewer",
+  "agents/pi-reviewer",
+  "agents/opencode-reviewer",
+  "skills/poietic-harness-update",
   "skills/poietic-harness-start",
 ];
 

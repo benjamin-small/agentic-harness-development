@@ -21,18 +21,18 @@ const clone = () => structuredClone(catalog);
 
 test("shipped catalog and progressively linked resources validate", async () => {
   await validateResources(catalog);
-  assert.equal(catalog.components.length, 5);
+  assert.equal(catalog.components.length, 9);
 });
 
 test("UI capability includes its skill dependency before the reviewer", () => {
   const plan = planSelection(catalog, { ...options, include: ["ui-reviewer"] });
   assert.deepEqual(
     plan.components.map((entry) => entry.id),
-    ["ui-standards", "ui-reviewer"],
+    ["ui-standards", "jev", "ui-reviewer"],
   );
   assert.equal(plan.components[0]!.reason, "ui-reviewer");
   assert.equal(plan.components[0]!.destination, ".claude/skills/ui-standards");
-  assert.equal(plan.components[1]!.destination, null);
+  assert.equal(plan.components[2]!.destination, null);
   assert.equal(plan.mode, "plan-only");
 });
 
@@ -45,7 +45,10 @@ test("Codex user maintenance selects startup and update without optional capabil
   assert.deepEqual(
     plan.components.map(({ id, destination }) => ({ id, destination })),
     [
-      { id: "update", destination: "~/.agents/skills/update" },
+      {
+        id: "poietic-harness-update",
+        destination: "~/.agents/skills/poietic-harness-update",
+      },
       {
         id: "poietic-harness-start",
         destination: "~/.agents/skills/poietic-harness-start",
@@ -317,7 +320,7 @@ test("CLI emits JSON results on stdout and errors exclusively on stderr", () => 
   );
   assert.equal(result.status, 0, result.stderr);
   assert.equal(result.stderr, "");
-  assert.equal(JSON.parse(result.stdout).components.length, 2);
+  assert.equal(JSON.parse(result.stdout).components.length, 3);
   for (const args of [
     ["plan"],
     ["unknown"],
@@ -337,4 +340,41 @@ test("CLI catalog, validation, and help work without credentials", () => {
   assert.equal(JSON.parse(cli("validate").stdout).valid, true);
   assert.match(cli("--help").stdout, /Read-only/);
   assert.match(cli().stdout, /harness-kit/);
+});
+
+test("harness reviewers select Jev once while retaining portable fresh roles", () => {
+  const plan = planSelection(catalog, {
+    harness: "codex",
+    scope: "project",
+    capabilities: ["harness-compatibility-review"],
+  });
+  assert.deepEqual(
+    plan.components.map((x) => x.id),
+    [
+      "jev",
+      "claude-code-reviewer",
+      "codex-reviewer",
+      "pi-reviewer",
+      "opencode-reviewer",
+    ],
+  );
+  assert.equal(plan.components[0]!.destination, ".agents/skills/jev");
+  assert.deepEqual(plan.components[0]!.software, ["jev-runtime"]);
+  assert.ok(plan.components.slice(1).every((x) => x.destination === null));
+  assert.throws(
+    () =>
+      planSelection(catalog, {
+        harness: "codex",
+        scope: "project",
+        capabilities: ["harness-compatibility-review"],
+        exclude: ["jev"],
+      }),
+    /Excluded component jev is required/,
+  );
+  for (const component of catalog.components.filter((x) =>
+    x.capabilities.includes("harness-compatibility-review"),
+  )) {
+    assert.deepEqual(component.software, []);
+    assert.equal(component.execution?.context, "fresh");
+  }
 });

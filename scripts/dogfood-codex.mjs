@@ -236,7 +236,12 @@ try {
     const projectSkills = after.data.find(
       (entry) => entry.cwd === "/workspace/project",
     );
-    const expectedSkills = ["jev", "ui-standards", "update"];
+    const updateName = projectSkills?.skills.some(
+      (skill) => skill.name === "poietic-harness-update",
+    )
+      ? "poietic-harness-update"
+      : "update";
+    const expectedSkills = ["jev", "ui-standards", updateName];
     const missingSkills = expectedSkills.filter(
       (name) =>
         !projectSkills?.skills.some(

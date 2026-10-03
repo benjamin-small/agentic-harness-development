@@ -10,7 +10,7 @@ import {
   type JevClient,
 } from "./types.js";
 import { requestId, validateRequest, validateResponse } from "./validation.js";
-import { callLogger, jevLogPath } from "./logging.js";
+import { callLogger, callMetadata, jevLogPath } from "./logging.js";
 
 export function aborted(signal: AbortSignal): JevError {
   return signal.reason instanceof JevError
@@ -164,7 +164,11 @@ export function createJevClient(options: ClientOptions): JevClient {
     async decide(input, call = {}): Promise<DecisionResult> {
       const log = callLogger(logPath);
       let attempts = 0;
-      const base = { schemaVersion: 1 as const, requestId: requestId(input) };
+      const base = {
+        schemaVersion: 1 as const,
+        requestId: requestId(input),
+        callId: log.callId,
+      };
       const controller = new AbortController();
       const cancel = () =>
         controller.abort(error("CANCELLED", "The request was cancelled."));
@@ -177,7 +181,8 @@ export function createJevClient(options: ClientOptions): JevClient {
       );
       const signal = controller.signal;
       try {
-        await log("jev.call.start", { model: JEV_MODEL });
+        const metadata = callMetadata(call.metadata);
+        await log("jev.call.start", { model: JEV_MODEL, ...metadata });
         const request = validateRequest(input);
         const body = JSON.stringify({
           model: JEV_MODEL,

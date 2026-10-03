@@ -1,6 +1,6 @@
 {
   "name": "@benjamin-small/agentic-harness-development",
-  "version": "2026.1003.142920",
+  "version": "2026.1003.200942",
   "description": "Portable agent skills, harness specialists, and versioned development tooling.",
   "private": true,
   "type": "module",
@@ -16,7 +16,8 @@
   "bin": {
     "harness-kit": "dist/src/cli.js",
     "jev": "dist/src/jev/cli.js",
-    "poietic-harness": "dist/src/maintenance/cli.js"
+    "poietic-harness": "dist/src/maintenance/cli.js",
+    "jev-mcp": "dist/src/jev/mcp-cli.js"
   },
   "exports": {
     ".": {
@@ -59,9 +60,11 @@
     "check": "npm run format:check && npm run typecheck && npm run test:coverage && node dist/src/cli.js validate",
     "release:stamp": "node scripts/stamp-release.mjs",
     "release:pack": "npm run check && node scripts/package-release.mjs",
-    "release:verify": "node scripts/verify-release.mjs"
+    "release:verify": "node scripts/verify-release.mjs",
+    "jev:adoption": "npm run build && node scripts/eval-jev-adoption.mjs"
   },
   "dependencies": {
+    "@modelcontextprotocol/sdk": "1.32.0",
     "ajv": "8.20.0",
     "yaml": "2.9.1"
   },

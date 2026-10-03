@@ -5,9 +5,14 @@ import { fetchLatestRelease, type LatestRelease } from "./release.js";
 
 export const PACKAGE_NAME = "@benjamin-small/agentic-harness-development";
 
-async function readJson(path: string, optional = false): Promise<unknown> {
+async function readJson(
+  path: string,
+  optional = false,
+  maxBytes = 65_536,
+): Promise<unknown> {
   try {
-    if ((await stat(path)).size > 65_536) throw new Error("Metadata too large");
+    if ((await stat(path)).size > maxBytes)
+      throw new Error("Metadata too large");
     return JSON.parse(await readFile(path, "utf8")) as unknown;
   } catch (error) {
     if (optional && (error as NodeJS.ErrnoException).code === "ENOENT")
@@ -56,7 +61,12 @@ export async function checkVersion(
     throw new Error("Not a Poietic Harness installation");
   versionTime(pkg.version);
   const installedVersion = pkg.version as string;
-  const lock = await readJson(resolve(options.root, "package-lock.json"), true);
+  // npm lockfiles include transitive dependency metadata and exceed small pin files.
+  const lock = await readJson(
+    resolve(options.root, "package-lock.json"),
+    true,
+    4_194_304,
+  );
   if (lock !== undefined) {
     const value = lock as {
       version?: unknown;

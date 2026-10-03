@@ -54,7 +54,21 @@ await cp(join(root, "dist/src/maintenance"), join(out, "runtime"), {
   recursive: true,
   filter: (path) => !/\.(?:map|ts)$/.test(path),
 });
-await cp(join(root, "skills/update"), join(out, "skills/update"), {
-  recursive: true,
-  filter: (path) => !/(?:knowledge|memory)[/\\]local(?:[/\\]|$)/.test(path),
-});
+await cp(
+  join(root, "skills/poietic-harness-update"),
+  join(out, "skills/update"),
+  {
+    recursive: true,
+    filter: (path) => !/(?:knowledge|memory)[/\\]local(?:[/\\]|$)/.test(path),
+  },
+);
+
+// Preserve Claude's established plugin command while the portable name is explicit.
+const entry = join(out, "skills/update/SKILL.md");
+await writeFile(
+  entry,
+  (await readFile(entry, "utf8")).replace(
+    /^name: poietic-harness-update$/m,
+    "name: update",
+  ),
+);

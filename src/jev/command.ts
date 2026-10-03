@@ -7,6 +7,13 @@ import { decideBatch } from "./batch.js";
 import { readInput, readJsonLines } from "./input.js";
 import { validateRequest } from "./validation.js";
 import {
+  evidenceRelevance,
+  findingSupport,
+  type EvidenceInput,
+  type FindingInput,
+} from "./recipes.js";
+import { recordJevOutcome, type JevOutcome } from "./logging.js";
+import {
   JEV_MODEL,
   JevError,
   error,
@@ -15,11 +22,15 @@ import {
 } from "./types.js";
 
 const help = `Usage: jev <decide|batch|validate> --input <file|-> [options]
+       jev <evidence-relevance|finding-support|outcome> --input <file|-> [options]
        jev --version
 
 decide     One JSON request; one JSON result on stdout.
 batch      JSONL requests; JSONL results in completion order with sequence IDs.
 validate   Validate one request locally without credentials or API access.
+evidence-relevance  Classify supplied excerpts against an objective (recipe v1).
+finding-support    Check supplied evidence for candidate findings (recipe v1).
+outcome    Log used/overridden/unavailable locally; no credentials or API call.
 
 Options for decide/batch:
   --timeout-ms <1..300000>     Whole request deadline (default 30000).
@@ -108,11 +119,18 @@ export async function runCommand(
       return 0;
     }
     const command = args[0];
-    if (!command || !["decide", "batch", "validate"].includes(command))
-      throw error(
-        "INVALID_INPUT",
-        "Expected decide, batch, or validate; use jev --help.",
-      );
+    if (
+      !command ||
+      ![
+        "decide",
+        "batch",
+        "validate",
+        "evidence-relevance",
+        "finding-support",
+        "outcome",
+      ].includes(command)
+    )
+      throw error("INVALID_INPUT", "Unknown command; use jev --help.");
     let values: Record<string, string | boolean | undefined>;
     try {
       ({ values } = parseArgs({
@@ -122,7 +140,7 @@ export async function runCommand(
         options: {
           input: { type: "string" },
           quiet: { type: "boolean" },
-          ...(command === "validate"
+          ...(["validate", "outcome"].includes(command)
             ? {}
             : {
                 "timeout-ms": { type: "string" },
@@ -161,16 +179,20 @@ export async function runCommand(
       return value;
     };
     const concurrency = numeric("concurrency", 4, 1, 16);
-    const client =
-      command === "validate"
-        ? undefined
-        : createJevClient({
-            apiKey: io.apiKey ?? "",
-            ...(io.fetch ? { fetch: io.fetch } : {}),
-            timeoutMs: numeric("timeout-ms", 30_000, 1, 300_000),
-            maxRetries: numeric("max-retries", 2, 0, 5),
-            retryTransportErrors: values["retry-transport-errors"] === true,
-          });
+    const client = ["validate", "outcome"].includes(command)
+      ? undefined
+      : createJevClient({
+          apiKey: io.apiKey ?? "",
+          ...(io.fetch ? { fetch: io.fetch } : {}),
+          timeoutMs: numeric("timeout-ms", 30_000, 1, 300_000),
+          maxRetries: numeric(
+            "max-retries",
+            ["evidence-relevance", "finding-support"].includes(command) ? 0 : 2,
+            0,
+            5,
+          ),
+          retryTransportErrors: values["retry-transport-errors"] === true,
+        });
     input = values.input === "-" ? io.stdin : createReadStream(values.input);
     io.signal?.addEventListener("abort", cancel, { once: true });
     if (io.signal?.aborted) {
@@ -178,6 +200,13 @@ export async function runCommand(
       throw error("CANCELLED", "The command was cancelled.");
     }
     const call = io.signal ? { signal: io.signal } : {};
+    if (command === "outcome") {
+      const callId = await recordJevOutcome(
+        (await readInput(input)) as JevOutcome,
+      );
+      await write(io.stdout, { recorded: true, callId });
+      return 0;
+    }
     if (command === "validate") {
       const request = validateRequest(await readInput(input));
       await write(io.stdout, {
@@ -197,7 +226,14 @@ export async function runCommand(
         const sequence = admitted++;
         const started = performance.now();
         await activity("jev.request.start", { sequence });
-        const result = await client!.decide(value, options);
+        const result = await client!.decide(value, {
+          ...options,
+          metadata: {
+            recipe: options?.metadata?.recipe ?? "custom",
+            recipeVersion: 1,
+            surface: "cli",
+          },
+        });
         completed++;
         await activity("jev.request.finish", {
           sequence,
@@ -209,9 +245,32 @@ export async function runCommand(
         return result;
       },
     };
-    if (command === "decide") {
-      const result = await loggedClient.decide(await readInput(input), call);
-      await write(io.stdout, result);
+    if (command !== "batch") {
+      const value = await readInput(input);
+      const recipe =
+        command === "evidence-relevance"
+          ? evidenceRelevance(value as EvidenceInput)
+          : command === "finding-support"
+            ? findingSupport(value as FindingInput)
+            : undefined;
+      const result = await loggedClient.decide(recipe?.request ?? value, {
+        ...call,
+        ...(recipe
+          ? {
+              metadata: {
+                recipe: recipe.name,
+                recipeVersion: recipe.version,
+                surface: "cli" as const,
+              },
+            }
+          : {}),
+      });
+      await write(io.stdout, {
+        ...result,
+        ...(recipe
+          ? { recipe: recipe.name, recipeVersion: recipe.version }
+          : {}),
+      });
       return finish(result.ok ? 0 : 1);
     }
     let failed = false;

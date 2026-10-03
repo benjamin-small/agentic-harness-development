@@ -6,6 +6,10 @@ This repository distributes portable skills, reusable agent roles, and TypeScrip
 
 Run $poietic-harness-start once at session start; its source is [skills/poietic-harness-start/SKILL.md](skills/poietic-harness-start/SKILL.md).
 
+For substantive repository changes, the parent must read [the harness review workflow](docs/harness-review.md) and run its four fresh-context specialists; reviewers return findings without recursively delegating.
+
+Use $jev by default for suitable bounded structured decisions; read its skill and pass its entrypoint and authorized execution access to subagents.
+
 ## Commands
 
 - `npm ci` installs the locked toolchain; use Node.js 24 LTS or 26.

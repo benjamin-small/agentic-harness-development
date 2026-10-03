@@ -1,0 +1,22 @@
+[
+  {
+    "id": "relevance",
+    "expectedTool": "jev_evidence_relevance",
+    "prompt": "Prepare an evidence handoff for a teammate implementing checkout in this fictional project. Select excerpts that matter, preserve unresolved constraints, and cite their IDs. Excerpts: relevant-1: Card payment is required. irrelevant-1: The office plants are watered Friday. relevant-2: Guests may check out without creating an account. irrelevant-2: Blog headlines use sentence case. uncertain-1: Finance has an unresolved question about the launch region. relevant-3: Failed payments must leave the cart intact. irrelevant-3: The internal calendar defaults to Monday. relevant-4: Tax is calculated before confirming the total. irrelevant-4: Careers pages show department names. uncertain-2: A shared identity provider may change next month. relevant-5: Show a receipt after confirmation. irrelevant-5: Marketing plans an autumn photo shoot. relevant-6: Keyboard users must be able to fix invalid billing fields. irrelevant-6: Meeting rooms were renamed."
+  },
+  {
+    "id": "findings",
+    "expectedTool": "jev_finding_support",
+    "prompt": "Check these proposed review findings against their supplied evidence in a fictional codebase, then return defensible findings and gaps. supported-1: Claim: normalize returns an empty string for null. Evidence: function normalize(x) { return x == null ? '' : String(x); }. contradicted-1: Claim: retry allows three attempts. Evidence: const MAX_ATTEMPTS = 1; for (let i=0; i<MAX_ATTEMPTS; i++) { attempt(); }. insufficient-1: Claim: payment requests are idempotent across server restarts. Evidence: const pending = new Map();. supported-2: Claim: error messages include the raw response body. Evidence: throw new Error(await response.text());. insufficient-2: Claim: the mobile dialog is keyboard accessible. Evidence: a screenshot showing a dialog with two buttons."
+  },
+  {
+    "id": "arithmetic",
+    "expectedTool": null,
+    "prompt": "What is 17 times 23? Give just the number."
+  },
+  {
+    "id": "prose",
+    "expectedTool": null,
+    "prompt": "Rewrite this sentence to be shorter: 'Due to the fact that the meeting has been postponed, we will send a revised invitation at a later time.'"
+  }
+]

@@ -2,9 +2,13 @@
 
 Scope: bounded UI reviews delegated by a parent harness. Source: this repository's UI reviewer role and the user's fresh-context specialist design. Reviewed on 2026-10-01.
 
+Jev integration reviewed 2026-10-03 against the repository skill and runtime.
+
 ## Task brief
 
 Expected inputs are the review objective, project root and relevant subproject, changed files or target flow, applicable design references, supported platforms, and available verification tools. Read missing project context from local files when possible. Ask for missing product decisions only when they materially affect the review.
+
+The parent also supplies Jev's absolute skill entrypoint, selected runtime/version or exposed tool names, allowed provider data scope, standing authorization, private temporary/log paths, and command-scoped credential locator and execution permissions (no secrets). A catalog dependency is not execution access. Unavailable Jev does not block independent evidence collection.
 
 ## Evidence
 
@@ -13,6 +17,8 @@ Inspect the relevant implementation and exercise the interface when tooling perm
 ## Result
 
 Return the review scope and checks performed, then actionable findings with severity, file or interaction, evidence, user impact, and suggested correction. State untested behavior or missing context. If there are no actionable findings, say so with the tested scope. Do not turn aesthetic preference into a defect.
+
+Include `Jev: used | overridden | unavailable | not-needed`. For a call, give its `callId` (or legacy request ID), recipe/model, supplied evidence scope, and how the answer changed the review; record feedback when supported. For unavailable/not-needed, give the specific blocker or deterministic/generative reason. Do not equate model support with live rendered verification.
 
 ## Learning
 

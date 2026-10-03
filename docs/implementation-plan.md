@@ -13,7 +13,7 @@ Publish a reusable collection of skills, harness specialists, and TypeScript too
 - A skill teaches a procedure; an agent definition selects a role, skills, and tools; an instance owns identity and state.
 - Harness specialists receive fresh task context. A future project manager has persistent identity and one active coordinator per project.
 - Keep durable services in a separate repository, consuming versioned definitions from this one.
-- Build Jev in TypeScript as an importable library with a thin CLI. Support Pi through a native extension when implemented.
+- Build Jev in TypeScript as an importable library with thin CLI and stdio MCP adapters. Support Pi through a native extension when implemented.
 - Personal, project, and deployment installations are distinct. Catalog metadata separates instruction assets from executable dependencies.
 - Native packaging is preferred over a new general-purpose package manager. Our bootstrap coordinates versions, capability selection, and verification.
 - Use MIT licensing and public GitHub releases. Keep the initial package private to npm until registry publication is deliberately selected.
@@ -61,6 +61,8 @@ writable log path, and failed persistence returns non-retryable `IO_ERROR`.
 
 Released in v2026.1002.125921, setup guidance also records configured Jev credential connections in private component-local knowledge and reuses them on invocation. This is a host-managed connection record, not a credential store or automatic authentication adapter.
 
+Included in v2026.1003.200942: Jev adds bounded evidence-relevance and finding-support recipes, returned persistent call IDs, allowlisted recipe/version/surface metadata, and caller-reported outcomes. The existing CLI/library and new opt-in stdio MCP adapter share the same client, validation and logs. MCP has zero retries, scope declarations, per-process admission limits and cancellation. Native compaction hooks and measured speed improvements remain outside this implementation. An opt-in native Codex adoption evaluation uses ordinary synthetic tasks, a mock Jev provider, and negative controls; see [MCP access](jev-mcp.md). UI reviewer dependencies and all review result contracts now include Jev access/outcomes.
+
 ## M2: Bootstrap and capability selection
 
 Add deterministic project inspection and installation planning. Inputs include the explicit project manifest, detected evidence, selected harness, scope, and pinned release.
@@ -73,7 +75,7 @@ automatic installer, capability manifest, and atomic updater remain future work.
 
 Released in v2026.1002.125921: `poietic-harness-start` moves startup procedures out of
 always-loaded AGENTS.md into a short skill entrypoint with separate routine-check
-and initial-setup references. The maintenance capability selects it with `update`.
+and initial-setup references. The maintenance capability selects it with `poietic-harness-update`.
 Install and verify discovery before replacing global guidance with its invocation;
 this does not add a native hook or upgrade an existing runtime.
 
@@ -104,6 +106,12 @@ Acceptance:
 
 Released in v2026.1003.142920: the startup skill includes a no-argument Codex helper and a documented command-specific access grant. Standard user installations can record and reuse one deterministic invocation; full update installation remains host-managed. The portable host-access contract documents shared requirements and verification for other harnesses and service identities without claiming native adapters.
 
+Included in v2026.1003.200942: the portable maintenance skill is renamed to `poietic-harness-update`; migrate its installed directory with local expertise intact. The generated Claude adapter retains `/poietic-harness:update`.
+
+Included in v2026.1003.200942: four portable harness compatibility reviewers and a repository-only adversarial review gate are implemented as role definitions and parent coordination guidance. Native registration remains separate; reviewers must distinguish researched compatibility from target-harness execution.
+
+Included in v2026.1003.200942: Jev is the personal setup default for bounded structured decisions; fresh reviewers receive an explicit skill/runtime/access packet and declare a Jev dependency. Existing startup only checks availability. Native child discovery and cross-host execution still require host-specific verification.
+
 ## M3: Native harness specialists
 
 Begin with Claude Code, Codex, and Pi. Add Cursor, Copilot, OpenCode, and Gemini adapters only after targeted consumer verification.
@@ -130,4 +138,4 @@ Acceptance in the service project:
 
 ## Release gates and remaining choices
 
-Every shipped artifact must pass an isolated consumer test. Real-harness and live-API validation remain separate from schema and mock tests. Native standalone binaries, npm publication, and an MCP wrapper are follow-up distribution choices, not requirements for the bootstrap release.
+Every shipped artifact must pass an isolated consumer test. Real-harness and live-API validation remain separate from schema and mock tests. Native standalone binaries and npm publication remain follow-up distribution choices. The opt-in MCP adapter is implemented; each target harness still needs native consumer verification.
