@@ -5,7 +5,15 @@ native hook or earlier invocation. Do not load bootstrap instructions on this pa
 
 ## Personal installation
 
-Read `${CODEX_HOME:-~/.codex}/poietic-harness/.poietic-harness.json`. Use targeted
+If this skill has `knowledge/local/INDEX.md`, consult its startup-command entry.
+Use the recorded fixed command when installed, once, and skip the manual user
+check below. Configure that command using [host access](host-access.md) only
+during authorized setup; do not modify permissions at every startup.
+
+Use the user pin and installation record selected for this host. For standard
+Codex installations the pin is `~/.codex/poietic-harness/.poietic-harness.json`
+(or under the configured CODEX_HOME). Other harnesses use their recorded paths,
+not Codex defaults. Use targeted
 search in the adjacent `INSTALLATION.md` to locate the recorded executable;
 there is no need to load the full installation history. Invoke that executable:
 

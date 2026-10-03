@@ -1,6 +1,6 @@
 # Bootstrap this toolkit
 
-Read this file when asked to install or use this repository from a fresh harness. Use the guide associated with the selected release. This guide targets **v2026.1002.125921**, with the Jev runtime, [local expertise convention](docs/local-expertise.md), and catalog schema 2. Package versions encode UTC date and time; they make no compatibility promise. Read the tag's guide when consuming an older release.
+Read this file when asked to install or use this repository from a fresh harness. Use the guide associated with the selected release. This guide targets **v2026.1003.142920**, with the Jev runtime, [local expertise convention](docs/local-expertise.md), and catalog schema 2. Package versions encode UTC date and time; they make no compatibility promise. Read the tag's guide when consuming an older release.
 
 ## Know what this release provides
 
@@ -25,14 +25,14 @@ Available capabilities: `ui`, `structured-decisions`, and `toolkit-maintenance`.
 The consumer needs Node.js 24 LTS or 26 and npm. The following acquisition example additionally uses GitHub CLI and `shasum` on macOS/Linux. The four release assets can also be downloaded from the GitHub release page using another trusted download tool.
 
 ```sh
-toolkit_dir="$HOME/.local/share/agentic-harness-development/2026.1002.125921"
+toolkit_dir="$HOME/.local/share/agentic-harness-development/2026.1003.142920"
 mkdir -p "$toolkit_dir/assets"
-gh release download v2026.1002.125921 \
+gh release download v2026.1003.142920 \
   --repo benjamin-small/agentic-harness-development \
   --dir "$toolkit_dir/assets"
 (cd "$toolkit_dir/assets" && shasum -a 256 -c SHA256SUMS)
 npm install --prefix "$toolkit_dir/runtime" --ignore-scripts --no-audit --no-fund \
-  "$toolkit_dir/assets/benjamin-small-agentic-harness-development-2026.1002.125921.tgz"
+  "$toolkit_dir/assets/benjamin-small-agentic-harness-development-2026.1003.142920.tgz"
 "$toolkit_dir/runtime/node_modules/.bin/harness-kit" validate
 "$toolkit_dir/runtime/node_modules/.bin/harness-kit" plan \
   --capability ui --harness claude-code --scope project
@@ -111,6 +111,10 @@ acquisition, staged installation, preservation of local expertise, and rollback.
 It does not silently upgrade a shared cache, running service, or development
 checkout. Version equality checks metadata; it does not verify manually copied
 skills or source-tree contents.
+
+### Provision startup access once
+
+Follow the [portable startup contract](skills/poietic-harness-start/knowledge/host-access.md) to record the exact checker, pin, cache and host permission mechanism. Verify a cold lookup and a cache hit from the actual harness or service identity. Keep only the skill invocation in standing context; keep host-specific details in private local knowledge. Codex has a bundled fixed wrapper and command-rule procedure; other hosts use their own supported hooks, profiles or supervisors. Installation instructions cannot grant permissions themselves. Startup checks never install an update.
 
 ### Record credential connections
 

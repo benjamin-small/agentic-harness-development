@@ -17,7 +17,8 @@ or a new release is not permission to reinstall or upgrade.
    using the release's pin schema. Put executable paths, artifact integrity,
    component destinations, verification, and host network setup in the adjacent
    `INSTALLATION.md`. Do not modify a source checkout to serve as the user runtime.
-4. Validate the installed catalog/runtime locally, verify native skill discovery,
+4. Provision the [portable startup command and host access](host-access.md) during authorized setup; verify the actual execution context and record its invocation in this skill's private local knowledge. Use the Codex-specific wrapper only for its documented layout.
+5. Validate the installed catalog/runtime locally, verify native skill discovery,
    and perform the [routine checks](checking.md). Report release, scope, paths,
    results, and any reload needed. No credentials or paid inference are needed.
 

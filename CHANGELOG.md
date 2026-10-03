@@ -6,6 +6,14 @@ Entries follow the [changelog policy](docs/changelog.md). `Unreleased` describes
 
 ## Unreleased
 
+## 2026.1003.142920 — 2026-10-03 14:29:20 UTC
+
+### Added
+
+- **Portable startup provisioning:** Define shared read/execute, cache-write and GitHub access requirements for human harnesses and service agents. Record host-specific commands and grants once in private local knowledge, verify cold and cached calls in the actual execution context, and distinguish verified Codex support from unimplemented native adapters. No automatic upgrades or universal permission syntax are implied.
+
+- **Codex startup checks:** Add a no-argument helper that resolves the standard personal pin/runtime and invokes bounded deterministic polling with a five-minute cache. Document a narrow command-specific permission rule and local invocation record so startup avoids repeated shell assembly and approval prompts after Codex reloads its rules. Reject alternate arguments and mismatched runtime metadata. This checks availability only; installs and upgrades remain explicit.
+
 ## 2026.1002.125921 — 2026-10-02 12:59:21 UTC
 
 ### Fixed
