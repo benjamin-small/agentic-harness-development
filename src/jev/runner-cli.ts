@@ -7,7 +7,19 @@ process.once("SIGINT", interrupt);
 process.once("SIGTERM", terminate);
 try {
   const plan = await prepareInvocation(process.argv.slice(2));
-  if (plan.kind === "status") console.log(JSON.stringify(plan));
+  if (plan.kind === "status")
+    console.log(
+      JSON.stringify({
+        kind: plan.kind,
+        configured: plan.configured,
+        liveVerified: plan.liveVerified,
+        runtimeVersion: plan.runtimeVersion,
+        pinPath: plan.pinPath,
+        runtimeCli: plan.runtimeCli,
+        logPath: plan.logPath,
+        allowedDataScopes: plan.allowedDataScopes,
+      }),
+    );
   else process.exitCode = await executeInvocation(plan, controller.signal);
 } catch (e) {
   console.error(

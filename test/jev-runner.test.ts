@@ -290,6 +290,29 @@ test("runner preserves stdin, structured stdout and child exit status", async ()
     );
     assert.equal(bad.status, 2);
     assert.equal(JSON.parse(bad.stderr).error.code, "CONFIG_UNAVAILABLE");
+    const status = spawnSync(
+      process.execPath,
+      [runner, "status", "--config", f.config],
+      {
+        encoding: "utf8",
+        env: { ...process.env, OPENROUTER_API_KEY: "secret-output-sentinel" },
+      },
+    );
+    assert.equal(status.status, 0);
+    assert.deepEqual(Object.keys(JSON.parse(status.stdout)).sort(), [
+      "allowedDataScopes",
+      "configured",
+      "kind",
+      "liveVerified",
+      "logPath",
+      "pinPath",
+      "runtimeCli",
+      "runtimeVersion",
+    ]);
+    assert.doesNotMatch(
+      status.stdout + status.stderr,
+      /secret-output-sentinel/,
+    );
   } finally {
     await f.cleanup();
   }

@@ -76,3 +76,13 @@ No secret-manager read or MCP invocation occurred. Host execution permission can
 still be required; the wrapper makes the predispatch recovery explicit rather than
 bypassing the sandbox. This proves one fresh Codex task on the current Mac, not
 reliability across all prompts, a performance benchmark, or other native hosts.
+
+## Release preparation follow-up
+
+CodeQL flagged whole-object status serialization because the result union also
+contains an invocation environment. The release candidate now serializes only
+the eight existing status fields. A subprocess regression asserts exact keys
+and absence of an inherited credential sentinel in stdout/stderr. All four
+specialists rechecked the narrow correction; final verdicts ready. The full
+86-test check passed with 99.57% lines/statements, 97.02% branches and 98.90%
+functions. This supersedes the earlier coverage measurement above.
