@@ -29,9 +29,9 @@ Current source ships each component's entrypoint and reviewed `knowledge/` and `
 5. Once CI passes for the intended commit, create and push the matching annotated tag. The release workflow validates the date/time, package/lockfile/tag agreement, rebuilds, verifies the consumer, and publishes the assets with the committed release notes. Timestamp releases are regular GitHub releases; this classification does not imply compatibility or completed live validation.
 6. Download the GitHub assets to a fresh directory and run `node scripts/verify-release.mjs /absolute/path/to/downloaded-assets`. Confirm the tag, timestamp, source commit, and asset list.
 
-If a workflow fails before publication, fix the failure and follow the documented tag/release state. Do not silently move a published tag or overwrite released assets. Publish a new version for a changed artifact. Rollback means restoring a previous pinned release and its recorded configuration.
+If a workflow fails before publication, fix the failure and follow the documented tag/release state. Do not silently move a published tag or overwrite released assets. Publish a new version for a changed artifact. Rollback means restoring a retained previous pinned release (or separately preserved verified artifacts) and its recorded configuration.
 
-The historical `v0.1.0-alpha.1` and `v0.1.0-alpha.2` releases retain their original tags, versions, and assets. The verifier accepts those legacy manifests; new releases must use timestamp metadata.
+Historical tags and versions remain unchanged, including `v0.1.0-alpha.1` and `v0.1.0-alpha.2`. Their release assets are subject to retention below. The verifier accepts legacy manifests; new releases must use timestamp metadata.
 
 Checksums depend on trusting their source. They are not signatures. Artifact signing/attestation can be added when a consumer requires that stronger provenance contract.
 
@@ -44,3 +44,11 @@ or changes the pin. `poietic-harness:update` guides an explicit upgrade and
 preserves scoped local expertise.
 
 [BOOTSTRAP.md](../BOOTSTRAP.md) distinguishes personal defaults, project capabilities, and deployment provisioning. Dependencies for the current package are pinned to exact direct versions. Future installations must record release identity and integrity alongside project selection; an npm lockfile in the consumer also captures transitive dependency resolution.
+
+## Release retention
+
+Keep four published GitHub releases, ordered by publication time (newest first), including prereleases. Drafts are outside this count and must not be deleted by this procedure. This is a manual release step, not an automatic deletion workflow.
+
+After the new regular release has passed downloaded-asset verification, enumerate all published releases and record the exact retained and deletion sets. Require the newly verified regular release to be among the retained four, and ensure GitHub's latest regular release resolves to a retained release. Re-read before deletion; if publication state changed, stop and recompute rather than deleting from a stale list. Delete only older GitHub release entries and attached assets. Preserve Git tags, commits, source history and changelog entries; do not use a tag-deletion option. Confirm exactly four published releases remain and the new release is still available.
+
+Pruning removes download availability for older pins. Existing installed runtimes and verified cached release artifacts can still be used; a maintenance metadata cache cannot reinstall a removed release. Rollback to a pruned version requires retained artifacts or a separately verified source build. Consumers must explicitly select an available release to reinstall; never silently migrate their pins.

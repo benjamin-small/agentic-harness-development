@@ -6,6 +6,22 @@ Entries follow the [changelog policy](docs/changelog.md). `Unreleased` describes
 
 ## Unreleased
 
+No pending changes.
+
+## 2026.1008.162714 — 2026-10-08 16:27:14 UTC
+
+### Added
+
+- **Direct Jev launcher:** Add `jev-run` and an explicit POSIX launcher installer for one-command pinned CLI use. Resolve project/personal pins, load the owner-only cached key only for inference, require an allowed data-scope declaration, default to zero retries, and preserve structured streams, exit codes and bounded cancellation. Offline status/validation/outcomes need no key or network. Configure once and record the absolute command in local skill knowledge; no server, secret-manager lookup or shell-profile change. Existing released runtimes can be used with a separately identified source wrapper until this addition ships.
+
+### Changed
+
+- **Release retention:** Keep the four newest published GitHub releases after verifying the new regular release. Prune older release entries and assets while preserving Git tags and source history. Older pins require an existing installation or verified cached artifacts; metadata caches cannot restore deleted assets. No automatic pin migration.
+
+### Removed
+
+- **Jev MCP server:** Remove `jev-mcp`, the MCP SDK dependency, server tests and native-tool adoption evaluation. Jev remains available through the CLI and TypeScript library with recipes, batches and correlated outcomes. Remove only the Jev server registration from harness configuration and restart existing sessions; preserve cached credentials, logs, local expertise and unrelated integrations. Refresh the complete Jev skill for direct invocation guidance. Existing release archives remain unchanged. Clean builds and package checks prevent stale adapter output from entering new artifacts.
+
 ## 2026.1003.200942 — 2026-10-03 20:09:42 UTC
 
 ### Added

@@ -4,6 +4,7 @@ Local summaries verified against upstream documentation on 2026-10-01. Search wi
 
 | Topic                                   | Read when                                                        | Search terms                                           |
 | --------------------------------------- | ---------------------------------------------------------------- | ------------------------------------------------------ |
+| [Direct launcher](launcher.md)          | Invoking with cached credentials and a pinned runtime            | command, status, config, stdin, scope, cancellation    |
 | [Default use](default-use.md)           | Choosing when to call Jev and exposing it to fresh agents        | defaults, global, authorization, delegation, fallback  |
 | [Recipes](recipes.md)                   | Triaging excerpts or checking findings against supplied evidence | evidence_relevance, finding_support, outcomes          |
 | [Question design](question-design.md)   | Building state and independent typed questions                   | state, choice, score, noul, criteria, batch            |

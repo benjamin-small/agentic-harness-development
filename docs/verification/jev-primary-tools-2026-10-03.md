@@ -1,5 +1,7 @@
 # Jev selection, native tools and outcomes — 2026-10-03
 
+Historical verification: current source has removed the Jev MCP adapter. Use the CLI/library; see [migration](../jev-mcp.md). Earlier results below apply only to the recorded artifact.
+
 Local unreleased implementation on macOS, Node.js 26.10.0, Codex CLI 0.156.1.
 Jev was already callable through the CLI/library. This work adds recipes,
 selection guidance, outcome correlation and a thin stdio MCP interface over the

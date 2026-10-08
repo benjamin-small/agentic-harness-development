@@ -4,13 +4,13 @@
 
 Skills contain expertise. Agent definitions combine a role with selected skills, tool requirements, and expected results. An agent instance is an execution of that definition with an identity, scope, and state. These are separate concepts even when a harness represents several of them in one file.
 
-| Concern      | This repository                        | Runtime service                                 |
-| ------------ | -------------------------------------- | ----------------------------------------------- |
-| Knowledge    | Canonical SKILL.md and references      | Loads selected content                          |
-| Specialist   | Portable role plus native adapters     | Invokes a fresh worker                          |
-| Tool         | Jev library/CLI and opt-in MCP adapter | Supplies credentials and transport              |
-| Identity     | Declares intended scope/lifecycle      | Enforces identity, concurrency, and persistence |
-| Distribution | Versioned definitions and artifacts    | Pins and deploys a release                      |
+| Concern      | This repository                     | Runtime service                                 |
+| ------------ | ----------------------------------- | ----------------------------------------------- |
+| Knowledge    | Canonical SKILL.md and references   | Loads selected content                          |
+| Specialist   | Portable role plus native adapters  | Invokes a fresh worker                          |
+| Tool         | Jev library and CLI                 | Supplies credentials and transport              |
+| Identity     | Declares intended scope/lifecycle   | Enforces identity, concurrency, and persistence |
+| Distribution | Versioned definitions and artifacts | Pins and deploys a release                      |
 
 ```mermaid
 flowchart LR
@@ -39,7 +39,7 @@ A runtime must enforce ownership using a lease/lock with fencing and deduplicate
 
 `skills/` and `agents/` are authoritative instruction sources. Adapter output is derived and tested against native harness semantics. Models, permissions, hooks, and discovery locations stay in adapters. Our `catalog.json` describes packaging and selection; its schema is repository-owned, not an industry agent specification.
 
-The bootstrap CLI validates resources and computes selection only. A separate `jev` executable and `/jev` library export perform explicitly invoked inference. The opt-in `jev-mcp` adapter exposes that same runtime through stdio, with host-owned credential/data-scope configuration and fixed bounded recipes. Installing the package supplies the runtime; registering a skill supplies its instructions. No automatic installation, project inspection, or background service runs.
+The bootstrap CLI validates resources and computes selection only. A separate `jev` executable and `/jev` library export perform explicitly invoked inference. Use the CLI or library directly; this repository does not provide MCP servers. Installing the package supplies the runtime; registering a skill supplies its instructions. No automatic installation, project inspection, or background service runs.
 
 The maintenance runtime separates local version/pin validation, bounded public
 release transport, and optional disposable caching. `check` remains read-only;

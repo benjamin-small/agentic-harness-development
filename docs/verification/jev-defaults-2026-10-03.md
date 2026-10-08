@@ -1,5 +1,7 @@
 # Default Jev verification — 2026-10-03
 
+Historical verification: current source has removed the Jev MCP adapter. Use the CLI/library; see [migration](../jev-mcp.md). Earlier results below apply only to the recorded artifact.
+
 Result: user-scoped Codex discovery and one explicitly provisioned fresh Codex
 child's live Jev inference passed. Default instructions were installed in the
 four personal harness configurations on the operator's Mac. Native Claude Code,

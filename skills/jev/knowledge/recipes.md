@@ -4,14 +4,13 @@ Repository recipes, version 1; implemented and reviewed 2026-10-03. Source:
 `src/jev/recipes.ts` in the version-matched toolkit. Each recipe builds a standard
 Jev request; it adds no endpoint, credential source, or automatic action.
 Inputs accept 1–32 unique item IDs and at most 16,000 characters per text field,
-subject to the shared 1 MiB request cap. Recipe CLI and MCP calls default to zero
+subject to the shared 1 MiB request cap. Recipe CLI calls default to zero
 retries. Multiple items share state but cannot consume each other's answers.
 
 ## Evidence relevance
 
 Use after a search yields excerpts that need semantic triage, or before a manual
-handoff. `jev_evidence_relevance` accepts the following fields plus `dataScope`.
-The equivalent CLI command is `jev evidence-relevance --input evidence.json`.
+handoff. The CLI command is `jev evidence-relevance --input evidence.json`.
 
 ```json
 {
@@ -33,7 +32,7 @@ Measure end-to-end latency and retained evidence before claiming a speedup.
 ## Finding support
 
 Use when several proposed findings need an independent support check.
-`jev_finding_support` accepts these fields plus `dataScope`; CLI:
+CLI:
 `jev finding-support --input findings.json`.
 
 ```json
@@ -65,8 +64,7 @@ same object. Use `overridden` with `contrary_evidence` or `uncertain` when appro
 An unavailable call may omit `callId` and use `credentials`, `permission`, `network`,
 `invalid_result`, or `busy`. Do not include free-text evidence in telemetry.
 
-MCP feedback accepts IDs issued by that server session and consumes an ID once;
-feedback after a restart uses the library/CLI. Library/CLI records are caller
+Library/CLI records are caller
 assertions and do not verify historic call existence. Old runtimes lack recipes,
 feedback and returned call IDs: continue using `decide` and report outcomes in
 the review until an explicitly selected newer runtime is installed.

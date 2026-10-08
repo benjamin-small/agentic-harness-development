@@ -87,7 +87,6 @@ const manifest = {
     "jev-cli-and-jsonl-batches",
     "jev-persistent-call-logging",
     "jev-recipes-and-outcomes",
-    "jev-stdio-mcp",
     "session-version-check",
     "deterministic-release-polling",
     "scoped-update-skill",

@@ -10,7 +10,7 @@ questions sharing state to reduce dispatch overhead.
 
 ## Selection triggers
 
-At these natural points, prefer the matching available Jev tool or CLI recipe:
+At these natural points, prefer the matching CLI command or library recipe:
 
 - After local search has produced several candidate excerpts, use
   `evidence_relevance` to decide which ones warrant deeper reading for a stated
@@ -21,9 +21,9 @@ At these natural points, prefer the matching available Jev tool or CLI recipe:
 - When routing work among explicit alternatives or applying a bounded rubric,
   use a custom typed decision. Batch independent questions over shared state.
 
-Prefer exposed `jev_*` tools when available; CLI and library remain supported
-first-class invocation paths. Do not rediscover credentials when an exposed tool
-is already configured. Tool availability does not establish disclosure authority.
+Use the recorded absolute launcher for CLI work, or import the TypeScript library directly. On a suitable task, invoke the recipe after preparing focused input; do not stop at recommending Jev or checking status. Do not register or invoke a
+Jev MCP server. Reuse the recorded cached-credential injection recipe; no secret
+manager lookup is needed on each call. Availability does not establish disclosure authority.
 If only a deterministic check, a tiny obvious selection, or generative writing
 remains, complete it directly. See [recipes](recipes.md) for runnable inputs.
 

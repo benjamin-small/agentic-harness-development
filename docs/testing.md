@@ -25,7 +25,7 @@ future-dated cache recovery, offline misses, unavailable stale results, atomic
 concurrent writes, cache write failures, separate update-availability exits, and
 both header/body deadlines. A real CLI subprocess reads a fresh cache offline.
 
-Measured on 2026-10-03 with Node.js 26.10.0: **99.78% lines/statements, 100% functions, and 98.00% branches**, across 85 passing tests. Reproduce with `npm run test:coverage`; CI uploads its own per-runtime measurements. Coverage covers `src/` runtime code, not the release scripts or skill decision quality. There is no arbitrary global coverage threshold.
+Measured on 2026-10-08 with Node.js 26.10.0: **99.56% lines/statements, 98.90% functions, and 96.92% branches**, across 86 passing tests. Reproduce with `npm run test:coverage`; CI uploads its own per-runtime measurements. Coverage covers `src/` runtime code, not the release scripts or skill decision quality. There is no arbitrary global coverage threshold.
 
 ## Artifact verification
 
@@ -70,18 +70,10 @@ credentials are explicitly injected. It reports typed answers, model, attempts,
 and usage, never credentials. These fixture expectations are not calibrated
 thresholds or a decision-quality benchmark.
 
-## Jev native adoption (opt-in)
+## Jev CLI/library consumer verification
 
-`JEV_ADOPTION_EVAL=1 npm run jev:adoption -- /absolute/private/results` exercises
-fresh Codex sessions against the source MCP adapter with a mocked provider.
-It retains each trace, answer and call log and distinguishes selection, blocked
-tools, successful dispatch and reported use. Positive ordinary-task prompts do
-not name Jev; normal default-use guidance is ambient. Arithmetic and prose are
-negative controls. This uses the existing Codex login and automatic approval
-reviewer in the workspace sandbox; it does not copy auth or bypass approvals.
-Native model runs consume account usage, but no live OpenRouter request occurs.
-The original offline bootstrap/restart dogfood contract is unchanged.
-
-The release consumer now also verifies MCP discovery, a mocked finding-support
-recipe, and correlated outcome logging for artifacts advertising `jev-stdio-mcp`.
-See [tool configuration](jev-mcp.md) for scope, privacy and portability limits.
+The release consumer exercises a mocked finding-support recipe and correlated
+outcome through the library and CLI. Package tests reject the former MCP binary,
+compiled modules and SDK dependency. Build output is cleaned before compilation.
+The historical native-tool adoption evaluation was removed with the adapter;
+its earlier results do not establish current cross-harness behavior.

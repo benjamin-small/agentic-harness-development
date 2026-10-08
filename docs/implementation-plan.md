@@ -13,11 +13,11 @@ Publish a reusable collection of skills, harness specialists, and TypeScript too
 - A skill teaches a procedure; an agent definition selects a role, skills, and tools; an instance owns identity and state.
 - Harness specialists receive fresh task context. A future project manager has persistent identity and one active coordinator per project.
 - Keep durable services in a separate repository, consuming versioned definitions from this one.
-- Build Jev in TypeScript as an importable library with thin CLI and stdio MCP adapters. Support Pi through a native extension when implemented.
+- Build Jev in TypeScript as an importable library with a thin CLI. Harnesses, including Pi, invoke the CLI or library directly; do not add MCP servers.
 - Personal, project, and deployment installations are distinct. Catalog metadata separates instruction assets from executable dependencies.
 - Native packaging is preferred over a new general-purpose package manager. Our bootstrap coordinates versions, capability selection, and verification.
 - Use MIT licensing and public GitHub releases. Keep the initial package private to npm until registry publication is deliberately selected.
-- Package versions encode UTC release-preparation date/time. Use `release:stamp`, exact timestamp tags, and explicit changelog/schema compatibility information; preserve historical releases.
+- Package versions encode UTC release-preparation date/time. Use `release:stamp`, exact timestamp tags, and explicit changelog/schema compatibility information; preserve historical Git tags and retain four published releases under the release policy.
 - Significant additions, fixes, removals, and behavior changes require a readable changelog entry in the same pull request, following [the shared policy](changelog.md) for people and harnesses.
 - Every project's primary README carries a linked [maturity badge](repository-maturity.md): Tinker, Alpha, Beta, or Stable. Assess the advertised core using documented evidence, independently of timestamp versions; keep the explanation and changelog current.
 
@@ -62,6 +62,10 @@ writable log path, and failed persistence returns non-retryable `IO_ERROR`.
 Released in v2026.1002.125921, setup guidance also records configured Jev credential connections in private component-local knowledge and reuses them on invocation. This is a host-managed connection record, not a credential store or automatic authentication adapter.
 
 Included in v2026.1003.200942: Jev adds bounded evidence-relevance and finding-support recipes, returned persistent call IDs, allowlisted recipe/version/surface metadata, and caller-reported outcomes. The existing CLI/library and new opt-in stdio MCP adapter share the same client, validation and logs. MCP has zero retries, scope declarations, per-process admission limits and cancellation. Native compaction hooks and measured speed improvements remain outside this implementation. An opt-in native Codex adoption evaluation uses ordinary synthetic tasks, a mock Jev provider, and negative controls; see [MCP access](jev-mcp.md). UI reviewer dependencies and all review result contracts now include Jev access/outcomes.
+
+Release 2026.1008.162714: remove the Jev MCP adapter, dependency and native-tool evaluation. Retain recipes, outcomes and CLI/library behavior. Clean build output prevents deleted adapter files entering new packages. Existing consumers must remove Jev server registration and reload; historical tags remain, while release assets follow retention.
+
+Release 2026.1008.162714: a direct Jev launcher resolves scoped pins and cached credentials for one-command CLI invocation, with offline status and bounded signal forwarding. Progressive skill guidance records the absolute command; fresh-task adoption is verified separately from deterministic tests.
 
 ## M2: Bootstrap and capability selection
 
@@ -122,7 +126,7 @@ Acceptance:
 - An invocation starts with isolated context, a bounded task brief, relevant references, and a defined findings/result contract.
 - Both specialist types recover expertise through small local indexes and targeted searches. Maintenance updates relevant knowledge/lessons with evidence and dates without loading or rewriting the entire corpus.
 - Declare unsupported settings rather than silently weakening tool restrictions or claiming identical semantics across harnesses.
-- Pi extension registers a Jev tool backed by the shared TypeScript library; package it using Pi conventions.
+- Pi invokes the shared TypeScript library or CLI without a persistent server.
 - Verify personal/project discovery and a realistic review in each supported harness. Mark documentation-only integrations separately.
 
 ## M4: Persistent agent service — separate project
@@ -138,4 +142,4 @@ Acceptance in the service project:
 
 ## Release gates and remaining choices
 
-Every shipped artifact must pass an isolated consumer test. Real-harness and live-API validation remain separate from schema and mock tests. Native standalone binaries and npm publication remain follow-up distribution choices. The opt-in MCP adapter is implemented; each target harness still needs native consumer verification.
+Every shipped artifact must pass an isolated consumer test. Real-harness and live-API validation remain separate from schema and mock tests. Native standalone binaries and npm publication remain follow-up distribution choices. Current source removes the MCP adapter; each target harness still needs CLI/library consumer verification.

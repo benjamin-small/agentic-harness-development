@@ -6,7 +6,7 @@ Documentation checked on 2026-10-01. The following are upstream documented capab
 
 - [Agent Skills](https://agentskills.io/specification): directory with SKILL.md; YAML `name` and `description`; optional scripts, references, and assets. Use portable metadata and keep detailed guidance outside the entrypoint.
 - [AGENTS.md](https://agents.md/): repository context, build/test instructions, and conventions. It does not instantiate an agent.
-- [MCP](https://modelcontextprotocol.io/docs/getting-started/intro): tool/service interoperability; an optional future interface for Jev.
+- Jev integrations use the CLI or TypeScript library directly. MCP servers are outside this repository's supported architecture.
 - [A2A](https://a2a-protocol.org/latest/): communication between independent agents; deferred.
 - [Open Agent Spec](https://github.com/oracle/agent-spec): declarative executable agents/flows. Its documented framework adapters do not establish native adoption across the coding harnesses below. Defer until there is a concrete runtime consumer.
 
