@@ -6,7 +6,7 @@ import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import assert from "node:assert/strict";
 import { versionTimestamp } from "./release-version.mjs";
-import { verifyJevAdapter } from "./verify-jev-adapter.mjs";
+import { verifyJevRecipes } from "./verify-jev-recipes.mjs";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const out = resolve(root, process.argv[2] ?? "release");
@@ -249,8 +249,8 @@ assert.equal(results.find(r => r.sequence === 1).ok,false);`;
       true,
     );
   }
-  if (manifest.capabilities.includes("jev-stdio-mcp")) {
-    await verifyJevAdapter(
+  if (manifest.capabilities.includes("jev-recipes-and-outcomes")) {
+    await verifyJevRecipes(
       join(consumer, "node_modules", manifest.packageName),
       consumer,
     );
@@ -268,8 +268,8 @@ assert.equal(results.find(r => r.sequence === 1).ok,false);`;
           "bundled-resources",
           "cli-bin",
           "selection",
-          ...(manifest.capabilities.includes("jev-stdio-mcp")
-            ? ["jev-mcp-discovery-recipe-outcome"]
+          ...(manifest.capabilities.includes("jev-recipes-and-outcomes")
+            ? ["jev-library-cli-recipes-outcome"]
             : []),
           ...(hasMaintenance
             ? [

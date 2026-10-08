@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { cp, mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
+import { cp, mkdir, mkdtemp, rm, writeFile, readFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { spawnSync } from "node:child_process";
@@ -89,4 +89,39 @@ test("Git ignores each component's private knowledge and memory", () => {
   });
   assert.equal(result.status, 0, result.stderr);
   assert.deepEqual(result.stdout.trim().split("\n").sort(), paths.sort());
+});
+
+test("actual package excludes removed Jev server output and dependency", async () => {
+  const fixture = await mkdtemp(join(tmpdir(), "no-jev-server-"));
+  try {
+    const result = spawnSync(
+      "npm",
+      [
+        "pack",
+        "--dry-run",
+        "--ignore-scripts",
+        "--json",
+        "--cache",
+        join(fixture, "cache"),
+      ],
+      { cwd: toolkitRoot, encoding: "utf8" },
+    );
+    assert.equal(result.status, 0, result.stderr);
+    const files: string[] = JSON.parse(result.stdout)[0].files.map(
+      (entry: { path: string }) => entry.path,
+    );
+    assert.ok(
+      !files.some((p) => /^dist\/.*(?:mcp|jev-mock-transport)/i.test(p)),
+      "Removed server output entered package",
+    );
+    const pkg = JSON.parse(
+      await readFile(join(toolkitRoot, "package.json"), "utf8"),
+    );
+    assert.equal(pkg.bin["jev-mcp"], undefined);
+    assert.equal(pkg.dependencies["@modelcontextprotocol/sdk"], undefined);
+    assert.ok(files.includes("dist/src/jev/cli.js"));
+    assert.ok(files.includes("dist/src/jev/recipes.js"));
+  } finally {
+    await rm(fixture, { recursive: true, force: true });
+  }
 });

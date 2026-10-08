@@ -6,7 +6,7 @@ Portable skills, harness specialists, and reusable development tools. This repos
 
 [Implementation plan](docs/implementation-plan.md) · [Bootstrap instructions](BOOTSTRAP.md) · [Architecture](docs/architecture.md) · [Releases](https://github.com/benjamin-small/agentic-harness-development/releases)
 
-Jev is callable through its CLI and TypeScript library. The toolkit provides [bounded recipes](skills/jev/knowledge/recipes.md), correlated outcome logging, and opt-in [MCP tool discovery](docs/jev-mcp.md). Native compaction hooks and measured speedups are not claimed.
+Jev is callable through its CLI and TypeScript library. Current source also provides a [one-command launcher](skills/jev/knowledge/launcher.md) that resolves the pin and cached credentials locally. The toolkit provides [bounded recipes](skills/jev/knowledge/recipes.md), correlated outcome logging through the CLI and library. Native compaction hooks and measured speedups are not claimed.
 
 ## Current status
 
@@ -21,7 +21,7 @@ The toolkit includes:
 - Agent Skills for Jev question design and UI standards, with progressive reference loading.
 - A portable UI reviewer role intended for fresh, isolated task contexts.
 - A validated capability catalog, TypeScript library, and read-only selection CLI.
-- An importable Jev client, `jev` CLI and opt-in `jev-mcp` adapter for typed decisions, bounded batches, evidence/finding recipes and correlated outcome logging through OpenRouter.
+- An importable Jev client, `jev` CLI for typed decisions, bounded batches, evidence/finding recipes and correlated outcome logging through OpenRouter.
 - A read-only `poietic-harness` version checker, an update skill, and a Claude Code plugin providing `/poietic-harness:update` and a SessionStart check. It also provides [fast cached polling without inference](docs/maintenance.md#fast-polling-without-inference).
 - CI, contributor guidance, and GitHub release archives with checksums and a source manifest.
 

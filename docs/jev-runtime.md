@@ -207,7 +207,7 @@ For an explicitly authorized live check, inject only `OPENROUTER_API_KEY` and ru
 
 To test an already verified release instead of this checkout, run `JEV_LIVE_SMOKE=1 node scripts/smoke-jev.mjs --package-root /absolute/runtime/node_modules/@benjamin-small/agentic-harness-development`. The runner lives in the source checkout. Never put the key in command arguments, commit it, or paste it into chat. Fixture success proves bounded integration behavior, not general accuracy or permission to process private project data.
 
-## Recipes, correlation and native tool access
+## Recipes and correlation
 
 Introduced in **v2026.1003.200942**.
 
@@ -223,6 +223,6 @@ Start records now include allowlisted `recipe`, `recipeVersion`, and `surface`.
 use, override, or unavailability without sending data to a provider. These records
 are not accuracy measurements. Request IDs and input text remain absent from logs.
 
-The opt-in [stdio MCP adapter](jev-mcp.md) exposes the same runtime to native tool
-discovery. Installation or discovery performs no inference. Native compaction
-hooks, native Pi extensions, and measured speedups remain unimplemented/unverified.
+Use the CLI or library directly from the harness. The former MCP adapter has
+been removed from current source; see [migration](jev-mcp.md). Native compaction
+hooks and measured speedups remain unimplemented/unverified.
