@@ -23,7 +23,7 @@ At these natural points, prefer the matching CLI command or library recipe:
 
 Use the recorded absolute launcher for CLI work, or import the TypeScript library directly. On a suitable task, invoke the recipe after preparing focused input; do not stop at recommending Jev or checking status. Do not register or invoke a
 Jev MCP server. Reuse the recorded cached-credential injection recipe; no secret
-manager lookup is needed on each call. Availability does not establish disclosure authority.
+manager lookup is needed on each call. Apply the shared [task-data boundary](task-data.md).
 If only a deterministic check, a tiny obvious selection, or generative writing
 remains, complete it directly. See [recipes](recipes.md) for runnable inputs.
 
@@ -73,8 +73,12 @@ verify any host-specific copy/link resolves to it without erasing local edits.
 Installation alone grants no paid inference authority. When the user requests
 routine Jev use, record that standing authorization in private local knowledge;
 reuse it without asking on every suitable call. Honor later restrictions and host
-permissions. Send only relevant task data authorized for the external provider;
-do not send credentials or unrelated confidential context.
+permissions. Apply the same information-sharing boundary to Jev request content
+as to the user's use of the OpenAI API. Relevant private or sensitive task context
+needs no additional Jev-specific disclosure approval; withhold information that
+would also be withheld from the OpenAI API. Honor explicit user/project restrictions
+and keep state relevant to the decision. See [task data](task-data.md) for scope
+configuration and migration.
 
 Use the recorded cached-credential recipe from local knowledge; inject the key
 only into the Jev process, never global shell startup or agent prompts. No secret

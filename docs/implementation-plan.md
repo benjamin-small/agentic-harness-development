@@ -67,6 +67,8 @@ Release 2026.1008.162714: remove the Jev MCP adapter, dependency and native-tool
 
 Release 2026.1008.162714: a direct Jev launcher resolves scoped pins and cached credentials for one-command CLI invocation, with offline status and bounded signal forwarding. Progressive skill guidance records the absolute command; fresh-task adoption is verified separately from deterministic tests.
 
+Release 2026.1013.214916: Jev request content follows the same information-sharing boundary as the user's use of the OpenAI API. Relevant private or sensitive task context needs no additional Jev-specific disclosure approval. Launcher setup includes `private`; existing public/synthetic-only configurations require an authorized one-time scope update. The existing runtime already supports it. Explicit user/project restrictions and host execution permissions remain applicable; see [task data](../skills/jev/knowledge/task-data.md).
+
 ## M2: Bootstrap and capability selection
 
 Add deterministic project inspection and installation planning. Inputs include the explicit project manifest, detected evidence, selected harness, scope, and pinned release.

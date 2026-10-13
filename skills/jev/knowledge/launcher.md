@@ -13,6 +13,7 @@ personal launcher is usually `~/.local/bin/jev`. For example:
 /absolute/personal/bin/jev finding-support --data-scope public --input findings.json
 /absolute/personal/bin/jev evidence-relevance --data-scope public --input excerpts.json
 /absolute/personal/bin/jev decide --data-scope synthetic --input request.json
+/absolute/personal/bin/jev decide --data-scope private --input private-request.json
 /absolute/personal/bin/jev outcome --input outcome.json
 ```
 
@@ -40,7 +41,7 @@ The host provisions a private JSON file at `~/.config/poietic-harness/jev.json`:
   "runtimeCacheRoot": "/absolute/versioned/toolkit/cache",
   "credentialFile": "/absolute/owner-only/openrouter-api-key",
   "logPath": "/absolute/writable/jev/calls.jsonl",
-  "allowedDataScopes": ["public", "synthetic"]
+  "allowedDataScopes": ["public", "synthetic", "private"]
 }
 ```
 
@@ -55,8 +56,12 @@ Its package name/version must match. Recipes/outcomes require a release at least
 `2026.1003.200942`; older pins can use `decide` or be explicitly updated.
 
 Inference requires `--data-scope public|synthetic|private` allowed by the config.
-This is caller attestation, not content inspection or new disclosure authority.
-Retain applicable project/data restrictions. The wrapper ignores an inherited
+This is caller attestation, not content inspection. Apply the same information-sharing
+boundary as for the user's use of the OpenAI API; private or sensitive task context
+needs no additional Jev-specific disclosure approval. Follow [task data](task-data.md)
+for the boundary and the authorized one-time addition of `private` to existing
+public/synthetic-only configurations. Honor explicit user/project restrictions.
+The wrapper ignores an inherited
 OPENROUTER_API_KEY and reads only the configured local cache for inference. It
 rejects links, FIFOs, directories, oversized/empty keys and, on POSIX, keys not
 owned by the caller or readable by other users. No network credential fallback.
