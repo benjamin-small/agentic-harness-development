@@ -8,6 +8,12 @@ Entries follow the [changelog policy](docs/changelog.md). `Unreleased` describes
 
 No pending changes.
 
+## 2026.1013.214916 — 2026-10-13 21:49:16 UTC
+
+### Changed
+
+- **Jev task data:** Use the same information-sharing boundary for Jev request content as for the user's use of the OpenAI API. Relevant private or sensitive context no longer needs additional Jev-specific disclosure approval. Launcher setup now includes `private`; existing public/synthetic-only configurations need an authorized one-time addition to `allowedDataScopes`. Runtime/schema and host execution permissions are unchanged. See [task data](skills/jev/knowledge/task-data.md).
+
 ## 2026.1008.162714 — 2026-10-08 16:27:14 UTC
 
 ### Added

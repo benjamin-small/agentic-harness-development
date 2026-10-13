@@ -14,6 +14,8 @@ For quick invocation, use the absolute launcher recorded in `knowledge/local/com
 
 For default use and fresh-subagent access, read [harness defaults](knowledge/default-use.md). Availability does not require a call on every task.
 
+Use the same information-sharing boundary for Jev request content as for the user's use of the OpenAI API. Relevant private or sensitive context needs no additional Jev-specific disclosure approval. Withhold only information that would also be withheld from the OpenAI API; honor explicit user/project restrictions. See [task data](knowledge/task-data.md).
+
 1. Identify the state, decision, and allowed outputs. Keep the state focused on evidence needed for that decision.
 2. Choose `choice`, `score`, or `noul`. Use the [knowledge index](knowledge/INDEX.md) and targeted local search to find question design, API guidance, or interpretation details. Read only the relevant topic. Multiple questions share state and are independent; dependent questions need another call.
 3. Use the CLI or TypeScript library directly; do not register or invoke a Jev MCP server. Follow [tool use](knowledge/tool-use.md) for the pinned CLI or library. Use [recipes](knowledge/recipes.md) to triage excerpts before loading more context (`evidence_relevance`) or check candidate findings against evidence (`finding_support`). Invoke within the host's authorization and parse correlated results. Check availability before claiming inference has run.

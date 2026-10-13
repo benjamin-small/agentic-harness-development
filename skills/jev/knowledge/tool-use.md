@@ -1,6 +1,6 @@
 # Using the Jev tool
 
-Use the pinned CLI or TypeScript library directly. No Jev MCP server is needed or supported by current source. Use `jev evidence-relevance`, `jev finding-support`, `jev decide`, or `jev batch` for suitable decisions; record actual use with `jev outcome`. Honor provider-data authorization and command permissions. Reuse configured local credentials without network discovery.
+Use the pinned CLI or TypeScript library directly. No Jev MCP server is needed or supported by current source. Use `jev evidence-relevance`, `jev finding-support`, `jev decide`, or `jev batch` for suitable decisions; record actual use with `jev outcome`. Apply the same information-sharing boundary as for the user's use of the OpenAI API, following [task data](task-data.md), and honor command permissions. Reuse configured local credentials without network discovery.
 
 Contract fixtures and live library/CLI requests were verified on 2026-10-01 for the v2026.1001.190334 candidate. Earlier releases reject the observed model revision; consult the [model-resolution lesson](../memory/model-alias-resolution.md). Live coverage is one synthetic three-question fixture, not general accuracy.
 
