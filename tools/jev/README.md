@@ -10,8 +10,7 @@ This component is embedded in the toolkit release; it is not published separatel
 
 **Maturity: Alpha.** Typed contracts, logging, retries, cancellation and CLI/library
 consumer behavior have automated coverage. Existing [live integration evidence](../../docs/verification/jev-2026-10-01.md)
-is a bounded fixture, not a general decision-quality claim. The new component
-layout is unreleased and needs the same release consumer gate as the toolkit.
+is a bounded fixture, not a general decision-quality claim. The component layout is shipped with the toolkit and verified through its exact-artifact consumer gate.
 
 ## Development
 

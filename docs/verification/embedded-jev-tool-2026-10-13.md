@@ -57,7 +57,7 @@ findings or exceptions.
 
 ## Scope and migration
 
-This is a local, unreleased layout change. Local candidate artifact verification
+At review time, this was a local, unreleased layout change. Local candidate artifact verification
 reused the existing version for testing; publication requires a new timestamp
 and the normal release gates. Source/manual/installer paths move under the tool;
 public command/library names remain stable. A future explicit update must refresh
@@ -68,3 +68,11 @@ new wrapper supports retained older declared layouts. See the
 No fresh native Claude, Pi or OpenCode session, actual personal wrapper switch,
 provider live call or publication was performed for this change. Filesystem and
 compiler boundaries are architectural checks, not a security sandbox claim.
+
+## Release preparation
+
+Prepared `v2026.1014.5143` from the isolated PR #17 branch, synchronizing root/lock/tool
+manifests. Only the reviewed embedded-tool change and release documentation are
+included; pending Blog-Review files and catalog/schema/runtime/test changes remain
+outside the branch. Publication and downloaded-asset verification are separate
+release gates; the earlier review evidence above remains tied to its exact snapshots.

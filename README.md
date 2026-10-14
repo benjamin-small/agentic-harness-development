@@ -33,9 +33,8 @@ release composes their outputs through explicit package metadata.
 
 [Jev](tools/jev/README.md) is the first embedded tool. Its CLI/library and launcher
 are owned by `tools/jev/`; the usage skill remains `skills/jev/`. Consumers keep
-the `jev`/`jev-run` commands and toolkit `/jev` export. The component layout is
-currently unreleased; existing installed releases keep their paths until an
-explicit update includes the wrapper migration.
+the `jev`/`jev-run` commands and toolkit `/jev` export. This release embeds the component layout; an explicit installation update
+includes the [wrapper migration](tools/jev/knowledge/toolkit-contract.md#wrapper-migration).
 
 Generic catalog/planning and maintenance code remains repository infrastructure
 under `src/`. Root `scripts/` owns build/release orchestration; tool-specific

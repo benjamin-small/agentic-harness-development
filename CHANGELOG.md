@@ -6,9 +6,13 @@ Entries follow the [changelog policy](docs/changelog.md). `Unreleased` describes
 
 ## Unreleased
 
+No pending changes.
+
+## 2026.1014.5143 — 2026-10-14 00:51:43 UTC
+
 ### Changed
 
-- **Embedded Jev tool:** Move executable source, tests, tool scripts and the runtime manual into `tools/jev/`, with its own build/typecheck/test boundary and implementation expertise. Keep portable usage guidance in `skills/jev/` and foreground generic harness instructions at the repository root. The tool remains Alpha based on existing runtime/consumer evidence; its new layout is unreleased. Public `jev`, `jev-run` and toolkit `/jev` names remain supported.
+- **Embedded Jev tool:** Move executable source, tests, tool scripts and the runtime manual into `tools/jev/`, with its own build/typecheck/test boundary and implementation expertise. Keep portable usage guidance in `skills/jev/` and foreground generic harness instructions at the repository root. The tool remains Alpha based on existing runtime/consumer evidence; its new layout is included in this release. Public `jev`, `jev-run` and toolkit `/jev` names remain supported.
 - **Tool composition:** Declare embedded private manifests in root metadata, synchronize their timestamp versions through `release:stamp`, cover both runtime trees in aggregate checks, and verify compiler and packaging boundaries. Private tool knowledge/memory stays excluded from Git, formatting and artifacts.
 - **Breaking — Jev internal paths:** Source/manual/installer and compiled paths move to `tools/jev/`. Source callers use `tools/jev/dist/src/cli.js`; updates must stage `tools/jev/dist/src/runner-cli.js` and deliberately refresh the personal wrapper using `tools/jev/scripts/install-launcher.mjs`. Older wrappers hardcode the removed path and cannot invoke the new layout. The updated wrapper resolves declared binaries and supports retained older runtime layouts; preserve pins, credentials, scopes, logs and local expertise. See [the migration](tools/jev/knowledge/toolkit-contract.md#wrapper-migration).
 

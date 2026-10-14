@@ -1,6 +1,6 @@
 # Embedded toolkit contract
 
-Applicability: toolkit source and future releases using `tools/jev/`. Reviewed
+Applicability: toolkit source and releases using `tools/jev/`. Reviewed
 2026-10-13 against the implementation and [release contract](../../../docs/releases.md).
 
 The root toolkit manifest declares embedded tool directories. Each tool owns a

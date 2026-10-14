@@ -69,7 +69,7 @@ Release 2026.1008.162714: a direct Jev launcher resolves scoped pins and cached 
 
 Release 2026.1013.214916: Jev request content follows the same information-sharing boundary as the user's use of the OpenAI API. Relevant private or sensitive task context needs no additional Jev-specific disclosure approval. Launcher setup includes `private`; existing public/synthetic-only configurations require an authorized one-time scope update. The existing runtime already supports it. Explicit user/project restrictions and host execution permissions remain applicable; see [task data](../skills/jev/knowledge/task-data.md).
 
-Unreleased: separate the embedded Jev executable component under `tools/jev/`,
+Release 2026.1014.5143: separate the embedded Jev executable component under `tools/jev/`,
 with owned source, tests, scripts, manual, build configuration and implementation
 expertise. Keep `skills/jev/` as portable usage/decision guidance and root content
 as generic harness instructions and composition. Preserve public commands and
