@@ -1,4 +1,11 @@
-import { readFile, mkdtemp, writeFile, rm } from "node:fs/promises";
+import {
+  readFile,
+  mkdtemp,
+  writeFile,
+  rm,
+  mkdir,
+  symlink,
+} from "node:fs/promises";
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
 import { tmpdir } from "node:os";
@@ -6,7 +13,7 @@ import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import assert from "node:assert/strict";
 import { versionTimestamp } from "./release-version.mjs";
-import { verifyJevRecipes } from "./verify-jev-recipes.mjs";
+import { verifyJevConsumer } from "../tools/jev/scripts/verify-consumer.mjs";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const out = resolve(root, process.argv[2] ?? "release");
@@ -112,6 +119,14 @@ assert.equal(plan.components[0].destination, '~/.agents/skills/ui-standards');`;
     ),
   );
   assert.equal(installed.version, manifest.version);
+  for (const tool of installed.embeddedTools ?? []) {
+    const toolRoot = join(consumer, "node_modules", manifest.packageName, tool);
+    const toolPkg = JSON.parse(
+      await readFile(join(toolRoot, "package.json"), "utf8"),
+    );
+    assert.equal(toolPkg.version, installed.version);
+    assert.equal(toolPkg.private, true);
+  }
   const hasMaintenance = manifest.capabilities.includes(
     "session-version-check",
   );
@@ -200,61 +215,13 @@ assert.equal(cached.polling.source,'cache');`;
         ).replace(/^name: poietic-harness-update$/m, "name: update"),
       );
   }
-  const hasJev = manifest.capabilities.includes("jev-typescript-library");
-  if (hasJev) {
-    const jevProbe = `import assert from 'node:assert/strict';
-import {createJevClient, decideBatch, validateRequest, JEV_MODEL} from '@benjamin-small/agentic-harness-development/jev';
-const request = {id:'consumer-check',state:'Synthetic input',questions:{check:{type:'noul',instructions:'Is the input synthetic?'}}};
-validateRequest(request);
-const client = createJevClient({apiKey:'fixture-only',logPath:${JSON.stringify(join(consumer, "jev-calls.jsonl"))},fetch:async () => Response.json({model:JEV_MODEL,answers:{check:{type:'noul',noul:1}},usage:{input_tokens:1,output_tokens:1}})});
-const result = await client.decide(request);
-assert.equal(result.ok,true);
-assert.equal(result.requestId,'consumer-check');
-const results = [];
-for await (const item of decideBatch(client,[request,null])) results.push(item);
-assert.equal(results.length,2);
-assert.equal(results.find(r => r.sequence === 0).ok,true);
-assert.equal(results.find(r => r.sequence === 1).ok,false);`;
-    run(process.execPath, ["--input-type=module", "-e", jevProbe]);
-    if (manifest.capabilities.includes("jev-persistent-call-logging")) {
-      const calls = (await readFile(join(consumer, "jev-calls.jsonl"), "utf8"))
-        .trim()
-        .split("\n")
-        .map((line) => JSON.parse(line));
-      assert.equal(
-        calls.filter((item) => item.event === "jev.call.start").length,
-        3,
-      );
-      assert.equal(
-        calls.filter((item) => item.event === "jev.call.finish").length,
-        3,
-      );
-      assert.equal(new Set(calls.map((item) => item.callId)).size, 3);
-      assert.ok(!JSON.stringify(calls).includes("fixture-only"));
-    }
-    const jevBin = join(consumer, "node_modules/.bin/jev");
-    assert.equal(run(jevBin, ["--version"]).trim(), manifest.version);
-    await writeFile(
-      join(consumer, "decision.json"),
-      JSON.stringify({
-        id: "consumer-check",
-        state: "Synthetic input",
-        questions: {
-          check: { type: "noul", instructions: "Is the input synthetic?" },
-        },
-      }),
-    );
-    assert.equal(
-      JSON.parse(run(jevBin, ["validate", "--input", "decision.json"])).valid,
-      true,
-    );
-  }
-  if (manifest.capabilities.includes("jev-recipes-and-outcomes")) {
-    await verifyJevRecipes(
-      join(consumer, "node_modules", manifest.packageName),
-      consumer,
-    );
-  }
+  const jevChecks = manifest.capabilities.includes("jev-typescript-library")
+    ? await verifyJevConsumer(
+        join(consumer, "node_modules", manifest.packageName),
+        consumer,
+        manifest,
+      )
+    : [];
   console.log(
     JSON.stringify(
       {
@@ -268,9 +235,6 @@ assert.equal(results.find(r => r.sequence === 1).ok,false);`;
           "bundled-resources",
           "cli-bin",
           "selection",
-          ...(manifest.capabilities.includes("jev-recipes-and-outcomes")
-            ? ["jev-library-cli-recipes-outcome"]
-            : []),
           ...(hasMaintenance
             ? [
                 "maintenance-library",
@@ -285,19 +249,7 @@ assert.equal(results.find(r => r.sequence === 1).ok,false);`;
                 "canonical-update-skill",
               ]
             : []),
-          ...(hasJev
-            ? [
-                "jev-library-mock",
-                ...(manifest.capabilities.includes(
-                  "jev-persistent-call-logging",
-                )
-                  ? ["jev-persistent-call-log"]
-                  : []),
-                "jev-batch",
-                "jev-cli-validation",
-                "jev-version",
-              ]
-            : []),
+          ...jevChecks,
         ],
       },
       null,

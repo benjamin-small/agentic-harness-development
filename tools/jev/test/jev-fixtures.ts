@@ -1,4 +1,4 @@
-import { JEV_MODEL, type DecisionRequest } from "../src/jev/index.js";
+import { JEV_MODEL, type DecisionRequest } from "../src/index.js";
 import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";

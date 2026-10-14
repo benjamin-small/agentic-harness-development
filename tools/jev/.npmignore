@@ -1,0 +1,10 @@
+node_modules/
+coverage/
+/src/
+/test/
+/dist/test/
+knowledge/local/
+memory/local/
+.env
+.env.*
+!.env.example

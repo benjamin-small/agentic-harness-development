@@ -12,6 +12,8 @@ const { values } = parseArgs({
 const root = values["package-root"]
   ? resolve(values["package-root"])
   : fileURLToPath(new URL("../", import.meta.url));
+const pkg = JSON.parse(readFileSync(resolve(root, "package.json")));
+const entry = pkg.exports["./jev"] ?? pkg.exports["."];
 
 if (process.env.JEV_LIVE_SMOKE !== "1") {
   console.error(
@@ -28,7 +30,7 @@ if (process.env.JEV_LIVE_SMOKE !== "1") {
   try {
     assert.ok(apiKey);
     const { createJevClient, JEV_MODEL, JEV_MODEL_REVISION, validateRequest } =
-      await import(pathToFileURL(resolve(root, "dist/src/jev/index.js")).href);
+      await import(pathToFileURL(resolve(root, entry.import)).href);
     report.version = JSON.parse(
       readFileSync(resolve(root, "package.json")),
     ).version;
@@ -111,7 +113,7 @@ if (process.env.JEV_LIVE_SMOKE !== "1") {
     const cli = spawnSync(
       process.execPath,
       [
-        resolve(root, "dist/src/jev/cli.js"),
+        resolve(root, pkg.bin.jev),
         "decide",
         "--input",
         "-",

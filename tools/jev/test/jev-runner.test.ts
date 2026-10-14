@@ -17,10 +17,8 @@ import {
   prepareInvocation,
   executeInvocation,
   RunnerError,
-} from "../src/jev/runner.js";
-const runner = fileURLToPath(
-  new URL("../src/jev/runner-cli.js", import.meta.url),
-);
+} from "../src/runner.js";
+const runner = fileURLToPath(new URL("../src/runner-cli.js", import.meta.url));
 async function fixture() {
   const dir = await mkdtemp(join(tmpdir(), "jev-runner-"));
   const version = "2026.1003.200942";
@@ -36,6 +34,7 @@ async function fixture() {
     JSON.stringify({
       name: "@benjamin-small/agentic-harness-development",
       version,
+      bin: { jev: "dist/src/jev/cli.js" },
     }),
   );
   const cli = join(root, "dist/src/jev/cli.js");
@@ -248,6 +247,7 @@ test("runtime mismatch, malformed config and unsupported old recipes fail closed
       JSON.stringify({
         name: "@benjamin-small/agentic-harness-development",
         version: "2026.1001.190334",
+        bin: { jev: "dist/src/jev/cli.js" },
       }),
     );
     await writeFile(join(old, "dist/src/jev/cli.js"), "");
@@ -368,7 +368,7 @@ test("installed shell launcher clears Node startup preloads and refuses collisio
     // Resolve from the compiled test directory to the source repository scripts.
     const installer = join(
       dirname(dirname(dirname(fileURLToPath(import.meta.url)))),
-      "scripts/install-jev-launcher.mjs",
+      "scripts/install-launcher.mjs",
     );
     const launcher = join(f.dir, "bin/jev");
     const harmless = join(f.dir, "status.mjs");
@@ -455,6 +455,69 @@ test("log access fails before credential access or CLI dispatch", async () => {
         await chmod(blocked, 0o700);
       }
     }
+  } finally {
+    await f.cleanup();
+  }
+});
+
+test("runner follows declared embedded binaries and rejects unsafe or missing targets", async () => {
+  const f = await fixture();
+  try {
+    const embedded = join(f.root, "tools/jev/dist/src/cli.js");
+    await mkdir(dirname(embedded), { recursive: true });
+    await writeFile(embedded, "process.exit(0)");
+    const pkgFile = join(f.root, "package.json");
+    const pkg = JSON.parse(await readFile(pkgFile, "utf8"));
+    await writeFile(
+      pkgFile,
+      JSON.stringify({ ...pkg, bin: { jev: "tools/jev/dist/src/cli.js" } }),
+    );
+    const status = await prepareInvocation(["status", "--config", f.config]);
+    assert.equal(status.kind, "status");
+    if (status.kind === "status") assert.equal(status.runtimeCli, embedded);
+    const plan = await prepareInvocation([
+      "decide",
+      "--config",
+      f.config,
+      "--data-scope",
+      "synthetic",
+    ]);
+    assert.equal(plan.kind, "run");
+    if (plan.kind === "run") assert.equal(plan.cli, embedded);
+    await rm(f.cli);
+    // A released old wrapper uses this hardcoded path, which is absent in new artifacts.
+    await assert.rejects(readFile(join(f.root, "dist/src/jev/cli.js")));
+    for (const target of [
+      undefined,
+      "",
+      embedded,
+      "../../outside.js",
+      "missing.js",
+      "tools/jev/dist/src",
+    ]) {
+      await writeFile(
+        pkgFile,
+        JSON.stringify({ ...pkg, bin: { jev: target } }),
+      );
+      await assert.rejects(
+        prepareInvocation(["status", "--config", f.config]),
+        (e: unknown) =>
+          e instanceof RunnerError && e.code === "RUNTIME_UNAVAILABLE",
+      );
+    }
+    const outside = join(f.dir, "outside.js");
+    await writeFile(outside, "process.exit(0)");
+    const link = join(f.root, "escape.js");
+    await symlink(outside, link);
+    await writeFile(
+      pkgFile,
+      JSON.stringify({ ...pkg, bin: { jev: "escape.js" } }),
+    );
+    await assert.rejects(
+      prepareInvocation(["status", "--config", f.config]),
+      (e: unknown) =>
+        e instanceof RunnerError && e.code === "RUNTIME_UNAVAILABLE",
+    );
   } finally {
     await f.cleanup();
   }

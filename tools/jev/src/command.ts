@@ -106,10 +106,7 @@ export async function runCommand(
   try {
     if (args.length === 1 && args[0] === "--version") {
       const pkg = JSON.parse(
-        await readFile(
-          new URL("../../../package.json", import.meta.url),
-          "utf8",
-        ),
+        await readFile(new URL("../../package.json", import.meta.url), "utf8"),
       ) as { version: string };
       await write(io.stdout, `${pkg.version}\n`, true);
       return 0;

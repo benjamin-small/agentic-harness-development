@@ -9,3 +9,6 @@ skills/*/knowledge/local/
 skills/*/memory/local/
 agents/*/knowledge/local/
 agents/*/memory/local/
+
+tools/*/knowledge/local/
+tools/*/memory/local/

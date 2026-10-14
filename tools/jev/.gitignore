@@ -1,0 +1,8 @@
+dist/
+node_modules/
+coverage/
+knowledge/local/
+memory/local/
+.env
+.env.*
+!.env.example

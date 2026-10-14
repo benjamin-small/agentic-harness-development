@@ -2,6 +2,17 @@
 
 Run `npm run check` for formatting, TypeScript, coverage tests, and resource validation. Node.js 24 and 26 are exercised in CI on Linux and macOS. Windows-native execution is not yet verified.
 
+## Embedded tools
+
+The generic harness and each embedded tool compile separately. Jev runtime tests
+and fixtures live under `tools/jev/test/`; tool-specific verification scripts and
+the manual live beside that implementation. Root tests protect compiler dependency
+boundaries, toolkit-pin contract conformance, embedded version stamping, and
+package/private-state exclusions. Aggregate coverage includes `dist/src/` and
+`tools/jev/dist/src/`; component tests can also run independently after root setup.
+The exact-consumer verifier exercises the declared embedded binaries, offline
+runner configuration, exports, manual and installer without live inference.
+
 ## Test scope
 
 Tests cover catalog structure/dependencies, selection, skill metadata/destinations, resource containment, local knowledge/memory indexes, and CLI output channels. Packaging tests inject synthetic private notes into isolated fixtures and verify their exclusion. Git ignore rules are checked without writing private notes into the repository.
@@ -25,7 +36,7 @@ future-dated cache recovery, offline misses, unavailable stale results, atomic
 concurrent writes, cache write failures, separate update-availability exits, and
 both header/body deadlines. A real CLI subprocess reads a fresh cache offline.
 
-Measured on 2026-10-08 with Node.js 26.10.0: **99.57% lines/statements, 98.90% functions, and 97.02% branches**, across 86 passing tests. Reproduce with `npm run test:coverage`; CI uploads its own per-runtime measurements. Coverage covers `src/` runtime code, not the release scripts or skill decision quality. There is no arbitrary global coverage threshold.
+Measured on 2026-10-13 with Node.js 26.10.0: **99.75% lines/statements, 98.93% functions, and 97.20% branches**, across 91 passing tests. Reproduce with `npm run test:coverage`; CI uploads its own per-runtime measurements. Coverage covers generic and embedded runtime code, not the release scripts or skill decision quality. There is no arbitrary global coverage threshold.
 
 ## Artifact verification
 

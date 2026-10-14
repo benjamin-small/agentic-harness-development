@@ -3,6 +3,7 @@ import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
 import { timestampVersion, versionTimestamp } from "./release-version.mjs";
+import { embeddedTools } from "./embedded-tools.mjs";
 
 export async function stampRelease(root, date = new Date()) {
   const packagePath = resolve(root, "package.json");
@@ -26,11 +27,16 @@ export async function stampRelease(root, date = new Date()) {
     throw new Error(
       "Release time must be later than the existing version; wait for a new second or correct the clock.",
     );
+  const tools = await embeddedTools(root, pkg);
   pkg.version = version;
   lock.version = version;
   lock.packages[""].version = version;
   await writeFile(packagePath, `${JSON.stringify(pkg, null, 2)}\n`);
   await writeFile(lockPath, `${JSON.stringify(lock, null, 2)}\n`);
+  for (const tool of tools) {
+    tool.metadata.version = version;
+    await writeFile(tool.file, `${JSON.stringify(tool.metadata, null, 2)}\n`);
+  }
   return { version, tag: `v${version}`, versionTimestamp: timestamp };
 }
 

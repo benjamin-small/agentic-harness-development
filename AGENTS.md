@@ -21,15 +21,15 @@ Use $jev by default for suitable bounded structured decisions; read its skill an
 ## Constraints
 
 - Every project's primary README must show a linked maturity badge directly below its title, using the shared [Tinker → Alpha → Beta → Stable scale](docs/repository-maturity.md). Select the stage from evidence, explain it in the status section, and log changes to the assessment. Apply this when bootstrapping or maintaining a project within the user's requested scope.
-- Use TypeScript for Jev and shared runtime code. Keep CLI and adapters thin over the library.
-- `skills/<id>/SKILL.md` and `agents/<id>/AGENT.md` are canonical entrypoints. Each component must own `knowledge/INDEX.md` and `memory/INDEX.md`, with local expertise maintained under its own directories. Follow `docs/local-expertise.md`.
+- Keep executable components in `tools/<id>/`, with owned source, tests, build configuration, documentation and expertise. Use TypeScript for shared runtime code; keep CLI and adapters thin over the library. Generic harness source must not import tool internals.
+- `skills/<id>/SKILL.md` and `agents/<id>/AGENT.md` are canonical entrypoints. Embedded tool manifests are `tools/<id>/package.json`. Each component must own `knowledge/INDEX.md` and `memory/INDEX.md`, with local expertise maintained under its own directories. Follow `docs/local-expertise.md`.
 - Keep entrypoints and indexes small. Search the selected component with `rg`, then read only relevant topics/lessons and supporting evidence. Build useful local explanations instead of relying on remote links or previous chat context alone.
 - Maintain provenance, verification dates, applicability, and index links when knowledge changes. Capture actual lessons in scoped local memory; keep `knowledge/local/` and `memory/local/` out of commits and releases. Do not modify unrelated host memory stores.
 - Native models, permissions, and discovery settings belong in harness adapters. Learned state uses a writable component working directory separate from immutable release caches.
 - This repository owns definitions and tools. Durable project state, event queues, leases, and deployed identities belong in a separate runtime service.
 - The bootstrap CLI is read-only. Do not silently turn a selection plan into installation, a paid API call, or a background service.
 - Explicit project selections override detection when detection is implemented. Installing a capability does not grant new external-action permissions.
-- Never commit credentials or copy local user configuration into releases. Read `.env.example` only for variable names; it is not a credential source.
+- Never commit credentials or copy local user configuration into releases. Read a component's `.env.example` only for variable names; it is not a credential source.
 - Do not claim native compatibility, a live API check, or a published release based solely on local validation.
 - Every significant addition, fix, removal, or behavior change must update `CHANGELOG.md` in the same pull request, including changes to agent/skill behavior. Follow [the changelog policy](docs/changelog.md): readable impact, searchable component names, migration actions, and clear unreleased/released status.
 

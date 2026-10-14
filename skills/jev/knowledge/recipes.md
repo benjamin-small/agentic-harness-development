@@ -1,7 +1,7 @@
 # Bounded decision recipes
 
 Repository recipes, version 1; implemented and reviewed 2026-10-03. Source:
-`src/jev/recipes.ts` in the version-matched toolkit. Each recipe builds a standard
+`tools/jev/src/recipes.ts` in the version-matched toolkit. Each recipe builds a standard
 Jev request; it adds no endpoint, credential source, or automatic action.
 Inputs accept 1–32 unique item IDs and at most 16,000 characters per text field,
 subject to the shared 1 MiB request cap. Recipe CLI calls default to zero

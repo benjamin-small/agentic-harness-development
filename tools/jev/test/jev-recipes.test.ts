@@ -11,9 +11,9 @@ import {
   runRecipe,
   recordJevOutcome,
   type CallMetadata,
-} from "../src/jev/index.js";
-import { runCommand } from "../src/jev/command.js";
-import { JEV_MODEL } from "../src/jev/types.js";
+} from "../src/index.js";
+import { runCommand } from "../src/command.js";
+import { JEV_MODEL } from "../src/types.js";
 
 const evidence = {
   id: "fixture",

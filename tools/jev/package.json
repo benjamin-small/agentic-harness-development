@@ -1,0 +1,26 @@
+{
+  "name": "@benjamin-small/jev",
+  "version": "2026.1013.214916",
+  "description": "Embedded TypeScript Jev decision client, CLI and toolkit launcher.",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": "^24.0.0 || ^26.0.0"
+  },
+  "bin": {
+    "jev": "dist/src/cli.js",
+    "jev-run": "dist/src/runner-cli.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/src/index.js"
+    }
+  },
+  "scripts": {
+    "build": "node scripts/clean-build.mjs && tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "npm run build && node --test dist/test/*.test.js"
+  }
+}
