@@ -1,6 +1,6 @@
 # Bootstrap this toolkit
 
-Read this file when asked to install or use this repository from a fresh harness. Use the guide associated with the selected release. This guide targets **v2026.1014.5143**, with the Jev runtime, [local expertise convention](docs/local-expertise.md), and catalog schema 2. Package versions encode UTC date and time; they make no compatibility promise. Read the tag's guide when consuming an older release.
+Read this file when asked to install or use this repository from a fresh harness. Use the guide associated with the selected release. This guide targets **v2026.1014.21134**, with the Jev runtime, [local expertise convention](docs/local-expertise.md), and catalog schema 2. Package versions encode UTC date and time; they make no compatibility promise. Read the tag's guide when consuming an older release.
 
 ## Know what this release provides
 
@@ -34,7 +34,7 @@ The consumer needs Node.js 24 LTS or 26 and npm. The following acquisition examp
 ```sh
 toolkit_dir="$HOME/.local/share/agentic-harness-development/2026.1008.162714"
 mkdir -p "$toolkit_dir/assets"
-gh release download v2026.1014.5143 \
+gh release download v2026.1014.21134 \
   --repo benjamin-small/agentic-harness-development \
   --dir "$toolkit_dir/assets"
 (cd "$toolkit_dir/assets" && shasum -a 256 -c SHA256SUMS)

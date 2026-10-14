@@ -76,3 +76,11 @@ manifests. Only the reviewed embedded-tool change and release documentation are
 included; pending Blog-Review files and catalog/schema/runtime/test changes remain
 outside the branch. Publication and downloaded-asset verification are separate
 release gates; the earlier review evidence above remains tied to its exact snapshots.
+
+## Tagged workflow fixture repair
+
+PR #17 merged at `0deea4d5cdbeb423862f2d622493e56e55e363ce` after CI and CodeQL passed. The tagged release workflow for `v2026.1014.5143` failed before publication: the synthetic private-expertise fixture inherited GitHub tag metadata and hit the tag/version guard before its intended assertion. No assets were published; the failed tag is preserved.
+
+Four fresh design reviewers (Claude Code, Codex, Pi and OpenCode roles under Codex/macOS) agreed the fixture should copy its environment and clear only `GITHUB_REF_TYPE` and `GITHUB_REF_NAME`. Production packaging is unchanged. The regression exercises ordinary and conflicting-tag parents and independently verifies mismatched tag rejection. Jev was not needed for deterministic guard ordering and environment propagation.
+
+Prepared replacement `v2026.1014.21134` in the isolated worktree. Blog-Review remains outside the release. Implementation snapshot `8c248b8fcf1783a503f5b7ff17ce801182b7ae1e` passed the tagged-parent regression (4/4), full matching-tag packaging (91 tests and checks) and exact-tarball fresh-consumer verification. Four new fresh contexts, again launched with `collaboration.spawn_agent` and `fork_turns: none`, returned ready: Claude Code, Codex, Pi and OpenCode. No findings remain; Claude Code and Codex independently reran the tagged packaging regressions. All reported Jev not-needed for these deterministic checks. Publication and downloaded-asset verification remain separate release gates.

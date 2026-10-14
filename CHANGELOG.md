@@ -8,7 +8,13 @@ Entries follow the [changelog policy](docs/changelog.md). `Unreleased` describes
 
 No pending changes.
 
-## 2026.1014.5143 — 2026-10-14 00:51:43 UTC
+## 2026.1014.21134 — 2026-10-14 02:11:34 UTC
+
+### Fixed
+
+- **Release packaging tests:** Isolate synthetic repository subprocesses from GitHub release-tag metadata so the private-expertise regression reaches its intended guard during tagged workflows. Verify mismatched real tag metadata still fails; production packaging validation is unchanged.
+
+The preceding preparation tag `v2026.1014.5143` failed its release workflow and published no assets. This release includes its embedded-tool changes below.
 
 ### Changed
 
