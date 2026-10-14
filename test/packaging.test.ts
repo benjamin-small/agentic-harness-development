@@ -200,13 +200,35 @@ test("source release rejects forcibly tracked private embedded-tool expertise", 
       const result = spawnSync("git", args, { cwd: fixture, encoding: "utf8" });
       assert.equal(result.status, 0, result.stderr);
     }
-    const result = spawnSync(
+    const conflictingTagEnv = {
+      ...process.env,
+      GITHUB_REF_TYPE: "tag",
+      GITHUB_REF_NAME: "v2026.1014.5143",
+    };
+    const mismatchedTag = spawnSync(
       process.execPath,
       [join(fixture, "scripts/package-release.mjs")],
-      { cwd: fixture, encoding: "utf8" },
+      { cwd: fixture, encoding: "utf8", env: conflictingTagEnv },
     );
-    assert.notEqual(result.status, 0);
-    assert.match(result.stderr, /Private local expertise must not be tracked/);
+    assert.notEqual(mismatchedTag.status, 0);
+    assert.match(mismatchedTag.stderr, /Git tag and package version differ/);
+
+    for (const parentEnv of [process.env, conflictingTagEnv]) {
+      // This synthetic repository has its own version, independent of CI's tag.
+      const fixtureEnv: NodeJS.ProcessEnv = { ...parentEnv };
+      delete fixtureEnv.GITHUB_REF_TYPE;
+      delete fixtureEnv.GITHUB_REF_NAME;
+      const result = spawnSync(
+        process.execPath,
+        [join(fixture, "scripts/package-release.mjs")],
+        { cwd: fixture, encoding: "utf8", env: fixtureEnv },
+      );
+      assert.notEqual(result.status, 0);
+      assert.match(
+        result.stderr,
+        /Private local expertise must not be tracked/,
+      );
+    }
   } finally {
     await rm(fixture, { recursive: true, force: true });
   }
