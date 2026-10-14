@@ -6,8 +6,11 @@ import { pathToFileURL } from "node:url";
 
 /** Verify the exact installed CLI/library; provider traffic is mocked. */
 export async function verifyJevRecipes(packageRoot, workingDirectory) {
+  const pkg = JSON.parse(
+    await readFile(join(packageRoot, "package.json"), "utf8"),
+  );
   const lib = await import(
-    pathToFileURL(join(packageRoot, "dist/src/jev/index.js"))
+    pathToFileURL(join(packageRoot, pkg.exports["./jev"].import))
   );
   const input = {
     id: "consumer",
@@ -45,7 +48,7 @@ export async function verifyJevRecipes(packageRoot, workingDirectory) {
   };
   delete env.NODE_OPTIONS;
   delete env.NODE_PATH;
-  const cli = join(packageRoot, "dist/src/jev/cli.js");
+  const cli = join(packageRoot, pkg.bin.jev);
   const output = JSON.parse(
     execFileSync(
       process.execPath,

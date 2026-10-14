@@ -67,7 +67,7 @@ rejects links, FIFOs, directories, oversized/empty keys and, on POSIX, keys not
 owned by the caller or readable by other users. No network credential fallback.
 
 Provision an absolute Node 24/26 executable and immutable wrapper entrypoint.
-Use the packaged `scripts/install-jev-launcher.mjs` with explicit `--node`,
+Use the packaged `tools/jev/scripts/install-launcher.mjs` with explicit `--node`,
 `--runner` and `--destination` paths; it refuses an existing different launcher.
 The generated POSIX shell launcher unsets NODE_OPTIONS/NODE_PATH **before** Node
 starts, then execs the wrapper. Direct `node runner-cli.js` or `jev-run` assumes a
@@ -87,3 +87,5 @@ wrapper. Verify offline status, actual command discovery or absolute invocation,
 stdio/exit behavior and skill reload separately from live inference.
 
 If the wrapper returns `LOCAL_ACCESS_REQUIRED`, it has not read the key or dispatched inference. Use the host permission flow to rerun the exact command with unchanged input/scope. Do not treat other failures as permission to retry. A successful preflight cannot guarantee later logging; runtime `IO_ERROR` remains non-replayable.
+
+For the embedded layout, refresh the wrapper during an explicit toolkit update: its entrypoint is `tools/jev/dist/src/runner-cli.js`. The new wrapper resolves the selected toolkit's `jev` binary from package metadata and can invoke older retained layouts. A wrapper installed from an older release hardcodes `dist/src/jev/cli.js` and cannot invoke the embedded layout; stage the new wrapper and deliberately replace the personal launcher, preserving its configuration and local expertise.

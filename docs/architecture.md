@@ -35,6 +35,26 @@ The intended project-manager identity is scoped per repository, such as `project
 
 A runtime must enforce ownership using a lease/lock with fencing and deduplicate incoming events and dispatched work. Definitions express intent; they do not provide distributed coordination. An event-driven activation can reconstruct bounded context from stored state without continuously running inference.
 
+## Embedded executable components
+
+Portable instructions and executable implementations have separate ownership.
+`skills/<id>/` teaches use; `tools/<id>/` owns executable source, tests, build
+configuration, tool documentation and implementation expertise. Each tool has a
+private manifest synchronized to the toolkit timestamp version. Root metadata
+declares the embedded tools; build/release scripts compose them without npm
+workspace or file dependencies.
+
+Generic catalog and maintenance source cannot import tool internals. The Jev
+component builds only its own TypeScript source/tests; its toolkit launcher owns
+a small pin wire-contract implementation with maintenance conformance tests.
+Compiler dependency-graph checks protect the boundary. Stable public binaries
+and exports point into the embedded output; consumers use those declared
+interfaces rather than assuming the source layout.
+
+The tool's knowledge/memory covers implementation; the skill's covers question
+design, usage and interpretation. Private local material stays scoped to its
+owner and is excluded from formatting, Git and artifacts. See the [tool index](../tools/README.md).
+
 ## Canonical content and adapters
 
 `skills/` and `agents/` are authoritative instruction sources. Adapter output is derived and tested against native harness semantics. Models, permissions, hooks, and discovery locations stay in adapters. Our `catalog.json` describes packaging and selection; its schema is repository-owned, not an industry agent specification.

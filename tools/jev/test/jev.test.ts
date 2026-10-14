@@ -10,9 +10,9 @@ import {
   LIMITS,
   JevError,
   type DecisionResult,
-} from "../src/jev/index.js";
-import { retryDelay, withSignal } from "../src/jev/client.js";
-import { validateResponse } from "../src/jev/validation.js";
+} from "../src/index.js";
+import { retryDelay, withSignal } from "../src/client.js";
+import { validateResponse } from "../src/validation.js";
 import { request, response, transport, goodFetch } from "./jev-fixtures.js";
 
 const client = (fetch = goodFetch, options = {}) =>

@@ -6,7 +6,9 @@ Versions encode the UTC time when a release is prepared: **`YYYY.MMDD.HHMMSS`**,
 
 The three numeric groups satisfy [npm's version format](https://docs.npmjs.com/cli/v11/configuring-npm/package-json#version); their meaning is entirely date and time. There are no major/minor/patch compatibility promises, revision counters, or alpha/beta suffixes. Read the changelog and pin exact releases instead of using caret/tilde ranges. Schema versions remain explicit wire-format identifiers, independent of package timestamps.
 
-Run `npm run release:stamp` once while preparing a release. It generates the current UTC timestamp to whole seconds and updates `package.json` plus both root version fields in `package-lock.json`, leaving dependency versions unchanged. For a reproducible timestamp use `npm run release:stamp -- --at 2026-10-01T17:14:32.000Z`. Duplicate or older times are rejected; wait for a new second or correct the clock. Stamping does not commit, tag, or publish. Packing/rebuilding an already stamped release preserves its version. Its GitHub publication time may be later than its preparation time.
+Run `npm run release:stamp` once while preparing a release. It generates the current UTC timestamp to whole seconds and updates `package.json`, both root version fields in `package-lock.json`, and the declared embedded tool manifests, leaving dependency versions unchanged. For a reproducible timestamp use `npm run release:stamp -- --at 2026-10-01T17:14:32.000Z`. Duplicate or older times are rejected; wait for a new second or correct the clock. Stamping does not commit, tag, or publish. Packing/rebuilding an already stamped release preserves its version. Its GitHub publication time may be later than its preparation time.
+
+Root `embeddedTools` metadata names the private component manifests. Stamping validates them all before modifying version files, and packing rejects version drift. Tool runtime outputs/docs are explicitly included; tool tests/caches/private expertise are excluded.
 
 Each release contains:
 

@@ -7,12 +7,12 @@ import { readFile, mkdtemp, writeFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { runCommand } from "../src/jev/command.js";
-import { readInput, readJsonLines } from "../src/jev/input.js";
-import { LIMITS, type DecisionResult } from "../src/jev/index.js";
+import { runCommand } from "../src/command.js";
+import { readInput, readJsonLines } from "../src/input.js";
+import { LIMITS, type DecisionResult } from "../src/index.js";
 import { request, response, goodFetch, transport } from "./jev-fixtures.js";
 
-const bin = fileURLToPath(new URL("../src/jev/cli.js", import.meta.url));
+const bin = fileURLToPath(new URL("../src/cli.js", import.meta.url));
 const noKeyEnv = { ...process.env, OPENROUTER_API_KEY: "" };
 function capture() {
   let content = "";

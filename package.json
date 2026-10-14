@@ -1,6 +1,6 @@
 {
   "name": "@benjamin-small/agentic-harness-development",
-  "version": "2026.1013.214916",
+  "version": "2026.1014.5143",
   "description": "Portable agent skills, harness specialists, and versioned development tooling.",
   "private": true,
   "type": "module",
@@ -15,9 +15,9 @@
   },
   "bin": {
     "harness-kit": "dist/src/cli.js",
-    "jev": "dist/src/jev/cli.js",
+    "jev": "tools/jev/dist/src/cli.js",
     "poietic-harness": "dist/src/maintenance/cli.js",
-    "jev-run": "dist/src/jev/runner-cli.js"
+    "jev-run": "tools/jev/dist/src/runner-cli.js"
   },
   "exports": {
     ".": {
@@ -25,8 +25,8 @@
       "import": "./dist/src/index.js"
     },
     "./jev": {
-      "types": "./dist/src/jev/index.d.ts",
-      "import": "./dist/src/jev/index.js"
+      "types": "./tools/jev/dist/src/index.d.ts",
+      "import": "./tools/jev/dist/src/index.js"
     },
     "./maintenance": {
       "types": "./dist/src/maintenance/index.d.ts",
@@ -41,24 +41,33 @@
     "schemas",
     "catalog.json",
     "docs",
-    ".env.example",
     "BOOTSTRAP.md",
     "AGENTS.md",
     "CONTRIBUTING.md",
     "CHANGELOG.md",
     "SECURITY.md",
-    "scripts/install-jev-launcher.mjs"
+    "tools/README.md",
+    "tools/jev/package.json",
+    "tools/jev/README.md",
+    "tools/jev/AGENTS.md",
+    "tools/jev/LICENSE",
+    "tools/jev/.env.example",
+    "tools/jev/dist/src",
+    "tools/jev/docs",
+    "tools/jev/knowledge",
+    "tools/jev/memory",
+    "tools/jev/scripts/install-launcher.mjs"
   ],
   "scripts": {
-    "build": "node scripts/clean-build.mjs && tsc && node scripts/build-claude-plugin.mjs",
-    "typecheck": "tsc --noEmit",
+    "build": "node scripts/clean-build.mjs && tsc && npm --prefix tools/jev run build && node scripts/build-claude-plugin.mjs",
+    "typecheck": "tsc --noEmit && npm --prefix tools/jev run typecheck",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "validate": "npm run build && node dist/src/cli.js validate",
-    "jev:smoke": "npm run build && node scripts/smoke-jev.mjs",
-    "test": "npm run build && node --test dist/test/*.test.js test/*.test.mjs",
-    "test:coverage": "npm run build && c8 --include 'dist/src/**' --reporter=text --reporter=json-summary node --test dist/test/*.test.js test/*.test.mjs",
-    "check": "npm run format:check && npm run typecheck && npm run test:coverage && node dist/src/cli.js validate",
+    "jev:smoke": "npm run build && node tools/jev/scripts/smoke.mjs",
+    "test": "npm run build && node --test dist/test/*.test.js test/*.test.mjs tools/jev/dist/test/*.test.js",
+    "test:coverage": "npm run build && c8 --include 'dist/src/**' --include 'tools/jev/dist/src/**' --reporter=text --reporter=json-summary node --test dist/test/*.test.js test/*.test.mjs tools/jev/dist/test/*.test.js",
+    "check": "npm run format:check && npm run typecheck && npm run test:coverage && node dist/src/cli.js validate && node scripts/validate-tools.mjs",
     "release:stamp": "node scripts/stamp-release.mjs",
     "release:pack": "npm run check && node scripts/package-release.mjs",
     "release:verify": "node scripts/verify-release.mjs"
@@ -72,5 +81,8 @@
     "c8": "12.0.0",
     "prettier": "3.9.9",
     "typescript": "7.0.2"
-  }
+  },
+  "embeddedTools": [
+    "tools/jev"
+  ]
 }

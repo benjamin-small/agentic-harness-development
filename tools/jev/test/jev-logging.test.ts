@@ -4,7 +4,7 @@ import { mkdtemp, readFile, mkdir, rm, stat } from "node:fs/promises";
 import { tmpdir, homedir } from "node:os";
 import { join } from "node:path";
 import { spawnSync } from "node:child_process";
-import { createJevClient, decideBatch, jevLogPath } from "../src/jev/index.js";
+import { createJevClient, decideBatch, jevLogPath } from "../src/index.js";
 import { request, response } from "./jev-fixtures.js";
 
 async function fixture(run: (path: string) => Promise<void>) {
@@ -146,7 +146,7 @@ test("quiet CLI calls still append to the same persistent call log", async () =>
       preload,
       `globalThis.fetch=async()=>Response.json(${JSON.stringify(response)});`,
     );
-    const cli = new URL("../src/jev/cli.js", import.meta.url);
+    const cli = new URL("../src/cli.js", import.meta.url);
     const { fileURLToPath } = await import("node:url");
     for (const quiet of [false, true]) {
       const result = spawnSync(

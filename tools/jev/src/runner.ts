@@ -1,9 +1,9 @@
 import { constants } from "node:fs";
-import { open, access, lstat, mkdir } from "node:fs/promises";
+import { open, lstat, mkdir, realpath, stat } from "node:fs/promises";
 import { homedir } from "node:os";
-import { dirname, isAbsolute, join } from "node:path";
+import { dirname, isAbsolute, join, relative, resolve, sep } from "node:path";
 import { spawn } from "node:child_process";
-import { validatePin, versionTime } from "../maintenance/version.js";
+import { validatePin, versionTime } from "./toolkit-version.js";
 
 const inference = new Set([
   "decide",
@@ -234,9 +234,33 @@ export async function prepareInvocation(
     pkg.version !== version
   )
     fail("RUNTIME_MISMATCH", "Installed runtime does not match selected pin.");
-  const cli = join(root, "dist/src/jev/cli.js");
+  const declared = (pkg.bin as Record<string, unknown> | undefined)?.jev;
+  if (typeof declared !== "string" || !declared || isAbsolute(declared))
+    fail(
+      "RUNTIME_UNAVAILABLE",
+      "Selected toolkit must declare a relative jev binary.",
+    );
+  const cli = resolve(root, declared);
+  const within = (base: string, target: string) => {
+    const child = relative(base, target);
+    return (
+      child !== "" &&
+      child !== ".." &&
+      !child.startsWith(`..${sep}`) &&
+      !isAbsolute(child)
+    );
+  };
+  if (!within(root, cli))
+    fail(
+      "RUNTIME_UNAVAILABLE",
+      "Declared Jev binary escapes the selected toolkit.",
+    );
   try {
-    await access(cli);
+    if (
+      !within(await realpath(root), await realpath(cli)) ||
+      !(await stat(cli)).isFile()
+    )
+      throw new Error();
   } catch {
     fail(
       "RUNTIME_UNAVAILABLE",

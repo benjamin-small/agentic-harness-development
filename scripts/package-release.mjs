@@ -4,6 +4,7 @@ import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { resolve } from "node:path";
 import { verifyVersionMetadata } from "./release-version.mjs";
+import { embeddedTools } from "./embedded-tools.mjs";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const run = (command, args) =>
@@ -18,6 +19,7 @@ const lock = JSON.parse(
   await readFile(resolve(root, "package-lock.json"), "utf8"),
 );
 const versionTimestamp = verifyVersionMetadata(pkg, lock);
+await embeddedTools(root, pkg);
 const tag = `v${pkg.version}`;
 if (
   process.env.GITHUB_REF_TYPE === "tag" &&
@@ -44,7 +46,7 @@ const packageAsset = packed[0].filename;
 for (const file of packed[0].files) {
   if (
     isLocalExpertise(file.path) ||
-    (file.path !== ".env.example" &&
+    (!/(?:^|\/)\.env\.example$/.test(file.path) &&
       /(^|\/)(?:\.env(?:\..*)?|node_modules|coverage|test|\.git)(?:\/|$)/.test(
         file.path,
       ))

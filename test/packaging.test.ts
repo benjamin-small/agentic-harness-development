@@ -8,6 +8,7 @@ import { toolkitRoot } from "../src/index.js";
 
 const components = [
   "skills/jev",
+  "tools/jev",
   "skills/ui-standards",
   "agents/ui-reviewer",
   "agents/claude-code-reviewer",
@@ -26,7 +27,7 @@ test("npm packages include local indexes and topics but exclude private working 
       JSON.stringify({
         name: "expertise-fixture",
         version: "1.0.0",
-        files: ["skills", "agents"],
+        files: ["skills", "agents", "tools"],
       }),
     );
     for (const component of components) {
@@ -111,7 +112,7 @@ test("actual package excludes removed Jev server output and dependency", async (
       (entry: { path: string }) => entry.path,
     );
     assert.ok(
-      !files.some((p) => /^dist\/.*(?:mcp|jev-mock-transport)/i.test(p)),
+      !files.some((p) => /(?:^|\/)dist\/.*(?:mcp|jev-mock-transport)/i.test(p)),
       "Removed server output entered package",
     );
     const pkg = JSON.parse(
@@ -119,8 +120,93 @@ test("actual package excludes removed Jev server output and dependency", async (
     );
     assert.equal(pkg.bin["jev-mcp"], undefined);
     assert.equal(pkg.dependencies["@modelcontextprotocol/sdk"], undefined);
-    assert.ok(files.includes("dist/src/jev/cli.js"));
-    assert.ok(files.includes("dist/src/jev/recipes.js"));
+    assert.ok(files.includes("tools/jev/dist/src/cli.js"));
+    assert.ok(files.includes("tools/jev/dist/src/recipes.js"));
+    assert.ok(files.includes("tools/jev/package.json"));
+    assert.ok(files.includes("tools/jev/docs/runtime.md"));
+    assert.ok(files.includes("tools/jev/scripts/install-launcher.mjs"));
+    assert.ok(files.includes("tools/jev/.env.example"));
+    assert.ok(!files.some((p) => p.startsWith("dist/src/jev/")));
+    assert.ok(
+      !files.some(
+        (p) =>
+          p.startsWith("tools/jev/test/") ||
+          p.startsWith("tools/jev/dist/test/"),
+      ),
+    );
+    assert.ok(!files.some((p) => p.includes("/local/")));
+  } finally {
+    await rm(fixture, { recursive: true, force: true });
+  }
+});
+
+test("source release rejects forcibly tracked private embedded-tool expertise", async () => {
+  const fixture = await mkdtemp(join(tmpdir(), "private-tool-source-"));
+  try {
+    await mkdir(join(fixture, "scripts"));
+    for (const name of [
+      "package-release.mjs",
+      "release-version.mjs",
+      "embedded-tools.mjs",
+    ])
+      await cp(
+        join(toolkitRoot, "scripts", name),
+        join(fixture, "scripts", name),
+      );
+    const version = "2026.1013.214916";
+    await writeFile(
+      join(fixture, "package.json"),
+      JSON.stringify({
+        name: "fixture",
+        type: "module",
+        version,
+        private: true,
+        embeddedTools: ["tools/jev"],
+      }),
+    );
+    await writeFile(
+      join(fixture, "package-lock.json"),
+      JSON.stringify({ version, packages: { "": { version } } }),
+    );
+    await writeFile(
+      join(fixture, "catalog.json"),
+      JSON.stringify({ schemaVersion: 2 }),
+    );
+    await mkdir(join(fixture, "tools/jev/knowledge/local"), {
+      recursive: true,
+    });
+    await writeFile(
+      join(fixture, "tools/jev/package.json"),
+      JSON.stringify({ private: true, version }),
+    );
+    await writeFile(
+      join(fixture, "tools/jev/knowledge/local/private-note.md"),
+      "synthetic private working note",
+    );
+    for (const args of [
+      ["init", "--quiet"],
+      ["add", "--force", "."],
+      [
+        "-c",
+        "user.name=Fixture",
+        "-c",
+        "user.email=fixture@example.invalid",
+        "commit",
+        "--quiet",
+        "-m",
+        "Fixture",
+      ],
+    ]) {
+      const result = spawnSync("git", args, { cwd: fixture, encoding: "utf8" });
+      assert.equal(result.status, 0, result.stderr);
+    }
+    const result = spawnSync(
+      process.execPath,
+      [join(fixture, "scripts/package-release.mjs")],
+      { cwd: fixture, encoding: "utf8" },
+    );
+    assert.notEqual(result.status, 0);
+    assert.match(result.stderr, /Private local expertise must not be tracked/);
   } finally {
     await rm(fixture, { recursive: true, force: true });
   }

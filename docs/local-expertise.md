@@ -1,6 +1,6 @@
 # Local knowledge and memory
 
-Agents and skills must build and maintain their expertise in their own local component directories. A remote URL, conversation history, or a harness-wide memory store is not a replacement for that local expertise. Use concise, searchable Markdown with provenance, small indexes, and progressive disclosure.
+Agents, skills and embedded tools must build and maintain their expertise in their own local component directories. A remote URL, conversation history, or a harness-wide memory store is not a replacement for that local expertise. Use concise, searchable Markdown with provenance, small indexes, and progressive disclosure.
 
 This is the repository's component convention. `SKILL.md` retains the Agent Skills format; `AGENT.md` is our canonical role entrypoint, not a universal native agent format.
 
@@ -22,6 +22,8 @@ skills/<skill-id>/                 agents/<agent-id>/
       INDEX.md                          INDEX.md
       <dated-lesson>.md                  <dated-lesson>.md
 ```
+
+Embedded tools use the same knowledge/memory convention under `tools/<id>/`, with `package.json` and `AGENTS.md` describing executable ownership. Tool expertise covers implementation; usage/decision expertise remains in the associated skill.
 
 Every component ships its entrypoint, `knowledge/INDEX.md`, and `memory/INDEX.md`. Create topic files only for actual expertise or observed lessons. Create `local/` directories on first authorized use; do not prefill them with invented memories. Optional `scripts/`, `assets/`, and `references/` directories hold executable helpers, output assets, and supporting evidence respectively. Keep maintained explanations in `knowledge/`.
 

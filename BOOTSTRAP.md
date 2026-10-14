@@ -1,6 +1,6 @@
 # Bootstrap this toolkit
 
-Read this file when asked to install or use this repository from a fresh harness. Use the guide associated with the selected release. This guide targets **v2026.1013.214916**, with the Jev runtime, [local expertise convention](docs/local-expertise.md), and catalog schema 2. Package versions encode UTC date and time; they make no compatibility promise. Read the tag's guide when consuming an older release.
+Read this file when asked to install or use this repository from a fresh harness. Use the guide associated with the selected release. This guide targets **v2026.1014.5143**, with the Jev runtime, [local expertise convention](docs/local-expertise.md), and catalog schema 2. Package versions encode UTC date and time; they make no compatibility promise. Read the tag's guide when consuming an older release.
 
 ## Know what this release provides
 
@@ -34,7 +34,7 @@ The consumer needs Node.js 24 LTS or 26 and npm. The following acquisition examp
 ```sh
 toolkit_dir="$HOME/.local/share/agentic-harness-development/2026.1008.162714"
 mkdir -p "$toolkit_dir/assets"
-gh release download v2026.1013.214916 \
+gh release download v2026.1014.5143 \
   --repo benjamin-small/agentic-harness-development \
   --dir "$toolkit_dir/assets"
 (cd "$toolkit_dir/assets" && shasum -a 256 -c SHA256SUMS)
@@ -65,7 +65,7 @@ The catalog declares `jev-runtime` as software required to execute the Jev skill
 
 For personal use, keep the pinned runtime in the user-owned cache above and give the harness its absolute executable path. For project use, record that exact version, path, and artifact integrity in the project's setup instructions; a project-local npm tarball installation is also valid. For deployments, include the package during image/provisioning build and pass its path and secrets to the service identity. Do not modify global npm packages or shell profiles implicitly.
 
-Verify `"$toolkit_dir/runtime/node_modules/.bin/jev" --version`, then use its `validate` command on a synthetic request from the [runtime manual](docs/jev-runtime.md). Inject `OPENROUTER_API_KEY` only into processes authorized to invoke inference. A live `decide` or `batch` call sends state externally and may bill; package installation and local validation do neither. Live library and CLI validation is recorded in the [Jev verification report](docs/verification/jev-2026-10-01.md); this does not establish decision quality for your workload.
+Verify `"$toolkit_dir/runtime/node_modules/.bin/jev" --version`, then use its `validate` command on a synthetic request from the [runtime manual](tools/jev/docs/runtime.md). Inject `OPENROUTER_API_KEY` only into processes authorized to invoke inference. A live `decide` or `batch` call sends state externally and may bill; package installation and local validation do neither. Live library and CLI validation is recorded in the [Jev verification report](docs/verification/jev-2026-10-01.md); this does not establish decision quality for your workload.
 
 ## Make Jev available across tasks
 
@@ -89,7 +89,7 @@ the writable log path and execution identity during provisioning; use
 runtime. The file is created on the first call. Terminal `--quiet` does not
 disable persistent logging. Failed persistence returns non-retryable `IO_ERROR`.
 See the
-[logging contract](docs/jev-runtime.md#persistent-call-logging) before upgrading.
+[logging contract](tools/jev/docs/runtime.md#persistent-call-logging) before upgrading.
 
 Record the chosen exact release in the consumer's `.poietic-harness.json` using
 `{ "schemaVersion": 1, "version": "<selected timestamp>" }`. Run that installation's
@@ -145,3 +145,7 @@ When setting up a consuming project, put its maturity badge directly below the p
 For components using the indexed layout, provision their own writable, scoped directories for knowledge and memory, separate from the pinned package/cache. Copy the released indexes and topics, preserve local material during upgrades, and use local search before loading detailed files. Do not copy private `knowledge/local/` or `memory/local/` content into another project or a shared release. See [local expertise](docs/local-expertise.md) for maintenance and scope rules. This remains a host-managed procedure until the installer milestone is implemented.
 
 Report the release/tag and source commit, scope, chosen capabilities and evidence, destination paths, executable dependencies installed, validation performed, and remaining limitations. The structured project selection/lockfile and idempotent install command are specified in [the implementation plan](docs/implementation-plan.md) and will arrive in a later milestone.
+
+## Embedded tool layout
+
+`tools/jev/` owns the Jev implementation; `skills/jev/` remains portable guidance. Public package binaries and `/jev` remain the consumer interface. When explicitly updating to this release, refresh the personal wrapper from `tools/jev/dist/src/runner-cli.js` with the packaged `tools/jev/scripts/install-launcher.mjs`. An older wrapper cannot invoke the new paths; preserve configuration, pins, local expertise, cached credentials and logs. Follow [the wrapper migration](tools/jev/knowledge/toolkit-contract.md#wrapper-migration) and use the selected tag's guide for an already published release.
