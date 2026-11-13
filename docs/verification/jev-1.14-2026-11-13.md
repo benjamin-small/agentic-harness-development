@@ -12,7 +12,7 @@ Verified [OpenRouter model](https://openrouter.ai/typesafe/jev-1.14), [provider 
 
 - `npm run check`: 91 tests, formatting, independent typechecks, nine catalog components and embedded manifest validation passed on Node.js 26.10.0/macOS. Coverage: 99.75% lines/statements, 98.93% functions, 97.20% branches.
 - The regression checks hardcoded 1.14 request selection, alias/revision preservation, and rejection of old alias/revision, unknown future/suffixed IDs, lookalike prefixes and the floating latest alias.
-- Package verification includes the recipe mock's explicit assertion of the 1.14 request ID. Exact-tarball consumer verification is recorded after completion.
+- Package verification includes the recipe mock's explicit assertion of the 1.14 request ID. `npm run release:pack` and `npm run release:verify` passed for exact source candidate `bf6c683d7622a1c8ea72a59a3acb2fadc8d9e9d1`, including checksums, isolated install, library imports, CLI, batching, recipes, logging/outcomes and embedded-runner paths. Both archives exclude pending Blog-Review.
 
 ## Live CLI check
 
@@ -30,4 +30,4 @@ This verifies one synthetic CLI/provider path and the shared client, not general
 
 ## Specialist review
 
-Four fresh design contexts returned ready with no findings: Claude Code, Codex, Pi and OpenCode roles under Codex/macOS, launched with `collaboration.spawn_agent` and `fork_turns: none`. Read-only behavior was instructed, not tool-enforced; reviewers did not delegate. All reported Jev not-needed for deterministic design checks. Fresh implementation verdicts are recorded after completion.
+Four fresh design contexts returned ready with no findings: Claude Code, Codex, Pi and OpenCode roles under Codex/macOS, launched with `collaboration.spawn_agent` and `fork_turns: none`. Read-only behavior was instructed, not tool-enforced; reviewers did not delegate. All reported Jev not-needed for deterministic design checks. Four new fresh implementation contexts reviewed `bf6c683d7622a1c8ea72a59a3acb2fadc8d9e9d1` and also returned ready with no findings. Codex and Pi independently reran three targeted transport/model-validation tests; all passed. All four reported Jev not-needed for deterministic implementation checks. No unresolved review findings remain. Publication and personal installation updates remain outside this source update.
