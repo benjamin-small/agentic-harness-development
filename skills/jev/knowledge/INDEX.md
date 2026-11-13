@@ -1,6 +1,6 @@
 # Jev knowledge index
 
-Local summaries verified against upstream documentation on 2026-10-01. Search within this directory, then read only the topic relevant to the task. Refresh volatile details when needed and record the verification date in the affected topic.
+Local summaries initially verified on 2026-10-01; model selection and transport integration refreshed for Jev 1.14 on 2026-11-13. Search within this directory, then read only the topic relevant to the task. Refresh volatile details when needed and record the verification date in the affected topic.
 
 | Topic                                   | Read when                                                        | Search terms                                           |
 | --------------------------------------- | ---------------------------------------------------------------- | ------------------------------------------------------ |

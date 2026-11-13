@@ -18,7 +18,7 @@ export async function verifyJevRecipes(packageRoot, workingDirectory) {
       { id: "f", claim: "Returns 1", evidence: "function f(){return 1;}" },
     ],
   };
-  const fixture = `globalThis.fetch=async(_url,init)=>{const b=JSON.parse(init.body);return Response.json({model:'typesafe/jev-1.13',answers:Object.fromEntries(Object.keys(b.questions).map(id=>[id,{type:'choice',choice:'supported'}])),usage:{input_tokens:1,output_tokens:1}})};`;
+  const fixture = `import assert from "node:assert/strict";globalThis.fetch=async(_url,init)=>{const b=JSON.parse(init.body);assert.equal(b.model,'typesafe/jev-1.14');return Response.json({model:'typesafe/jev-1.14',answers:Object.fromEntries(Object.keys(b.questions).map(id=>[id,{type:'choice',choice:'supported'}])),usage:{input_tokens:1,output_tokens:1}})};`;
   const log = join(workingDirectory, "jev-recipe-calls.jsonl");
   const client = lib.createJevClient({
     apiKey: "fixture-only",
