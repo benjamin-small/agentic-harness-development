@@ -173,16 +173,22 @@ test("transport sends only provider wire fields to the pinned endpoint and prese
 });
 
 test("OpenRouter's resolved Jev revision is accepted and preserved while requests use the alias", async () => {
-  // Revision observed in a real OpenRouter response on 2026-10-01.
-  const resolved = { ...response, model: "typesafe/jev-1.13-20260917" };
-  const result = await client(
-    transport((_url, init) => {
-      assert.equal(JSON.parse(init?.body as string).model, "typesafe/jev-1.13");
-      return Response.json(resolved);
-    }),
-  ).decide(request);
-  assert.equal(result.ok, true);
-  if (result.ok) assert.deepEqual(result.response, resolved);
+  // OpenRouter endpoint metadata checked 2026-11-13; assert IDs independently
+  // of the exported constants so request-model drift cannot pass via fixtures.
+  for (const model of ["typesafe/jev-1.14", "typesafe/jev-1.14-20261014"]) {
+    const resolved = { ...response, model };
+    const result = await client(
+      transport((_url, init) => {
+        assert.equal(
+          JSON.parse(init?.body as string).model,
+          "typesafe/jev-1.14",
+        );
+        return Response.json(resolved);
+      }),
+    ).decide(request);
+    assert.equal(result.ok, true);
+    if (result.ok) assert.deepEqual(result.response, resolved);
+  }
 });
 
 test("malformed, partial, wrong-model and out-of-range provider responses fail closed", async () => {
@@ -191,9 +197,13 @@ test("malformed, partial, wrong-model and out-of-range provider responses fail c
     [],
     {},
     { ...response, model: "another-model" },
-    { ...response, model: "typesafe/jev-1.13-20990101" },
-    { ...response, model: "typesafe/jev-1.13-20260917-extra" },
+    { ...response, model: "typesafe/jev-1.13" },
+    { ...response, model: "typesafe/jev-1.13-20260917" },
+    { ...response, model: "typesafe/jev-1.14-20990101" },
+    { ...response, model: "typesafe/jev-1.14-20261014-extra" },
     { ...response, model: "typesafe/jev-1.14-20260917" },
+    { ...response, model: "typesafe/jev-1.140" },
+    { ...response, model: "~typesafe/jev-latest" },
     { ...response, usage: {} },
     { ...response, usage: { input_tokens: -1, output_tokens: 1 } },
     { ...response, usage: { input_tokens: 1, output_tokens: 1.5 } },

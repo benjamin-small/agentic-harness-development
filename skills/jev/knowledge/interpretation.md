@@ -6,7 +6,9 @@ Noul's scalar expresses support for the proposition. Do not manufacture a separa
 
 Source: [TypeSafe confidence guidance](https://docs.typesafe.ai/confidence).
 
-Jev 1.13 has documented weaknesses around precise numeric/date distinctions, literal interpretations, irrelevant context, and adversarially written state. Equivalent-looking formulations can behave differently. Separately asked propositions do not guarantee algebraic consistency. Use deterministic code for exact arithmetic, identifiers, authorization rules, and checks with an exact answer available locally.
+Historical Jev 1.13 documentation describes weaknesses around precise numeric/date distinctions, literal interpretations, irrelevant context, and adversarially written state. Equivalent-looking formulations can behave differently. Separately asked propositions do not guarantee algebraic consistency. Use deterministic code for exact arithmetic, identifiers, authorization rules, and checks with an exact answer available locally.
+
+These dated observations are not a Jev 1.14 evaluation. Recheck operational thresholds on representative labeled cases when changing models.
 
 Source: [Jev 1.13 model limitations](https://docs.typesafe.ai/model-jaggedness/jev-1.13).
 

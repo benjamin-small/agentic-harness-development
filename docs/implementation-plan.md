@@ -39,7 +39,7 @@ The external publication gate is a successful [CI run](https://github.com/benjam
 
 ## M1: Jev library and command-line tool
 
-The [Jev runtime](jev-runtime.md) is implemented for alpha.2 through the `/jev` package export and separate executable. The initial model is pinned to `typesafe/jev-1.13`; the upstream schema was verified on 2026-10-01.
+The [Jev runtime](jev-runtime.md) is implemented for alpha.2 through the `/jev` package export and separate executable. The initial model was `typesafe/jev-1.13`; the upstream schema was first verified on 2026-10-01. Unreleased: request `typesafe/jev-1.14` and accept its exact documented `typesafe/jev-1.14-20261014` revision, preserving response IDs and the existing JSON choice/score/noul contract. Model/transport metadata was rechecked on 2026-11-13; image assets, Box and long-context controls remain outside this update.
 
 Acceptance:
 
