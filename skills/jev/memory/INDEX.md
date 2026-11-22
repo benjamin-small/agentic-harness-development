@@ -1,8 +1,8 @@
 # Jev memory index
 
-| Lesson                                              | Applicability                                                             | Search terms                                    |
-| --------------------------------------------------- | ------------------------------------------------------------------------- | ----------------------------------------------- |
-| [Model alias resolution](model-alias-resolution.md) | OpenRouter response validation and live smoke checks; observed 2026-10-01 | model, revision, INVALID_RESPONSE, smoke, alias |
+| Lesson                                              | Applicability                                                                                  | Search terms                                          |
+| --------------------------------------------------- | ---------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| [Model alias resolution](model-alias-resolution.md) | OpenRouter response validation and live smoke checks; observed 2026-10-01, 1.14 pin 2026-11-22 | model, revision, INVALID_RESPONSE, smoke, alias, 1.14 |
 
 The runtime has bounded live library/CLI evidence for one synthetic fixture. Do not infer broader accuracy or invent unobserved outcomes.
 

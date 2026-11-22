@@ -8,7 +8,8 @@ These are focused summaries of upstream documentation, checked on 2026-10-01. Th
 | State                | [TypeSafe: State](https://docs.typesafe.ai/concepts/state)                                                                    |
 | Question primitives  | [TypeSafe: Primitives](https://docs.typesafe.ai/primitives)                                                                   |
 | Confidence           | [TypeSafe: Confidence](https://docs.typesafe.ai/confidence)                                                                   |
-| Model limitations    | [TypeSafe: Jev 1.13](https://docs.typesafe.ai/model-jaggedness/jev-1.13)                                                      |
+| Model limitations    | [TypeSafe: Jev 1.13](https://docs.typesafe.ai/model-jaggedness/jev-1.13) (no 1.14 page as of 2026-11-22)                      |
+| Model releases       | [TypeSafe: Changelog](https://docs.typesafe.ai/changelog)                                                                     |
 | Skill routing        | [TypeSafe: Skill suggestion](https://docs.typesafe.ai/cookbooks/skill_suggestion)                                             |
 | OpenRouter transport | [Decisions API](https://openrouter.ai/docs/api/api-reference/alphadecisions/submit-a-decisions-questions-and-answers-request) |
 | Model availability   | [OpenRouter: Jev](https://openrouter.ai/docs/guides/community/jev)                                                            |

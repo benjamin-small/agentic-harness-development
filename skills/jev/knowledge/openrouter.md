@@ -1,9 +1,9 @@
 # OpenRouter integration
 
-Verified against upstream documentation on 2026-10-01. The Decisions API is alpha; re-check its schema before implementing or updating transport code.
+Verified against upstream documentation on 2026-10-01; model pin rechecked on 2026-11-22. The Decisions API is alpha; re-check its schema before implementing or updating transport code.
 
 - Endpoint: `POST https://openrouter.ai/api/alpha/decisions`.
-- Request model alias: `typesafe/jev-1.13`; observed and documented response revision: `typesafe/jev-1.13-20260917`. Preserve the returned revision; do not require it to equal the request alias.
+- Request model alias: `typesafe/jev-1.14` (TypeSafe release 2026-10-14); observed response revision: `typesafe/jev-1.14-20261014` (live check 2026-11-22; not yet shown in upstream docs). `typesafe/jev-1.13` remains available upstream but this client no longer accepts it. Preserve the returned revision; do not require it to equal the request alias.
 - Authentication: bearer token from `OPENROUTER_API_KEY`; JSON request body.
 - Body: `model`, `state`, and a map of named `questions`.
 - A choice question has `type: "choice"`, instructions, and a criteria map keyed by option.

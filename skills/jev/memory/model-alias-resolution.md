@@ -23,3 +23,13 @@ accuracy or proof that arbitrary future responses work.
 When a new revision appears, inspect the documented and observed contract,
 update the explicit acceptance set and regression evidence, and rerun a bounded
 authorized check. Do not turn a parser failure into a model decision.
+
+## Jev 1.14 (2026-11-22)
+
+The pin moved to `typesafe/jev-1.14`. A bounded synthetic request returned
+`typesafe/jev-1.14-20261014`, which matches TypeSafe's documented 1.14 release
+date (2026-10-14) but did not yet appear in upstream docs. The acceptance set is
+now exactly that alias and revision; Jev 1.13 IDs are rejected so a 1.14 request
+cannot silently be answered by 1.13. Same procedure as above: observe, add the
+explicit revision, keep regressions for neighbouring wrong IDs, recheck live. See
+the [dated evidence](../../../docs/verification/jev-1.14-2026-11-22.md).

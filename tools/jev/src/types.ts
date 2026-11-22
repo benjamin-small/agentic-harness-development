@@ -1,6 +1,7 @@
-export const JEV_MODEL = "typesafe/jev-1.13";
-// OpenRouter resolves the request alias to this documented provider revision.
-export const JEV_MODEL_REVISION = "typesafe/jev-1.13-20260917";
+export const JEV_MODEL = "typesafe/jev-1.14";
+// OpenRouter resolves the request alias to this provider revision (observed in a
+// live response on 2026-11-22; TypeSafe documents Jev 1.14 as released 2026-10-14).
+export const JEV_MODEL_REVISION = "typesafe/jev-1.14-20261014";
 export const JEV_ENDPOINT = "https://openrouter.ai/api/alpha/decisions";
 export const LIMITS = Object.freeze({
   inputBytes: 1_048_576,

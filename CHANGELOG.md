@@ -6,7 +6,10 @@ Entries follow the [changelog policy](docs/changelog.md). `Unreleased` describes
 
 ## Unreleased
 
-No pending changes.
+### Changed
+
+- **Breaking — Jev model pin:** The Jev library and CLI now request `typesafe/jev-1.14` (TypeSafe release 2026-10-14) instead of `typesafe/jev-1.13`. Response validation accepts exactly `typesafe/jev-1.14` and the observed revision `typesafe/jev-1.14-20261014`. It now rejects 1.13 IDs, so a 1.14 request can't silently be answered by 1.13. The request/response contract for `choice`, `score` and `noul` is unchanged. The 1.14-only Box question type is not supported. **Migration:** install this release and update the pin. Callers that compare `response.model` with a 1.13 ID must accept the 1.14 IDs. Expect different answers and confidences from the new model, and re-evaluate thresholds on labeled cases. Live library/CLI checks passed on synthetic state; see [the verification](docs/verification/jev-1.14-2026-11-22.md).
+- **Jev skill knowledge:** Update the OpenRouter model notes, limitations source, and alias-resolution lesson for 1.14. TypeSafe publishes no 1.14 limitations page, so the 1.13 weaknesses are still treated as applying.
 
 ## 2026.1014.21134 — 2026-10-14 02:11:34 UTC
 

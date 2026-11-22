@@ -8,6 +8,6 @@ Source: [TypeSafe confidence guidance](https://docs.typesafe.ai/confidence).
 
 Jev 1.13 has documented weaknesses around precise numeric/date distinctions, literal interpretations, irrelevant context, and adversarially written state. Equivalent-looking formulations can behave differently. Separately asked propositions do not guarantee algebraic consistency. Use deterministic code for exact arithmetic, identifiers, authorization rules, and checks with an exact answer available locally.
 
-Source: [Jev 1.13 model limitations](https://docs.typesafe.ai/model-jaggedness/jev-1.13).
+Source: [Jev 1.13 model limitations](https://docs.typesafe.ai/model-jaggedness/jev-1.13). As of 2026-11-22 TypeSafe publishes no separate Jev 1.14 limitations page (`/model-jaggedness/jev-1.14` returns 404); its changelog lists better multilingual support for 1.14 and no fixes to these weaknesses, so assume they still apply to the pinned 1.14 model.
 
 Return the actual answer and supplied metadata with its request/question IDs. Report malformed responses, unavailable metadata, and failed requests separately. Do not turn an error or abstention into a negative decision, and do not attribute a generated explanation to Jev.
