@@ -8,6 +8,12 @@ Entries follow the [changelog policy](docs/changelog.md). `Unreleased` describes
 
 No pending changes.
 
+## 2026.1122.143507 — 2026-11-22 14:35:07 UTC
+
+### Changed
+
+- **Jev model:** Upgrade the fixed OpenRouter request model from `typesafe/jev-1.13` to `typesafe/jev-1.14`, accepting only that alias or documented revision `typesafe/jev-1.14-20261014`. Preserve returned IDs and reject old/unreviewed models. Existing choice/score/noul requests, public commands, credentials, scopes, logs and retry behavior remain supported. Re-evaluate model-specific thresholds before relying on the new model; existing installations need an explicit toolkit update. Image assets, Box and long-context controls are outside this change.
+
 ## 2026.1014.21134 — 2026-10-14 02:11:34 UTC
 
 ### Fixed

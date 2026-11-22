@@ -1,9 +1,10 @@
 # OpenRouter integration
 
-Verified against upstream documentation on 2026-10-01. The Decisions API is alpha; re-check its schema before implementing or updating transport code.
+Model selection and existing transport contract rechecked against upstream documentation on 2026-11-13. The Decisions API is alpha; re-check its schema before implementing or updating transport code.
 
 - Endpoint: `POST https://openrouter.ai/api/alpha/decisions`.
-- Request model alias: `typesafe/jev-1.13`; observed and documented response revision: `typesafe/jev-1.13-20260917`. Preserve the returned revision; do not require it to equal the request alias.
+- Request model alias: `typesafe/jev-1.14`; documented and live-observed provider revision: `typesafe/jev-1.14-20261014`. Preserve the returned revision; do not require it to equal the request alias.
+- Toolkit scope: bounded JSON state and `choice`, `score`, `noul`; image assets, Box and long-context controls are not added by this model update.
 - Authentication: bearer token from `OPENROUTER_API_KEY`; JSON request body.
 - Body: `model`, `state`, and a map of named `questions`.
 - A choice question has `type: "choice"`, instructions, and a criteria map keyed by option.
@@ -14,10 +15,12 @@ The response has typed answers and usage. Confidence, distributions, and cost ma
 
 OpenRouter also exposes `/api/v1/systemone` for TypeSafe SDK compatibility. Keep that transport separate from the Decisions request/response contract.
 
-Sources: [OpenRouter Jev guide](https://openrouter.ai/docs/guides/community/jev), [Decisions schema](https://openrouter.ai/docs/api/api-reference/alphadecisions/submit-a-decisions-request), [SDK guide](https://openrouter.ai/docs/guides/community/typesafe-sdk).
+Sources: [1.14 endpoint metadata](https://openrouter.ai/api/v1/models/typesafe/jev-1.14/endpoints), [OpenRouter Jev guide](https://openrouter.ai/docs/guides/community/jev), [Decisions schema](https://openrouter.ai/docs/api/api-reference/alphadecisions/submit-a-decisions-request), [SDK guide](https://openrouter.ai/docs/guides/community/typesafe-sdk).
 
 ## Repository implementation status
 
 Toolkit 0.1.0-alpha.2 introduced the TypeScript library, CLI, batching, validation, cancellation, and bounded retries. Start with [tool use](tool-use.md), then load the packaged runtime manual if needed. The 2026-10-01 live check verified library and CLI requests with all three question types after fixing resolved-model validation for v2026.1001.190334. Earlier releases reject the observed revision. See the [observed lesson](../memory/model-alias-resolution.md); this limited check is not a quality benchmark. A missing client or credential is a setup limitation, not a model result.
 
 Never place credentials in a request example, project selection, skill file, or stdout. Any live invocation sends the provided state to the configured service and can incur usage charges.
+
+The unreleased 2026-11-13 candidate verified a synthetic CLI call against Jev 1.14 with all three supported question types, one attempt and no retries. See [dated evidence](../../../docs/verification/jev-1.14-2026-11-13.md). Earlier live 1.13 records remain historical.
