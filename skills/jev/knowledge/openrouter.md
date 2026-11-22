@@ -3,7 +3,7 @@
 Verified against upstream documentation on 2026-10-01; model pin rechecked on 2026-11-22. The Decisions API is alpha; re-check its schema before implementing or updating transport code.
 
 - Endpoint: `POST https://openrouter.ai/api/alpha/decisions`.
-- Request model alias: `typesafe/jev-1.14` (TypeSafe release 2026-10-14); observed response revision: `typesafe/jev-1.14-20261014` (live check 2026-11-22; not yet shown in upstream docs). `typesafe/jev-1.13` remains available upstream but this client no longer accepts it. Preserve the returned revision; do not require it to equal the request alias.
+- Request model alias: `typesafe/jev-1.14` (TypeSafe release 2026-10-14); observed response revision: `typesafe/jev-1.14-20261014` (live check 2026-11-22; not yet shown in upstream docs). `typesafe/jev-1.13` remains available upstream. From the release after v2026.1014.21134, the client no longer requests 1.13 and rejects responses identifying 1.13; older pinned runtimes still call 1.13. The pinned runtime's `JEV_MODEL` is authoritative — check `jev --version` against the changelog. Preserve the returned revision; do not require it to equal the request alias.
 - Authentication: bearer token from `OPENROUTER_API_KEY`; JSON request body.
 - Body: `model`, `state`, and a map of named `questions`.
 - A choice question has `type: "choice"`, instructions, and a criteria map keyed by option.
@@ -17,6 +17,8 @@ OpenRouter also exposes `/api/v1/systemone` for TypeSafe SDK compatibility. Keep
 Sources: [OpenRouter Jev guide](https://openrouter.ai/docs/guides/community/jev), [Decisions schema](https://openrouter.ai/docs/api/api-reference/alphadecisions/submit-a-decisions-request), [SDK guide](https://openrouter.ai/docs/guides/community/typesafe-sdk).
 
 ## Repository implementation status
+
+The 1.14 pin was verified live on 2026-11-22 for library and CLI requests on synthetic state; see the [dated evidence](../../../docs/verification/jev-1.14-2026-11-22.md).
 
 Toolkit 0.1.0-alpha.2 introduced the TypeScript library, CLI, batching, validation, cancellation, and bounded retries. Start with [tool use](tool-use.md), then load the packaged runtime manual if needed. The 2026-10-01 live check verified library and CLI requests with all three question types after fixing resolved-model validation for v2026.1001.190334. Earlier releases reject the observed revision. See the [observed lesson](../memory/model-alias-resolution.md); this limited check is not a quality benchmark. A missing client or credential is a setup limitation, not a model result.
 

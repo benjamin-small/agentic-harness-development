@@ -7,7 +7,8 @@ This record covers the model-pin change only. It is not an accuracy benchmark.
 ## Why
 
 TypeSafe released Jev 1.14 on 2026-10-14 ([changelog](https://docs.typesafe.ai/changelog)),
-and OpenRouter lists `typesafe/jev-1.14` as current. Every toolkit release through
+and the [OpenRouter Jev guide](https://openrouter.ai/docs/guides/community/jev), read on
+2026-11-22, names `typesafe/jev-1.14` and `~typesafe/jev-latest` as the current IDs. Every toolkit release through
 v2026.1014.21134 hard-codes `typesafe/jev-1.13`, so installed runtimes kept calling 1.13.
 
 ## Upstream contract (read 2026-11-22)

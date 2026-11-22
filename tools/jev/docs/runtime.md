@@ -2,7 +2,7 @@
 
 Introduced in **0.1.0-alpha.2** and included in subsequent timestamp releases. The package exports `@benjamin-small/agentic-harness-development/jev` and a `jev` executable. Node.js 24 or 26 is required. Installing or selecting instructions never calls the API. Invoking `decide` or `batch` sends supplied state to OpenRouter and can incur charges.
 
-The transport is pinned to `POST https://openrouter.ai/api/alpha/decisions` and `typesafe/jev-1.14`. It does not use chat completions or the separate TypeSafe SDK endpoint. The alpha [upstream schema](https://openrouter.ai/docs/api/api-reference/alphadecisions/submit-a-decisions-request) was checked on 2026-10-01 and rechecked for Jev 1.14 on 2026-11-22. The 1.14 Box (image bounding-box) question type is not supported by this client. Fixtures test that contract; they do not establish live provider availability or model quality.
+The transport is pinned to `POST https://openrouter.ai/api/alpha/decisions` and `typesafe/jev-1.14`. It does not use chat completions or the separate TypeSafe SDK endpoint. The alpha [upstream schema](https://openrouter.ai/docs/api/api-reference/alphadecisions/submit-a-decisions-request) was checked on 2026-10-01 and partly rechecked for Jev 1.14 on 2026-11-22 (see [the verification](../../../docs/verification/jev-1.14-2026-11-22.md) for what was read). The 1.14 Box (image bounding-box) question type is not supported by this client. Fixtures test that contract; they do not establish live provider availability or model quality.
 
 ## Commands
 
