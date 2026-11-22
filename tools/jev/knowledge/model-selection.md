@@ -1,6 +1,6 @@
 # Jev model selection
 
-Applicability: the unreleased Jev 1.14 toolkit source update. Verified 2026-11-13.
+Applicability: the Jev 1.14 toolkit update included in 2026.1122.143507. Verified 2026-11-13.
 
 `src/types.ts` requests OpenRouter model `typesafe/jev-1.14`; validation accepts only that exact alias or `typesafe/jev-1.14-20261014`, preserving the returned value. Old 1.13 IDs, fabricated revisions, prefixes and the floating latest alias are rejected. Adding future revisions requires explicit contract review and regression evidence.
 
